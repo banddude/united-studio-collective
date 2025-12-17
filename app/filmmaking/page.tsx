@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -63,9 +63,19 @@ export default function FilmmakingPage() {
   const [selectedVideo, setSelectedVideo] = useState<Video>(videos[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredVideos = videos.filter((video) =>
+    video.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const visibleThumbnails = 3;
-  const maxIndex = Math.max(0, videos.length - visibleThumbnails);
+  const maxIndex = Math.max(0, filteredVideos.length - visibleThumbnails);
+
+  // Reset thumbnail index when search changes
+  useEffect(() => {
+    setThumbnailIndex(0);
+  }, [searchQuery]);
 
   const handlePlayVideo = () => {
     setIsPlaying(true);
@@ -156,6 +166,8 @@ export default function FilmmakingPage() {
                   <input
                     type="text"
                     placeholder="Search video..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-transparent border-b border-white/50 text-white placeholder-white/70 py-2 px-1 w-48 focus:outline-none focus:border-white text-sm"
                   />
                 </div>
@@ -210,7 +222,7 @@ export default function FilmmakingPage() {
         {/* Video Thumbnails Strip */}
         <div className="bg-white relative">
           <div className="grid grid-cols-3 gap-0">
-            {videos
+            {filteredVideos
               .slice(thumbnailIndex, thumbnailIndex + visibleThumbnails)
               .map((video) => (
                 <div

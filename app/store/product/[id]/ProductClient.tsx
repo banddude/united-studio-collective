@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import { X, ChevronLeft, ChevronRight, Minus, Plus } from "lucide-react";
+import { useCart } from "../../../context/CartContext";
+import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
 
 const products = [
   {
@@ -130,7 +132,7 @@ const products = [
   },
 ];
 
-const frameOptions = ["No Frame", "Standard Frame", "Premium Frame"];
+const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White", "Natural Wood", "Dark Wood"];
 
 interface ProductClientProps {
@@ -139,10 +141,16 @@ interface ProductClientProps {
 
 export default function ProductClient({ productId }: ProductClientProps) {
   const product = products.find((p) => p.id === productId);
+  const router = useRouter();
+  const { addItem } = useCart();
 
   const [quantity, setQuantity] = useState(1);
   const [frameOption, setFrameOption] = useState("");
   const [frameColor, setFrameColor] = useState("");
+  const [showAdded, setShowAdded] = useState(false);
+  const [error, setError] = useState("");
+
+  const isFrameless = frameOption === "Frameless Photograph";
 
   if (!product) {
     return (
@@ -169,6 +177,52 @@ export default function ProductClient({ productId }: ProductClientProps) {
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
+  };
+
+  const validateSelection = () => {
+    if (!frameOption) {
+      setError("Please select a frame option");
+      return false;
+    }
+    if (!isFrameless && !frameColor) {
+      setError("Please select a frame color");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
+  const handleAddToCart = () => {
+    if (!validateSelection()) return;
+
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      frameOption,
+      frameColor: isFrameless ? null : frameColor,
+      quantity,
+    });
+
+    setShowAdded(true);
+    setTimeout(() => setShowAdded(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    if (!validateSelection()) return;
+
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      frameOption,
+      frameColor: isFrameless ? null : frameColor,
+      quantity,
+    });
+
+    router.push("/cart");
   };
 
   return (
@@ -259,6 +313,13 @@ export default function ProductClient({ productId }: ProductClientProps) {
               <h1 className="text-3xl font-medium text-black mb-4">{product.name}</h1>
               <p className="text-2xl text-black mb-6">${product.price.toFixed(2)}</p>
 
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+                  {error}
+                </div>
+              )}
+
               {/* Frame Option */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-black mb-2">
@@ -266,7 +327,13 @@ export default function ProductClient({ productId }: ProductClientProps) {
                 </label>
                 <select
                   value={frameOption}
-                  onChange={(e) => setFrameOption(e.target.value)}
+                  onChange={(e) => {
+                    setFrameOption(e.target.value);
+                    if (e.target.value === "Frameless Photograph") {
+                      setFrameColor("");
+                    }
+                    setError("");
+                  }}
                   className="w-full border border-gray-300 rounded px-4 py-3 text-sm text-black bg-white focus:outline-none focus:ring-1 focus:ring-black"
                 >
                   <option value="">Select</option>
@@ -280,16 +347,24 @@ export default function ProductClient({ productId }: ProductClientProps) {
 
               {/* Color of Frame */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-black mb-2">
-                  Color of Frame *
+                <label className={`block text-sm font-medium mb-2 ${isFrameless ? "text-gray-400" : "text-black"}`}>
+                  Color of Frame {!isFrameless && "*"}
                 </label>
                 <select
                   value={frameColor}
-                  onChange={(e) => setFrameColor(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-4 py-3 text-sm text-black bg-white focus:outline-none focus:ring-1 focus:ring-black"
+                  onChange={(e) => {
+                    setFrameColor(e.target.value);
+                    setError("");
+                  }}
+                  disabled={isFrameless}
+                  className={`w-full border rounded px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-black ${
+                    isFrameless
+                      ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "border-gray-300 bg-white text-black"
+                  }`}
                 >
-                  <option value="">Select</option>
-                  {frameColors.map((color) => (
+                  <option value="">{isFrameless ? "N/A" : "Select"}</option>
+                  {!isFrameless && frameColors.map((color) => (
                     <option key={color} value={color}>
                       {color}
                     </option>
@@ -323,12 +398,25 @@ export default function ProductClient({ productId }: ProductClientProps) {
               </div>
 
               {/* Add to Cart Button */}
-              <button className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors mb-3">
-                Add to Cart
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors mb-3 flex items-center justify-center gap-2"
+              >
+                {showAdded ? (
+                  <>
+                    <Check size={18} />
+                    Added to Cart
+                  </>
+                ) : (
+                  "Add to Cart"
+                )}
               </button>
 
               {/* Buy Now Button */}
-              <button className="w-full bg-gray-100 text-black py-4 text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300">
+              <button
+                onClick={handleBuyNow}
+                className="w-full bg-gray-100 text-black py-4 text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300"
+              >
                 Buy Now
               </button>
             </div>

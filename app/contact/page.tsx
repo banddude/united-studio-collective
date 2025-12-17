@@ -26,7 +26,11 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    const subject = encodeURIComponent("Contact from United Studio Collective Website");
+    const body = encodeURIComponent(
+      `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`
+    );
+    window.location.href = `mailto:Unitedstudiocollective@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
