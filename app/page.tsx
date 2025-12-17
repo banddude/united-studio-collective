@@ -4,12 +4,14 @@ import Image from "next/image";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const images = [
-  "/image_4.jpg", // Sand dunes with person
-  "/image_3.jpg", // Blurry subway/train
-  "/image_5.jpg", // Band in bar
-  "/image_2.jpg", // B&W two people window
-  "/image_1.jpg", // B&W single person window
+  `${basePath}/image_4.jpg`, // Sand dunes with person
+  `${basePath}/image_3.jpg`, // Blurry subway/train
+  `${basePath}/image_5.jpg`, // Band in bar
+  `${basePath}/image_2.jpg`, // B&W two people window
+  `${basePath}/image_1.jpg`, // B&W single person window
 ];
 
 export default function Home() {
