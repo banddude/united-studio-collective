@@ -1,61 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, Circle, ExternalLink } from "lucide-react";
+import { Check, Circle, ExternalLink, RefreshCw } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
   task: string;
   description: string;
   owner: "Evan" | "Mike" | "Both";
-  status: "done" | "pending" | "blocked";
   link?: string;
+  blockedBy?: string;
 }
 
-const checklist: ChecklistItem[] = [
+interface ChecklistStatus {
+  lastUpdated: string;
+  items: Record<string, { done: boolean }>;
+}
+
+const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collective" : "";
+
+const checklistItems: ChecklistItem[] = [
   // COMPLETED
   {
     id: "1",
     task: "Build website",
     description: "Next.js site with all pages: Home, Filmmaking, Photography, Store, About, Contact",
     owner: "Mike",
-    status: "done",
   },
   {
     id: "2",
     task: "SEO optimizations",
     description: "Sitemap, robots.txt, meta tags, Open Graph, Twitter Cards, JSON-LD schemas",
     owner: "Mike",
-    status: "done",
   },
   {
     id: "3",
     task: "Speed optimizations",
     description: "Image compression, lazy loading, preconnect hints",
     owner: "Mike",
-    status: "done",
   },
   {
     id: "4",
     task: "Shopping cart",
     description: "Cart functionality with localStorage persistence",
     owner: "Mike",
-    status: "done",
   },
   {
     id: "5",
     task: "Product pages",
     description: "10 photography prints with frame options",
     owner: "Mike",
-    status: "done",
   },
   {
     id: "6",
     task: "Deploy to GitHub Pages",
     description: "Site is live at banddude.github.io/united-studio-collective",
     owner: "Mike",
-    status: "done",
     link: "https://banddude.github.io/united-studio-collective",
   },
   // PENDING - EVAN
@@ -64,7 +65,6 @@ const checklist: ChecklistItem[] = [
     task: "Transfer domain to Cloudflare",
     description: "Move unitedstudiocollective.com to Cloudflare for DNS management",
     owner: "Evan",
-    status: "pending",
     link: "https://dash.cloudflare.com",
   },
   {
@@ -72,22 +72,21 @@ const checklist: ChecklistItem[] = [
     task: "Set up DNS records",
     description: "Add A records (185.199.108-111.153) and CNAME (www -> banddude.github.io)",
     owner: "Evan",
-    status: "pending",
+    blockedBy: "7",
   },
   {
     id: "9",
     task: "Configure custom domain in GitHub",
     description: "Add unitedstudiocollective.com in repo Settings > Pages",
     owner: "Evan",
-    status: "pending",
     link: "https://github.com/banddude/united-studio-collective/settings/pages",
+    blockedBy: "8",
   },
   {
     id: "10",
     task: "Create Stripe account",
     description: "Sign up at stripe.com and verify business details",
     owner: "Evan",
-    status: "pending",
     link: "https://dashboard.stripe.com/register",
   },
   {
@@ -95,15 +94,15 @@ const checklist: ChecklistItem[] = [
     task: "Create Stripe Payment Links",
     description: "Create payment links for each product variant (frameless, black frame, white frame)",
     owner: "Evan",
-    status: "pending",
     link: "https://dashboard.stripe.com/payment-links",
+    blockedBy: "10",
   },
   {
     id: "12",
     task: "Add Payment Links to store.json",
     description: "Edit public/config/store.json with Stripe URLs and set stripeEnabled: true",
     owner: "Evan",
-    status: "pending",
+    blockedBy: "11",
   },
   // PENDING - MIKE (after domain)
   {
@@ -111,38 +110,72 @@ const checklist: ChecklistItem[] = [
     task: "Update base URL in code",
     description: "Change from GitHub Pages URL to unitedstudiocollective.com",
     owner: "Mike",
-    status: "blocked",
+    blockedBy: "9",
   },
   // OPTIONAL
   {
     id: "14",
     task: "Add Box Chocolate video",
-    description: "Replace 'Video coming soon' placeholder with actual video",
+    description: "Replace 'Video coming soon' placeholder with actual video (optional)",
     owner: "Evan",
-    status: "pending",
   },
 ];
 
 export default function LaunchChecklist() {
-  const [items, setItems] = useState(checklist);
+  const [status, setStatus] = useState<ChecklistStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [lastFetch, setLastFetch] = useState<Date | null>(null);
 
-  const toggleStatus = (id: string) => {
-    setItems(prev =>
-      prev.map(item =>
-        item.id === id
-          ? { ...item, status: item.status === "done" ? "pending" : "done" as const }
-          : item
-      )
-    );
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch(`${basePath}/config/checklist.json?t=${Date.now()}`);
+      const data = await res.json();
+      setStatus(data);
+      setLastFetch(new Date());
+    } catch (err) {
+      console.error("Failed to fetch checklist status:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const doneCount = items.filter(i => i.status === "done").length;
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const isBlocked = (item: ChecklistItem): boolean => {
+    if (!item.blockedBy || !status) return false;
+    return !status.items[item.blockedBy]?.done;
+  };
+
+  const isDone = (id: string): boolean => {
+    return status?.items[id]?.done ?? false;
+  };
+
+  const getItemsWithStatus = () => {
+    return checklistItems.map(item => ({
+      ...item,
+      done: isDone(item.id),
+      blocked: isBlocked(item),
+    }));
+  };
+
+  const items = getItemsWithStatus();
+  const doneCount = items.filter(i => i.done).length;
   const totalCount = items.length;
   const progress = Math.round((doneCount / totalCount) * 100);
 
-  const evanTasks = items.filter(i => i.owner === "Evan" && i.status !== "done");
-  const mikeTasks = items.filter(i => i.owner === "Mike" && i.status !== "done");
-  const completedTasks = items.filter(i => i.status === "done");
+  const evanTasks = items.filter(i => i.owner === "Evan" && !i.done);
+  const mikeTasks = items.filter(i => i.owner === "Mike" && !i.done);
+  const completedTasks = items.filter(i => i.done);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-500">Loading checklist...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -153,12 +186,21 @@ export default function LaunchChecklist() {
             <h1 className="text-2xl font-semibold text-gray-900">Launch Checklist</h1>
             <p className="text-sm text-gray-500">United Studio Collective</p>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-gray-600 hover:text-gray-900 underline"
-          >
-            Back to site
-          </Link>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={fetchStatus}
+              className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </button>
+            <Link
+              href="/"
+              className="text-sm text-gray-600 hover:text-gray-900 underline"
+            >
+              Back to site
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -176,6 +218,29 @@ export default function LaunchChecklist() {
             />
           </div>
           <p className="text-center text-2xl font-bold text-gray-900 mt-3">{progress}%</p>
+          {lastFetch && (
+            <p className="text-center text-xs text-gray-400 mt-2">
+              Last updated: {status?.lastUpdated} &bull; Fetched: {lastFetch.toLocaleTimeString()}
+            </p>
+          )}
+        </div>
+
+        {/* How to Update */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+          <h3 className="font-medium text-yellow-800 mb-2">How to mark items complete:</h3>
+          <p className="text-sm text-yellow-700">
+            Edit <code className="bg-yellow-100 px-1 rounded">public/config/checklist.json</code> in the repo.
+            Change <code className="bg-yellow-100 px-1 rounded">&quot;done&quot;: false</code> to{" "}
+            <code className="bg-yellow-100 px-1 rounded">&quot;done&quot;: true</code> for completed items, then commit and push.
+          </p>
+          <a
+            href="https://github.com/banddude/united-studio-collective/edit/main/public/config/checklist.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 mt-2 text-sm text-yellow-800 hover:text-yellow-900 underline"
+          >
+            Edit on GitHub <ExternalLink className="w-3 h-3" />
+          </a>
         </div>
 
         {/* Evan's Tasks */}
@@ -190,23 +255,26 @@ export default function LaunchChecklist() {
               {evanTasks.map(item => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-lg shadow-sm p-4 flex items-start gap-4"
+                  className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
                 >
-                  <button
-                    onClick={() => toggleStatus(item.id)}
-                    className="mt-0.5 flex-shrink-0"
-                  >
-                    {item.status === "done" ? (
+                  <div className="mt-0.5 flex-shrink-0">
+                    {item.done ? (
                       <Check className="w-6 h-6 text-green-500" />
-                    ) : item.status === "blocked" ? (
-                      <Circle className="w-6 h-6 text-gray-300" />
+                    ) : item.blocked ? (
+                      <Circle className="w-6 h-6 text-orange-300" />
                     ) : (
-                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500" />
+                      <Circle className="w-6 h-6 text-gray-400" />
                     )}
-                  </button>
+                  </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-medium text-gray-900">{item.task}</h3>
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">#{item.id}</span>
+                      {item.blocked && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
+                          Blocked by #{item.blockedBy}
+                        </span>
+                      )}
                       {item.link && (
                         <a
                           href={item.link}
@@ -238,26 +306,25 @@ export default function LaunchChecklist() {
               {mikeTasks.map(item => (
                 <div
                   key={item.id}
-                  className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.status === "blocked" ? "opacity-60" : ""}`}
+                  className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
                 >
-                  <button
-                    onClick={() => toggleStatus(item.id)}
-                    className="mt-0.5 flex-shrink-0"
-                    disabled={item.status === "blocked"}
-                  >
-                    {item.status === "done" ? (
+                  <div className="mt-0.5 flex-shrink-0">
+                    {item.done ? (
                       <Check className="w-6 h-6 text-green-500" />
-                    ) : item.status === "blocked" ? (
+                    ) : item.blocked ? (
                       <Circle className="w-6 h-6 text-orange-300" />
                     ) : (
-                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500" />
+                      <Circle className="w-6 h-6 text-gray-400" />
                     )}
-                  </button>
+                  </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-medium text-gray-900">{item.task}</h3>
-                      {item.status === "blocked" && (
-                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">Blocked</span>
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">#{item.id}</span>
+                      {item.blocked && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
+                          Blocked by #{item.blockedBy}
+                        </span>
                       )}
                     </div>
                     <p className="text-sm text-gray-600 mt-1">{item.description}</p>
