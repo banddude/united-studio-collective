@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: /united-studio-collective
+          NEXT_PUBLIC_GITHUB_TOKEN: ${{ secrets.CHECKLIST_TOKEN }}
 
       - name: List output directory
         run: ls -la out || echo "out directory not found"

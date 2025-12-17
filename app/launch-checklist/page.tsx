@@ -22,6 +22,7 @@ const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collect
 
 const GITHUB_REPO = "banddude/united-studio-collective";
 const GITHUB_FILE_PATH = "public/config/checklist.json";
+const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN || "";
 
 const checklistItems: ChecklistItem[] = [
   {
@@ -125,17 +126,7 @@ export default function LaunchChecklist() {
   const [loading, setLoading] = useState(true);
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
-  const [token, setToken] = useState<string>("");
-  const [showTokenInput, setShowTokenInput] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Load token from localStorage
-  useEffect(() => {
-    const savedToken = localStorage.getItem("github_token");
-    if (savedToken) {
-      setToken(savedToken);
-    }
-  }, []);
 
   const fetchStatus = async () => {
     try {
@@ -156,15 +147,9 @@ export default function LaunchChecklist() {
     fetchStatus();
   }, []);
 
-  const saveToken = () => {
-    localStorage.setItem("github_token", token);
-    setShowTokenInput(false);
-    setError(null);
-  };
-
   const toggleItem = async (id: string) => {
-    if (!token) {
-      setShowTokenInput(true);
+    if (!GITHUB_TOKEN) {
+      setError("GitHub token not configured");
       return;
     }
 
@@ -187,7 +172,7 @@ export default function LaunchChecklist() {
         `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`,
         {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `token ${GITHUB_TOKEN}`,
             Accept: "application/vnd.github.v3+json",
           },
         }
@@ -195,8 +180,7 @@ export default function LaunchChecklist() {
 
       if (!getRes.ok) {
         if (getRes.status === 401) {
-          setError("Invalid token. Please update your GitHub token.");
-          setShowTokenInput(true);
+          setError("Invalid token. Check GitHub token configuration.");
           setUpdating(null);
           return;
         }
@@ -216,7 +200,7 @@ export default function LaunchChecklist() {
         {
           method: "PUT",
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `token ${GITHUB_TOKEN}`,
             Accept: "application/vnd.github.v3+json",
             "Content-Type": "application/json",
           },
@@ -287,12 +271,6 @@ export default function LaunchChecklist() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setShowTokenInput(!showTokenInput)}
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              {token ? "Change Token" : "Set Token"}
-            </button>
-            <button
               onClick={fetchStatus}
               className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
             >
@@ -310,39 +288,6 @@ export default function LaunchChecklist() {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
-        {/* Token Input */}
-        {showTokenInput && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
-            <h3 className="font-medium text-yellow-800 mb-2">GitHub Token Required</h3>
-            <p className="text-sm text-yellow-700 mb-3">
-              To save changes, enter a GitHub personal access token with repo access.
-              <a
-                href="https://github.com/settings/tokens/new?scopes=repo&description=USC%20Checklist"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-1 underline"
-              >
-                Create one here
-              </a>
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                placeholder="ghp_xxxxxxxxxxxx"
-                className="flex-1 px-3 py-2 border border-yellow-300 rounded text-sm"
-              />
-              <button
-                onClick={saveToken}
-                className="px-4 py-2 bg-yellow-600 text-white rounded text-sm hover:bg-yellow-700"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
