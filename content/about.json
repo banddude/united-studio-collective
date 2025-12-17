@@ -1,0 +1,35 @@
+{
+  "page": "about",
+  "title": "What We Strive For",
+  "mission_statement": "United Studio Collective is a gateway to creative expression. Our mission is to use a diverse range of specialty artists and transform the everyday into something different and exquisite. We specialize in producing fashion films, experimental short films, and delving into the timeless worlds of analog and digital photography. Our team of talented creative individuals is continuously growing, so come and join us on this exciting adventure of visual storytelling.",
+  "team_image": "https://static.wixstatic.com/media/963954_team_photo.jpg",
+  "team_members": [
+    {
+      "name": "Evan Rene",
+      "bio": "How do we expand upon the standard? That is the constant question that lingers in Evan Rene's mind! Film is a creative medium that has thrived in pop culture. Amazing trends have started and bad trends have come from it. Evan's goal isn't to completely revitalize the film industry or even bring it back to its former self. Evan's goal is to make art count and to tell compelling thought-provoking stories through filmmaking & photography.",
+      "image": "USC Team Member_Evan Rene"
+    },
+    {
+      "name": "Katie Chew",
+      "bio": "Katie is a fashion photographer from the Midwest who moved to Los Angeles to achieve her dreams of working with other creatives in fashion. She is a skilled photographer who gets her inspiration from movies and current high fashion magazines she carefully studies. She enjoys working with everyone as a collective effort and believes the best ideas come from working with others.",
+      "image": "240308_KatieChew.png"
+    }
+  ],
+  "fashion_brands": [
+    {
+      "name": "DELIKATE RAYNE",
+      "url": "https://www.delikaterayne.com/",
+      "logo": "DELIKATE RAYNE logo"
+    },
+    {
+      "name": "SIMON",
+      "url": "https://www.instagram.com/simon_haiku/",
+      "logo": "SIMON logo with Japanese characters"
+    },
+    {
+      "name": "Hellstar",
+      "url": "https://hellstar.com/",
+      "logo": "Hellstar logo"
+    }
+  ]
+}

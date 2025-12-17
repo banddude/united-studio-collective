@@ -1,0 +1,21 @@
+{
+  "page": "filmmaking",
+  "title": "Filmmaking",
+  "channel_name": "United Studio Collective",
+  "videos": [
+    {
+      "title": "United Studio Collective 2024 Reel",
+      "description": "Main featured reel - woman on white fur background",
+      "featured": true
+    },
+    {
+      "title": "Light / Dark",
+      "description": "Woman on white background"
+    },
+    {
+      "title": "Delikate Rayne Fashion Shoot",
+      "description": "Sand dunes fashion video"
+    }
+  ],
+  "features": ["Video search", "Share button", "Channel info"]
+}

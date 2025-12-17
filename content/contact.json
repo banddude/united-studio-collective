@@ -1,0 +1,14 @@
+{
+  "page": "contact",
+  "title": "Connect with us on future projects",
+  "email": "Unitedstudiocollective@gmail.com",
+  "background_image": "Griffith Observatory at night",
+  "form_fields": [
+    {"name": "First Name", "type": "text", "required": true},
+    {"name": "Last Name", "type": "text", "required": true},
+    {"name": "Email", "type": "email", "required": true},
+    {"name": "Phone", "type": "tel", "required": false},
+    {"name": "Message", "type": "textarea", "placeholder": "Type your message here..."}
+  ],
+  "submit_button": "Submit"
+}

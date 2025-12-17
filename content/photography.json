@@ -1,0 +1,32 @@
+{
+  "page": "photography",
+  "title": "Photography",
+  "layout": "grid",
+  "has_load_more": true,
+  "images": [
+    {
+      "src": "https://static.wixstatic.com/media/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",
+      "description": "B&W silhouette person at window"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_fac333b082b54599afa0d5a3ed3f18b8~mv2.jpg",
+      "description": "Blurry abstract B&W"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_c62af60703dd4601859d5cee56ff3e17~mv2.jpg",
+      "description": "Sand dunes with person"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_81382f1afcf74f6d83d8f3d9063801b8~mv2.jpg",
+      "description": "Dark hallway with light"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_68c785f9dcc04d579553545aeba44046~mv2.jpg",
+      "description": "Woman portrait in greenery"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_6f8bb6be5e1e487c80d32a1e7b748e53~mv2.jpg",
+      "description": "Woman on rooftop blue sky"
+    }
+  ]
+}

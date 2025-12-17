@@ -1,0 +1,26 @@
+{
+  "site_name": "United Studio Collective",
+  "tagline": "Los Angeles Video Production Company",
+  "instagram": "https://www.instagram.com/unitedstudiocollective/",
+  "email": "Unitedstudiocollective@gmail.com",
+  "copyright": "© 2024 United Studio Collective",
+  "navigation": [
+    {"name": "Home", "path": "/"},
+    {"name": "Filmmaking", "path": "/filmmaking-2"},
+    {"name": "Photography", "path": "/photography"},
+    {"name": "Store", "path": "/category/all-products"},
+    {"name": "About", "path": "/about"},
+    {"name": "Contact", "path": "/contact"}
+  ],
+  "header": {
+    "has_login": true,
+    "has_cart": true,
+    "title_font": "thin serif (Didot/Bodoni style)",
+    "title_color": "#3d3d3d"
+  },
+  "footer": {
+    "background": "#f0f0f0",
+    "has_back_to_top": true,
+    "has_social_bar": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "page": "homepage",
+  "gallery_images": [
+    {
+      "src": "https://static.wixstatic.com/media/963954_c62af60703dd4601859d5cee56ff3e17~mv2.jpg/v1/fill/w_1470,h_827,q_90,enc_avif,quality_auto/963954_c62af60703dd4601859d5cee56ff3e17~mv2.jpg",
+      "alt": "EP_Colored_Edit_210727.00_01_46_14.Still006.jpg",
+      "description": "Sand dunes with person"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_c4beeeacd4d143c8aeeebae3bf9a4e49~mv2.jpg/v1/fill/w_1470,h_1476,q_90,enc_avif,quality_auto/963954_c4beeeacd4d143c8aeeebae3bf9a4e49~mv2.jpg",
+      "alt": "LightRoom_Edit-1.jpg",
+      "description": "Blurry subway/train"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_d1783f6f4df14475a4b284c0613f5421~mv2.jpg/v1/fill/w_1470,h_980,q_90,enc_avif,quality_auto/963954_d1783f6f4df14475a4b284c0613f5421~mv2.jpg",
+      "alt": "",
+      "description": "Band in bar"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_4433bed26cae4977aec34e1769c72c38~mv2.jpg/v1/fill/w_1470,h_1448,q_90,enc_avif,quality_auto/963954_4433bed26cae4977aec34e1769c72c38~mv2.jpg",
+      "alt": "",
+      "description": "B&W two people window"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg/v1/fill/w_1470,h_935,q_90,enc_avif,quality_auto/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",
+      "alt": "",
+      "description": "B&W single person window"
+    }
+  ]
+}
