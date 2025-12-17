@@ -174,13 +174,25 @@ export default function FilmmakingPage() {
 
               </div>
 
+              {/* Previous Video Arrow */}
+              {thumbnailIndex > 0 && (
+                <button
+                  onClick={handlePrevThumbnails}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+                >
+                  <ChevronLeft size={48} strokeWidth={1} />
+                </button>
+              )}
+
               {/* Next Video Arrow */}
-              <button
-                onClick={handleNextThumbnails}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
-              >
-                <ChevronRight size={48} strokeWidth={1} />
-              </button>
+              {thumbnailIndex < maxIndex && (
+                <button
+                  onClick={handleNextThumbnails}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+                >
+                  <ChevronRight size={48} strokeWidth={1} />
+                </button>
+              )}
             </div>
           )}
         </div>
