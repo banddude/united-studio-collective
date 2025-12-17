@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,101 +8,40 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { useCart } from "../../../context/CartContext";
 import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  artist?: string;
-  size?: string;
-  description?: string;
-  stripe: {
-    frameless: string;
-    framed_black: string;
-    framed_white: string;
-  };
-}
-
-interface StoreConfig {
-  stripeEnabled: boolean;
-  defaultArtist: string;
-  defaultSize: string;
-  defaultDescription: string;
-  products: Product[];
-}
+import type { Product } from "../../../lib/store-data";
 
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White", "Natural Wood", "Dark Wood"];
 
 interface ProductClientProps {
-  productId: number;
+  product: Product;
+  prevProduct: Product | null;
+  nextProduct: Product | null;
+  artist: string;
+  size: string;
+  description: string;
+  stripeEnabled: boolean;
 }
 
-export default function ProductClient({ productId }: ProductClientProps) {
+export default function ProductClient({
+  product,
+  prevProduct,
+  nextProduct,
+  artist,
+  size,
+  description,
+  stripeEnabled,
+}: ProductClientProps) {
   const router = useRouter();
   const { addItem } = useCart();
 
-  const [storeConfig, setStoreConfig] = useState<StoreConfig | null>(null);
-  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [frameOption, setFrameOption] = useState("");
   const [frameColor, setFrameColor] = useState("");
   const [showAdded, setShowAdded] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetch("/config/store.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setStoreConfig(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to load store config:", err);
-        setLoading(false);
-      });
-  }, []);
-
-  const products = storeConfig?.products || [];
-  const product = products.find((p) => p.id === productId);
-
   const isFrameless = frameOption === "Frameless Photograph";
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white">
-        <Header variant="light" currentPage="Store" />
-        <main className="pt-40 pb-16 px-6 text-center">
-          <p className="text-gray-600">Loading...</p>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-white">
-        <Header variant="light" currentPage="Store" />
-        <main className="pt-40 pb-16 px-6 text-center">
-          <h1 className="text-2xl font-medium text-black">Product Not Found</h1>
-          <Link href="/store" className="text-blue-600 hover:underline mt-4 inline-block">
-            Back to Store
-          </Link>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  const currentIndex = products.findIndex((p) => p.id === productId);
-  const prevProduct = currentIndex > 0 ? products[currentIndex - 1] : null;
-  const nextProduct = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
-
-  const artist = product.artist || storeConfig?.defaultArtist || "Evan Rene";
-  const size = product.size || storeConfig?.defaultSize || "16x20";
-  const description = product.description || storeConfig?.defaultDescription || "";
 
   const decrementQuantity = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -146,7 +85,7 @@ export default function ProductClient({ productId }: ProductClientProps) {
     if (!validateSelection()) return;
 
     // Check if Stripe is enabled and we have a payment link
-    if (storeConfig?.stripeEnabled) {
+    if (stripeEnabled) {
       let stripeLink = "";
       if (isFrameless) {
         stripeLink = product.stripe.frameless;
