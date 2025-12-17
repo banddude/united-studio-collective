@@ -46,7 +46,7 @@ export default function Footer() {
           {/* Left: Copyright */}
           <div className="text-sm font-light">
             <a href="/" className="underline hover:opacity-70 transition-opacity">
-              © 2026 United Studio Collective
+              © 2024 United Studio Collective
             </a>
             <div className="text-xs mt-1 opacity-70">© Copyright</div>
           </div>
@@ -62,7 +62,7 @@ export default function Footer() {
 
           {/* Right: Connect with us */}
           <div className="flex items-center gap-4">
-            <span className="text-sm font-light">Connect with us!</span>
+            <Link href="/contact" className="text-sm font-light hover:opacity-70 transition-opacity">Connect with us!</Link>
             <a
               href="https://www.instagram.com/unitedstudiocollective/"
               target="_blank"

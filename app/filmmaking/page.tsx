@@ -78,7 +78,7 @@ const videos: Video[] = [
     videoId: "kg1EDL-O5zI",
     platform: "youtube",
     creator: "United Studio Collective",
-    description: "A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on Blackmagic URSA Mini Pro.",
+    description: "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro.",
   },
   {
     id: "7",
