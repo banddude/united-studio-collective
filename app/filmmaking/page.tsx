@@ -68,7 +68,7 @@ const videos: Video[] = [
     id: "7",
     title: "A Friendship Divided",
     duration: "01:30",
-    thumbnail: "https://vumbnail.com/534300555.jpg",
+    thumbnail: "https://static.wixstatic.com/media/963954_5d4dbea05d6b47f3bf62b0e182a08190~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "534300555",
     platform: "vimeo",
   },
@@ -76,9 +76,9 @@ const videos: Video[] = [
     id: "8",
     title: "Box Chocolate: We Have Your Delivery",
     duration: "00:00",
-    thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
+    thumbnail: "https://i.vimeocdn.com/video/1401443224-d8abccfdb8e26a6ce6bd46eed625f0aa1baa9c3430aa65ab9bb4d3ba98fc085d-d_1920x1080",
     videoId: "",
-    platform: "pending", // TODO: Evan needs to upload this to YouTube/Vimeo
+    platform: "pending", // Private Vimeo video
   },
 ];
 
