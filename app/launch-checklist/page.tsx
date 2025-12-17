@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, Circle, ExternalLink, RefreshCw, Loader2 } from "lucide-react";
+import { Check, Circle, ExternalLink, RefreshCw, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
@@ -157,6 +157,7 @@ export default function LaunchChecklist() {
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const fetchStatus = async () => {
     try {
@@ -197,7 +198,6 @@ export default function LaunchChecklist() {
     };
 
     try {
-      // Get current file SHA
       const getRes = await fetch(
         `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`,
         {
@@ -210,7 +210,7 @@ export default function LaunchChecklist() {
 
       if (!getRes.ok) {
         if (getRes.status === 401) {
-          setError("Invalid token. Check GitHub token configuration.");
+          setError("Invalid token");
           setUpdating(null);
           return;
         }
@@ -220,7 +220,6 @@ export default function LaunchChecklist() {
       const fileData = await getRes.json();
       const sha = fileData.sha;
 
-      // Update file
       const content = btoa(JSON.stringify(newStatus, null, 2));
       const taskName = checklistItems.find(i => i.id === id)?.task || `item ${id}`;
       const action = !status.items[id]?.done ? "Complete" : "Uncomplete";
@@ -246,11 +245,10 @@ export default function LaunchChecklist() {
         throw new Error(`Failed to update file: ${updateRes.status}`);
       }
 
-      // Update local state immediately
       setStatus(newStatus);
     } catch (err) {
       console.error("Failed to update checklist:", err);
-      setError("Failed to save. Check your token and try again.");
+      setError("Failed to save");
     } finally {
       setUpdating(null);
     }
@@ -280,326 +278,347 @@ export default function LaunchChecklist() {
 
   const evanTasks = items.filter(i => i.owner === "Evan" && !i.done);
   const mikeTasks = items.filter(i => i.owner === "Mike" && !i.done);
+  const bothTasks = items.filter(i => i.owner === "Both" && !i.done);
   const completedTasks = items.filter(i => i.done);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading checklist...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Launch Checklist</h1>
-            <p className="text-sm text-gray-500">United Studio Collective</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={fetchStatus}
-              className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Refresh
-            </button>
-            <Link
-              href="/"
-              className="text-sm text-gray-600 hover:text-gray-900 underline"
-            >
-              Back to site
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Subtle gradient overlay */}
+      <div className="fixed inset-0 bg-gradient-to-br from-zinc-900/50 via-transparent to-zinc-900/30 pointer-events-none" />
 
-      <main className="max-w-4xl mx-auto px-6 py-8">
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-            <p className="text-sm text-red-700">{error}</p>
-          </div>
-        )}
-
-        {/* Progress Bar */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Progress</span>
-            <span className="text-sm text-gray-500">{doneCount} of {totalCount} complete</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
-            <div
-              className="bg-green-500 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-center text-2xl font-bold text-gray-900 mt-3">{progress}%</p>
-          {lastFetch && (
-            <p className="text-center text-xs text-gray-400 mt-2">
-              Last updated: {status?.lastUpdated} &bull; Fetched: {lastFetch.toLocaleTimeString()}
-            </p>
-          )}
-        </div>
-
-        {/* Evan's Tasks */}
-        {evanTasks.length > 0 && (
-          <section className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span className="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">E</span>
-              Evan&apos;s Tasks
-              <span className="text-sm font-normal text-gray-500">({evanTasks.length} remaining)</span>
-            </h2>
-            <div className="space-y-3">
-              {evanTasks.map(item => (
-                <div
-                  key={item.id}
-                  className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
-                >
-                  <button
-                    onClick={() => !item.blocked && toggleItem(item.id)}
-                    disabled={item.blocked || updating === item.id}
-                    className="mt-0.5 flex-shrink-0 disabled:cursor-not-allowed"
-                  >
-                    {updating === item.id ? (
-                      <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
-                    ) : item.done ? (
-                      <Check className="w-6 h-6 text-green-500" />
-                    ) : item.blocked ? (
-                      <Circle className="w-6 h-6 text-orange-300" />
-                    ) : (
-                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer" />
-                    )}
-                  </button>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-medium text-gray-900">{item.task}</h3>
-                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">#{item.id}</span>
-                      {item.blocked && (
-                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
-                          Blocked by #{item.blockedBy}
-                        </span>
-                      )}
-                      {item.link && (
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+      <div className="relative">
+        {/* Header */}
+        <header className="border-b border-white/5 backdrop-blur-sm bg-black/20">
+          <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-zinc-500 mb-1">Launch</p>
+              <h1 className="text-2xl font-light tracking-tight">Checklist</h1>
+              <p className="text-sm text-zinc-500 mt-1">United Studio Collective</p>
             </div>
-          </section>
-        )}
-
-        {/* Mike's Tasks */}
-        {mikeTasks.length > 0 && (
-          <section className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">M</span>
-              Mike&apos;s Tasks
-              <span className="text-sm font-normal text-gray-500">({mikeTasks.length} remaining)</span>
-            </h2>
-            <div className="space-y-3">
-              {mikeTasks.map(item => (
-                <div
-                  key={item.id}
-                  className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
-                >
-                  <button
-                    onClick={() => !item.blocked && toggleItem(item.id)}
-                    disabled={item.blocked || updating === item.id}
-                    className="mt-0.5 flex-shrink-0 disabled:cursor-not-allowed"
-                  >
-                    {updating === item.id ? (
-                      <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
-                    ) : item.done ? (
-                      <Check className="w-6 h-6 text-green-500" />
-                    ) : item.blocked ? (
-                      <Circle className="w-6 h-6 text-orange-300" />
-                    ) : (
-                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer" />
-                    )}
-                  </button>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-medium text-gray-900">{item.task}</h3>
-                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-mono">#{item.id}</span>
-                      {item.blocked && (
-                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
-                          Blocked by #{item.blockedBy}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Completed Tasks */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Check className="w-6 h-6 text-green-500" />
-            Completed
-            <span className="text-sm font-normal text-gray-500">({completedTasks.length} tasks)</span>
-          </h2>
-          <div className="space-y-2">
-            {completedTasks.map(item => (
-              <div
-                key={item.id}
-                className="bg-gray-100 rounded-lg p-3 flex items-center gap-3"
+            <div className="flex items-center gap-4">
+              <button
+                onClick={fetchStatus}
+                className="text-sm text-zinc-500 hover:text-white transition-colors flex items-center gap-2 group"
               >
-                <button
-                  onClick={() => toggleItem(item.id)}
-                  disabled={updating === item.id}
-                  className="flex-shrink-0"
-                >
-                  {updating === item.id ? (
-                    <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-                  ) : (
-                    <Check className="w-5 h-5 text-green-500 hover:text-orange-500 cursor-pointer" />
-                  )}
-                </button>
-                <span className="text-gray-600 line-through">{item.task}</span>
-                <span className="text-xs text-gray-400 ml-auto">{item.owner}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Instructions Section */}
-        <section className="mt-12 space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900">Setup Instructions</h2>
-
-          {/* Step 1: Domain Transfer */}
-          <div className="bg-blue-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
-              <span className="w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">1</span>
-              Transfer Domain to Cloudflare
-            </h3>
-            <ol className="text-sm text-blue-800 space-y-2 ml-9 list-decimal">
-              <li>Go to <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">dash.cloudflare.com</a></li>
-              <li>Click &quot;Add a Site&quot; and enter <strong>unitedstudiocollective.com</strong></li>
-              <li>Select the Free plan</li>
-              <li>Cloudflare will give you 2 nameservers (e.g., ada.ns.cloudflare.com)</li>
-              <li>Go to your current domain registrar (Wix, GoDaddy, etc.)</li>
-              <li>Update the nameservers to the Cloudflare ones</li>
-              <li>Wait up to 24 hours for propagation (usually faster)</li>
-            </ol>
-          </div>
-
-          {/* Step 2: DNS Records */}
-          <div className="bg-green-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
-              <span className="w-7 h-7 bg-green-600 text-white rounded-full flex items-center justify-center text-sm">2</span>
-              Add DNS Records in Cloudflare
-            </h3>
-            <p className="text-sm text-green-800 mb-4 ml-9">Once the domain is on Cloudflare, add these DNS records:</p>
-            <div className="bg-white rounded border border-green-200 overflow-hidden ml-9">
-              <table className="w-full text-sm">
-                <thead className="bg-green-100">
-                  <tr>
-                    <th className="text-left px-4 py-2 text-green-900">Type</th>
-                    <th className="text-left px-4 py-2 text-green-900">Name</th>
-                    <th className="text-left px-4 py-2 text-green-900">Content</th>
-                    <th className="text-left px-4 py-2 text-green-900">Proxy</th>
-                  </tr>
-                </thead>
-                <tbody className="font-mono text-xs">
-                  <tr className="border-t border-green-100">
-                    <td className="px-4 py-2">A</td>
-                    <td className="px-4 py-2">@</td>
-                    <td className="px-4 py-2">185.199.108.153</td>
-                    <td className="px-4 py-2 text-gray-500">DNS only</td>
-                  </tr>
-                  <tr className="border-t border-green-100">
-                    <td className="px-4 py-2">A</td>
-                    <td className="px-4 py-2">@</td>
-                    <td className="px-4 py-2">185.199.109.153</td>
-                    <td className="px-4 py-2 text-gray-500">DNS only</td>
-                  </tr>
-                  <tr className="border-t border-green-100">
-                    <td className="px-4 py-2">A</td>
-                    <td className="px-4 py-2">@</td>
-                    <td className="px-4 py-2">185.199.110.153</td>
-                    <td className="px-4 py-2 text-gray-500">DNS only</td>
-                  </tr>
-                  <tr className="border-t border-green-100">
-                    <td className="px-4 py-2">A</td>
-                    <td className="px-4 py-2">@</td>
-                    <td className="px-4 py-2">185.199.111.153</td>
-                    <td className="px-4 py-2 text-gray-500">DNS only</td>
-                  </tr>
-                  <tr className="border-t border-green-100">
-                    <td className="px-4 py-2">CNAME</td>
-                    <td className="px-4 py-2">www</td>
-                    <td className="px-4 py-2">banddude.github.io</td>
-                    <td className="px-4 py-2 text-gray-500">DNS only</td>
-                  </tr>
-                </tbody>
-              </table>
+                <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+              </button>
+              <Link
+                href="/meeting-prep"
+                className="text-sm text-zinc-400 hover:text-white transition-colors"
+              >
+                Meeting Prep
+              </Link>
+              <Link
+                href="/"
+                className="text-sm text-zinc-400 hover:text-white transition-colors"
+              >
+                Site
+              </Link>
             </div>
-            <p className="text-xs text-green-700 mt-3 ml-9">
-              Note: Turn OFF the orange cloud (Proxy) for all records. Set to &quot;DNS only&quot; (gray cloud).
-            </p>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto px-6 py-12 space-y-12">
+          {/* Error */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
+          )}
+
+          {/* Progress */}
+          <div className="bg-zinc-900/50 rounded-2xl border border-white/5 p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="text-4xl font-light">{progress}%</p>
+                <p className="text-sm text-zinc-500 mt-1">{doneCount} of {totalCount} complete</p>
+              </div>
+              {lastFetch && (
+                <p className="text-xs text-zinc-600">
+                  Updated {status?.lastUpdated}
+                </p>
+              )}
+            </div>
+            <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
 
-          {/* Step 3: GitHub Pages */}
-          <div className="bg-purple-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-purple-900 mb-3 flex items-center gap-2">
-              <span className="w-7 h-7 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm">3</span>
-              Configure GitHub Pages
-            </h3>
-            <ol className="text-sm text-purple-800 space-y-2 ml-9 list-decimal">
-              <li>Go to <a href="https://github.com/banddude/united-studio-collective/settings/pages" target="_blank" rel="noopener noreferrer" className="underline font-medium">GitHub repo Settings → Pages</a></li>
-              <li>Under &quot;Custom domain&quot;, enter <strong>unitedstudiocollective.com</strong></li>
-              <li>Click Save</li>
-              <li>Wait for DNS check to pass (may take a few minutes)</li>
-              <li>Check &quot;Enforce HTTPS&quot; once available</li>
-            </ol>
-          </div>
+          {/* Evan's Tasks */}
+          {evanTasks.length > 0 && (
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                  <span className="text-blue-400 font-medium">E</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-light">Evan</h2>
+                  <p className="text-sm text-zinc-500">{evanTasks.length} remaining</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {evanTasks.map(item => (
+                  <div
+                    key={item.id}
+                    className={`bg-zinc-900/50 rounded-xl border border-white/5 p-4 flex items-center gap-4 transition-opacity ${item.blocked ? "opacity-40" : ""}`}
+                  >
+                    <button
+                      onClick={() => !item.blocked && toggleItem(item.id)}
+                      disabled={item.blocked || updating === item.id}
+                      className="flex-shrink-0 disabled:cursor-not-allowed"
+                    >
+                      {updating === item.id ? (
+                        <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+                      ) : (
+                        <Circle className={`w-5 h-5 ${item.blocked ? "text-zinc-700" : "text-zinc-600 hover:text-emerald-400"} transition-colors`} />
+                      )}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-white text-sm">{item.task}</p>
+                        <span className="text-[10px] text-zinc-600 font-mono">#{item.id}</span>
+                        {item.blocked && (
+                          <span className="text-[10px] text-amber-500/60">blocked</span>
+                        )}
+                      </div>
+                      <p className="text-zinc-500 text-xs mt-0.5 truncate">{item.description}</p>
+                    </div>
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-zinc-600 hover:text-white transition-colors flex-shrink-0"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-          {/* Step 4: Stripe */}
-          <div className="bg-orange-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-orange-900 mb-3 flex items-center gap-2">
-              <span className="w-7 h-7 bg-orange-600 text-white rounded-full flex items-center justify-center text-sm">4</span>
-              Set Up Stripe Payments
-            </h3>
-            <ol className="text-sm text-orange-800 space-y-2 ml-9 list-decimal">
-              <li>Create account at <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener noreferrer" className="underline font-medium">stripe.com</a></li>
-              <li>Go to <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener noreferrer" className="underline font-medium">Products → Payment Links</a></li>
-              <li>For each print, create 3 payment links:
-                <ul className="list-disc ml-5 mt-1">
-                  <li>Frameless ($85)</li>
-                  <li>Framed Black ($85)</li>
-                  <li>Framed White ($85)</li>
-                </ul>
-              </li>
-              <li>Edit <a href="https://github.com/banddude/united-studio-collective/edit/main/public/config/store.json" target="_blank" rel="noopener noreferrer" className="underline font-medium">public/config/store.json</a></li>
-              <li>Set <code className="bg-orange-100 px-1 rounded">&quot;stripeEnabled&quot;: true</code></li>
-              <li>Add payment link URLs for each product</li>
-            </ol>
-          </div>
-        </section>
-      </main>
+          {/* Mike's Tasks */}
+          {mikeTasks.length > 0 && (
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                  <span className="text-purple-400 font-medium">M</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-light">Mike</h2>
+                  <p className="text-sm text-zinc-500">{mikeTasks.length} remaining</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {mikeTasks.map(item => (
+                  <div
+                    key={item.id}
+                    className={`bg-zinc-900/50 rounded-xl border border-white/5 p-4 flex items-center gap-4 transition-opacity ${item.blocked ? "opacity-40" : ""}`}
+                  >
+                    <button
+                      onClick={() => !item.blocked && toggleItem(item.id)}
+                      disabled={item.blocked || updating === item.id}
+                      className="flex-shrink-0 disabled:cursor-not-allowed"
+                    >
+                      {updating === item.id ? (
+                        <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
+                      ) : (
+                        <Circle className={`w-5 h-5 ${item.blocked ? "text-zinc-700" : "text-zinc-600 hover:text-emerald-400"} transition-colors`} />
+                      )}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-white text-sm">{item.task}</p>
+                        <span className="text-[10px] text-zinc-600 font-mono">#{item.id}</span>
+                        {item.blocked && (
+                          <span className="text-[10px] text-amber-500/60">blocked</span>
+                        )}
+                      </div>
+                      <p className="text-zinc-500 text-xs mt-0.5 truncate">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
-        This page is only visible to you. Remove before final launch.
-      </footer>
+          {/* Both Tasks */}
+          {bothTasks.length > 0 && (
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <span className="text-amber-400 font-medium text-xs">E+M</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-light">Both</h2>
+                  <p className="text-sm text-zinc-500">{bothTasks.length} remaining</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {bothTasks.map(item => (
+                  <div
+                    key={item.id}
+                    className="bg-zinc-900/50 rounded-xl border border-white/5 p-4 flex items-center gap-4"
+                  >
+                    <button
+                      onClick={() => toggleItem(item.id)}
+                      disabled={updating === item.id}
+                      className="flex-shrink-0"
+                    >
+                      {updating === item.id ? (
+                        <Loader2 className="w-5 h-5 text-amber-400 animate-spin" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-zinc-600 hover:text-emerald-400 transition-colors" />
+                      )}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-white text-sm">{item.task}</p>
+                        <span className="text-[10px] text-zinc-600 font-mono">#{item.id}</span>
+                      </div>
+                      <p className="text-zinc-500 text-xs mt-0.5 truncate">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Completed */}
+          {completedTasks.length > 0 && (
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                  <Check className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-light">Completed</h2>
+                  <p className="text-sm text-zinc-500">{completedTasks.length} tasks</p>
+                </div>
+              </div>
+              <div className="space-y-1">
+                {completedTasks.map(item => (
+                  <div
+                    key={item.id}
+                    className="bg-zinc-900/30 rounded-lg p-3 flex items-center gap-3"
+                  >
+                    <button
+                      onClick={() => toggleItem(item.id)}
+                      disabled={updating === item.id}
+                      className="flex-shrink-0"
+                    >
+                      {updating === item.id ? (
+                        <Loader2 className="w-4 h-4 text-emerald-400 animate-spin" />
+                      ) : (
+                        <Check className="w-4 h-4 text-emerald-500/50 hover:text-amber-400 transition-colors" />
+                      )}
+                    </button>
+                    <span className="text-zinc-500 text-sm line-through">{item.task}</span>
+                    <span className="text-[10px] text-zinc-700 ml-auto">{item.owner}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Instructions Toggle */}
+          <section>
+            <button
+              onClick={() => setShowInstructions(!showInstructions)}
+              className="w-full bg-zinc-900/50 rounded-xl border border-white/5 p-4 flex items-center justify-between hover:bg-zinc-900/70 transition-colors"
+            >
+              <span className="text-sm text-zinc-400">Setup Instructions</span>
+              {showInstructions ? (
+                <ChevronUp className="w-4 h-4 text-zinc-500" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-zinc-500" />
+              )}
+            </button>
+
+            {showInstructions && (
+              <div className="mt-4 space-y-4">
+                {/* Domain Transfer */}
+                <div className="bg-zinc-900/50 rounded-xl border border-white/5 p-6">
+                  <h3 className="text-xs uppercase tracking-[0.15em] text-blue-400/60 mb-4">1. Transfer Domain to Cloudflare</h3>
+                  <ol className="text-sm text-zinc-400 space-y-2 list-decimal list-inside">
+                    <li>Go to <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">dash.cloudflare.com</a></li>
+                    <li>Click &quot;Add a Site&quot; and enter unitedstudiocollective.com</li>
+                    <li>Select the Free plan</li>
+                    <li>Copy the 2 nameservers Cloudflare gives you</li>
+                    <li>Go to Wix and update nameservers</li>
+                    <li>Wait for propagation (up to 24h)</li>
+                  </ol>
+                </div>
+
+                {/* DNS Records */}
+                <div className="bg-zinc-900/50 rounded-xl border border-white/5 p-6">
+                  <h3 className="text-xs uppercase tracking-[0.15em] text-emerald-400/60 mb-4">2. Add DNS Records</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-zinc-500 text-xs uppercase tracking-wider">
+                          <th className="text-left py-2">Type</th>
+                          <th className="text-left py-2">Name</th>
+                          <th className="text-left py-2">Content</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-zinc-400 font-mono text-xs">
+                        <tr className="border-t border-white/5"><td className="py-2">A</td><td>@</td><td>185.199.108.153</td></tr>
+                        <tr className="border-t border-white/5"><td className="py-2">A</td><td>@</td><td>185.199.109.153</td></tr>
+                        <tr className="border-t border-white/5"><td className="py-2">A</td><td>@</td><td>185.199.110.153</td></tr>
+                        <tr className="border-t border-white/5"><td className="py-2">A</td><td>@</td><td>185.199.111.153</td></tr>
+                        <tr className="border-t border-white/5"><td className="py-2">CNAME</td><td>www</td><td>banddude.github.io</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="text-xs text-zinc-600 mt-3">Turn OFF proxy (gray cloud) for all records</p>
+                </div>
+
+                {/* GitHub Pages */}
+                <div className="bg-zinc-900/50 rounded-xl border border-white/5 p-6">
+                  <h3 className="text-xs uppercase tracking-[0.15em] text-purple-400/60 mb-4">3. Configure GitHub Pages</h3>
+                  <ol className="text-sm text-zinc-400 space-y-2 list-decimal list-inside">
+                    <li>Go to <a href="https://github.com/banddude/united-studio-collective/settings/pages" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">repo Settings → Pages</a></li>
+                    <li>Enter unitedstudiocollective.com under Custom domain</li>
+                    <li>Click Save</li>
+                    <li>Enable &quot;Enforce HTTPS&quot; once available</li>
+                  </ol>
+                </div>
+
+                {/* Stripe */}
+                <div className="bg-zinc-900/50 rounded-xl border border-white/5 p-6">
+                  <h3 className="text-xs uppercase tracking-[0.15em] text-amber-400/60 mb-4">4. Set Up Stripe</h3>
+                  <ol className="text-sm text-zinc-400 space-y-2 list-decimal list-inside">
+                    <li>Create account at <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">stripe.com</a></li>
+                    <li>Go to Products → Payment Links</li>
+                    <li>Create links for each variant (Frameless $85, Black Frame $85, White Frame $85)</li>
+                    <li>Edit <a href="https://github.com/banddude/united-studio-collective/edit/main/public/config/store.json" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">store.json</a></li>
+                    <li>Set stripeEnabled: true and add URLs</li>
+                  </ol>
+                </div>
+              </div>
+            )}
+          </section>
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t border-white/5 py-8 text-center">
+          <p className="text-xs text-zinc-600">Internal use only</p>
+        </footer>
+      </div>
     </div>
   );
 }
