@@ -13,6 +13,8 @@ interface Video {
   thumbnail: string;
   videoId: string;
   platform: "youtube" | "vimeo" | "local" | "pending";
+  creator?: string;
+  description?: string;
 }
 
 const videos: Video[] = [
@@ -23,6 +25,8 @@ const videos: Video[] = [
     thumbnail: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "NO4KgrvH4Dg",
     platform: "youtube",
+    creator: "United Studio Collective",
+    description: "United Studio Collective's 2024 Reel",
   },
   {
     id: "2",
@@ -31,6 +35,8 @@ const videos: Video[] = [
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "/videos/light-dark.mp4",
     platform: "local",
+    creator: "Ion Tong & Evan Rene",
+    description: "A collaboration of architecture and fashion. Directed By: Ion Tong & Evan Rene. Produced By: United Studio Collective. Director of Photography: Ion Tong. Fashion Designer/Artist: Simon. Model: Jessie Rainbow. Makeup Artist: Jena Mogensen, Sarai Diaz.",
   },
   {
     id: "3",
@@ -39,6 +45,8 @@ const videos: Video[] = [
     thumbnail: "https://vumbnail.com/867541676.jpg",
     videoId: "867541676",
     platform: "vimeo",
+    creator: "Evan Rene",
+    description: "Fashion shoot for Delikate Rayne.",
   },
   {
     id: "4",
@@ -47,6 +55,8 @@ const videos: Video[] = [
     thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
     videoId: "Mwe9xCaLLBM",
     platform: "youtube",
+    creator: "Ion Tong & Evan Rene",
+    description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man. The looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.",
   },
   {
     id: "5",
@@ -55,6 +65,8 @@ const videos: Video[] = [
     thumbnail: "https://img.youtube.com/vi/HBXVsbKGq4s/maxresdefault.jpg",
     videoId: "HBXVsbKGq4s",
     platform: "youtube",
+    creator: "United Studio Collective",
+    description: "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
   },
   {
     id: "6",
@@ -63,6 +75,8 @@ const videos: Video[] = [
     thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
     videoId: "kg1EDL-O5zI",
     platform: "youtube",
+    creator: "United Studio Collective",
+    description: "A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on Blackmagic URSA Mini Pro.",
   },
   {
     id: "7",
@@ -71,6 +85,8 @@ const videos: Video[] = [
     thumbnail: "https://static.wixstatic.com/media/963954_5d4dbea05d6b47f3bf62b0e182a08190~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "534300555",
     platform: "vimeo",
+    creator: "Ion Tong",
+    description: "A collection of shots from various films shot by Ion Tong and Evan Rene. Directed by Ion Tong.",
   },
   {
     id: "8",
@@ -78,7 +94,9 @@ const videos: Video[] = [
     duration: "00:00",
     thumbnail: "https://i.vimeocdn.com/video/1401443224-d8abccfdb8e26a6ce6bd46eed625f0aa1baa9c3430aa65ab9bb4d3ba98fc085d-d_1920x1080",
     videoId: "",
-    platform: "pending", // Private Vimeo video
+    platform: "pending",
+    creator: "Evan Rene",
+    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA. Directed By: Evan Rene. Produced By: Evaon Pictures & Mike Shaffer. DP: Ion Tong.",
   },
 ];
 
@@ -156,48 +174,85 @@ export default function FilmmakingPage() {
       {/* Main Content */}
       <main className="flex-1 pt-[120px] md:pt-[160px]">
         {/* Main Video Player Section */}
-        <div className="relative w-full aspect-video max-h-[70vh] z-10">
+        <div className="relative w-full z-10">
           {isPlaying ? (
-            /* Video Embed (YouTube or Vimeo) */
-            <div className="absolute inset-0 bg-black z-20">
-              {selectedVideo.platform === "youtube" ? (
-                <iframe
-                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
-                  title={selectedVideo.title}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : selectedVideo.platform === "vimeo" ? (
-                <iframe
-                  src={`https://player.vimeo.com/video/${selectedVideo.videoId}?autoplay=1`}
-                  title={selectedVideo.title}
-                  className="w-full h-full"
-                  allow="autoplay; fullscreen; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : selectedVideo.platform === "local" ? (
-                <video
-                  src={selectedVideo.videoId}
-                  className="w-full h-full"
-                  controls
-                  autoPlay
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white">
-                  <p>Video coming soon</p>
+            /* Video Embed with Info Panel */
+            <div className="flex flex-col md:flex-row bg-black">
+              {/* Video Player */}
+              <div className="relative w-full md:w-2/3 aspect-video">
+                {selectedVideo.platform === "youtube" ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
+                    title={selectedVideo.title}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : selectedVideo.platform === "vimeo" ? (
+                  <iframe
+                    src={`https://player.vimeo.com/video/${selectedVideo.videoId}?autoplay=1`}
+                    title={selectedVideo.title}
+                    className="w-full h-full"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : selectedVideo.platform === "local" ? (
+                  <video
+                    src={selectedVideo.videoId}
+                    className="w-full h-full"
+                    controls
+                    autoPlay
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <p>Video coming soon</p>
+                  </div>
+                )}
+              </div>
+              {/* Info Panel */}
+              <div className="w-full md:w-1/3 bg-[#1a1a1a] p-6 flex flex-col">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-white text-xl font-medium">{selectedVideo.title}</h3>
+                  <button
+                    onClick={handleCloseVideo}
+                    className="text-white/70 hover:text-white transition-colors"
+                  >
+                    <X size={24} />
+                  </button>
                 </div>
-              )}
-              <button
-                onClick={handleCloseVideo}
-                className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-10"
-              >
-                <X size={24} />
-              </button>
+                <div className="flex items-center gap-4 text-white/70 text-sm mb-4">
+                  <span>{selectedVideo.creator}</span>
+                  <span>{selectedVideo.duration}</span>
+                </div>
+                <p className="text-white/80 text-sm leading-relaxed flex-1">
+                  {selectedVideo.description}
+                </p>
+                {/* Navigation */}
+                <div className="flex justify-between mt-6 pt-4 border-t border-white/20">
+                  {currentVideoIndex > 0 ? (
+                    <button
+                      onClick={handlePrevVideo}
+                      className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+                    >
+                      <ChevronLeft size={20} />
+                      <span className="text-sm">Previous</span>
+                    </button>
+                  ) : <div />}
+                  {currentVideoIndex < filteredVideos.length - 1 && (
+                    <button
+                      onClick={handleNextVideo}
+                      className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+                    >
+                      <span className="text-sm">Next</span>
+                      <ChevronRight size={20} />
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           ) : (
             /* Thumbnail with Play Button */
-            <div className="absolute inset-0">
+            <div className="relative w-full aspect-video max-h-[70vh]">
               <Image
                 src={selectedVideo.thumbnail}
                 alt={selectedVideo.title}
