@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Check, Circle, ExternalLink, RefreshCw } from "lucide-react";
+import { Check, Circle, ExternalLink, RefreshCw, Loader2 } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
@@ -20,8 +20,10 @@ interface ChecklistStatus {
 
 const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collective" : "";
 
+const GITHUB_REPO = "banddude/united-studio-collective";
+const GITHUB_FILE_PATH = "public/config/checklist.json";
+
 const checklistItems: ChecklistItem[] = [
-  // COMPLETED
   {
     id: "1",
     task: "Build website",
@@ -59,7 +61,6 @@ const checklistItems: ChecklistItem[] = [
     owner: "Mike",
     link: "https://banddude.github.io/united-studio-collective",
   },
-  // PENDING - EVAN
   {
     id: "7",
     task: "Transfer domain to Cloudflare",
@@ -104,7 +105,6 @@ const checklistItems: ChecklistItem[] = [
     owner: "Evan",
     blockedBy: "11",
   },
-  // PENDING - MIKE (after domain)
   {
     id: "13",
     task: "Update base URL in code",
@@ -112,7 +112,6 @@ const checklistItems: ChecklistItem[] = [
     owner: "Mike",
     blockedBy: "9",
   },
-  // OPTIONAL
   {
     id: "14",
     task: "Add Box Chocolate video",
@@ -125,6 +124,18 @@ export default function LaunchChecklist() {
   const [status, setStatus] = useState<ChecklistStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const [token, setToken] = useState<string>("");
+  const [showTokenInput, setShowTokenInput] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load token from localStorage
+  useEffect(() => {
+    const savedToken = localStorage.getItem("github_token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  }, []);
 
   const fetchStatus = async () => {
     try {
@@ -132,8 +143,10 @@ export default function LaunchChecklist() {
       const data = await res.json();
       setStatus(data);
       setLastFetch(new Date());
+      setError(null);
     } catch (err) {
       console.error("Failed to fetch checklist status:", err);
+      setError("Failed to load checklist");
     } finally {
       setLoading(false);
     }
@@ -142,6 +155,92 @@ export default function LaunchChecklist() {
   useEffect(() => {
     fetchStatus();
   }, []);
+
+  const saveToken = () => {
+    localStorage.setItem("github_token", token);
+    setShowTokenInput(false);
+    setError(null);
+  };
+
+  const toggleItem = async (id: string) => {
+    if (!token) {
+      setShowTokenInput(true);
+      return;
+    }
+
+    if (!status) return;
+
+    setUpdating(id);
+    setError(null);
+
+    const newStatus: ChecklistStatus = {
+      lastUpdated: new Date().toISOString().split("T")[0],
+      items: {
+        ...status.items,
+        [id]: { done: !status.items[id]?.done },
+      },
+    };
+
+    try {
+      // Get current file SHA
+      const getRes = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`,
+        {
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      );
+
+      if (!getRes.ok) {
+        if (getRes.status === 401) {
+          setError("Invalid token. Please update your GitHub token.");
+          setShowTokenInput(true);
+          setUpdating(null);
+          return;
+        }
+        throw new Error(`Failed to get file: ${getRes.status}`);
+      }
+
+      const fileData = await getRes.json();
+      const sha = fileData.sha;
+
+      // Update file
+      const content = btoa(JSON.stringify(newStatus, null, 2));
+      const taskName = checklistItems.find(i => i.id === id)?.task || `item ${id}`;
+      const action = !status.items[id]?.done ? "Complete" : "Uncomplete";
+
+      const updateRes = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: "application/vnd.github.v3+json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: `${action}: ${taskName}`,
+            content,
+            sha,
+          }),
+        }
+      );
+
+      if (!updateRes.ok) {
+        throw new Error(`Failed to update file: ${updateRes.status}`);
+      }
+
+      // Update local state immediately
+      setStatus(newStatus);
+    } catch (err) {
+      console.error("Failed to update checklist:", err);
+      setError("Failed to save. Check your token and try again.");
+    } finally {
+      setUpdating(null);
+    }
+  };
 
   const isBlocked = (item: ChecklistItem): boolean => {
     if (!item.blockedBy || !status) return false;
@@ -188,6 +287,12 @@ export default function LaunchChecklist() {
           </div>
           <div className="flex items-center gap-4">
             <button
+              onClick={() => setShowTokenInput(!showTokenInput)}
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              {token ? "Change Token" : "Set Token"}
+            </button>
+            <button
               onClick={fetchStatus}
               className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
             >
@@ -205,6 +310,46 @@ export default function LaunchChecklist() {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
+        {/* Token Input */}
+        {showTokenInput && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+            <h3 className="font-medium text-yellow-800 mb-2">GitHub Token Required</h3>
+            <p className="text-sm text-yellow-700 mb-3">
+              To save changes, enter a GitHub personal access token with repo access.
+              <a
+                href="https://github.com/settings/tokens/new?scopes=repo&description=USC%20Checklist"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-1 underline"
+              >
+                Create one here
+              </a>
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="ghp_xxxxxxxxxxxx"
+                className="flex-1 px-3 py-2 border border-yellow-300 rounded text-sm"
+              />
+              <button
+                onClick={saveToken}
+                className="px-4 py-2 bg-yellow-600 text-white rounded text-sm hover:bg-yellow-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         {/* Progress Bar */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -225,24 +370,6 @@ export default function LaunchChecklist() {
           )}
         </div>
 
-        {/* How to Update */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
-          <h3 className="font-medium text-yellow-800 mb-2">How to mark items complete:</h3>
-          <p className="text-sm text-yellow-700">
-            Edit <code className="bg-yellow-100 px-1 rounded">public/config/checklist.json</code> in the repo.
-            Change <code className="bg-yellow-100 px-1 rounded">&quot;done&quot;: false</code> to{" "}
-            <code className="bg-yellow-100 px-1 rounded">&quot;done&quot;: true</code> for completed items, then commit and push.
-          </p>
-          <a
-            href="https://github.com/banddude/united-studio-collective/edit/main/public/config/checklist.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 mt-2 text-sm text-yellow-800 hover:text-yellow-900 underline"
-          >
-            Edit on GitHub <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
-
         {/* Evan's Tasks */}
         {evanTasks.length > 0 && (
           <section className="mb-8">
@@ -257,15 +384,21 @@ export default function LaunchChecklist() {
                   key={item.id}
                   className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
                 >
-                  <div className="mt-0.5 flex-shrink-0">
-                    {item.done ? (
+                  <button
+                    onClick={() => !item.blocked && toggleItem(item.id)}
+                    disabled={item.blocked || updating === item.id}
+                    className="mt-0.5 flex-shrink-0 disabled:cursor-not-allowed"
+                  >
+                    {updating === item.id ? (
+                      <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+                    ) : item.done ? (
                       <Check className="w-6 h-6 text-green-500" />
                     ) : item.blocked ? (
                       <Circle className="w-6 h-6 text-orange-300" />
                     ) : (
-                      <Circle className="w-6 h-6 text-gray-400" />
+                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer" />
                     )}
-                  </div>
+                  </button>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-medium text-gray-900">{item.task}</h3>
@@ -308,15 +441,21 @@ export default function LaunchChecklist() {
                   key={item.id}
                   className={`bg-white rounded-lg shadow-sm p-4 flex items-start gap-4 ${item.blocked ? "opacity-60" : ""}`}
                 >
-                  <div className="mt-0.5 flex-shrink-0">
-                    {item.done ? (
+                  <button
+                    onClick={() => !item.blocked && toggleItem(item.id)}
+                    disabled={item.blocked || updating === item.id}
+                    className="mt-0.5 flex-shrink-0 disabled:cursor-not-allowed"
+                  >
+                    {updating === item.id ? (
+                      <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+                    ) : item.done ? (
                       <Check className="w-6 h-6 text-green-500" />
                     ) : item.blocked ? (
                       <Circle className="w-6 h-6 text-orange-300" />
                     ) : (
-                      <Circle className="w-6 h-6 text-gray-400" />
+                      <Circle className="w-6 h-6 text-gray-400 hover:text-green-500 cursor-pointer" />
                     )}
-                  </div>
+                  </button>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-medium text-gray-900">{item.task}</h3>
@@ -348,7 +487,17 @@ export default function LaunchChecklist() {
                 key={item.id}
                 className="bg-gray-100 rounded-lg p-3 flex items-center gap-3"
               >
-                <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <button
+                  onClick={() => toggleItem(item.id)}
+                  disabled={updating === item.id}
+                  className="flex-shrink-0"
+                >
+                  {updating === item.id ? (
+                    <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+                  ) : (
+                    <Check className="w-5 h-5 text-green-500 hover:text-orange-500 cursor-pointer" />
+                  )}
+                </button>
                 <span className="text-gray-600 line-through">{item.task}</span>
                 <span className="text-xs text-gray-400 ml-auto">{item.owner}</span>
               </div>
