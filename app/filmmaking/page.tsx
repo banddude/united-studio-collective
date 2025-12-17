@@ -140,7 +140,7 @@ export default function FilmmakingPage() {
     if (currentVideoIndex < filteredVideos.length - 1) {
       const nextVideo = filteredVideos[currentVideoIndex + 1];
       setSelectedVideo(nextVideo);
-      setIsPlaying(false);
+      // Keep playing state so video autoplays when navigating
       // Auto-scroll thumbnails to keep selected video visible
       if (currentVideoIndex + 1 >= thumbnailIndex + visibleThumbnails) {
         setThumbnailIndex(prev => Math.min(prev + 1, maxIndex));
@@ -152,7 +152,7 @@ export default function FilmmakingPage() {
     if (currentVideoIndex > 0) {
       const prevVideo = filteredVideos[currentVideoIndex - 1];
       setSelectedVideo(prevVideo);
-      setIsPlaying(false);
+      // Keep playing state so video autoplays when navigating
       // Auto-scroll thumbnails to keep selected video visible
       if (currentVideoIndex - 1 < thumbnailIndex) {
         setThumbnailIndex(prev => Math.max(prev - 1, 0));
