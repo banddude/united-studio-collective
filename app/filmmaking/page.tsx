@@ -37,8 +37,8 @@ const videos: Video[] = [
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "light-dark.mp4",
     platform: "local",
-    creator: "Ion Tong & Evan Rene",
-    description: "A collaboration of architecture and fashion. Directed By: Ion Tong & Evan Rene. Produced By: United Studio Collective. Director of Photography: Ion Tong. Fashion Designer/Artist: Simon. Model: Jessie Rainbow. Makeup Artist: Jena Mogensen, Sarai Diaz.",
+    creator: "United Studio Collective",
+    description: "A collaboration of architecture and fashion\n\nDirected By: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nDirector of Photography: Ion Tong\nFashion Designer/Artist: Simon\nModel: Jessie Rainbow\nMakeup Artist: Jena Mogensen, Sarai Diaz",
   },
   {
     id: "3",
@@ -57,8 +57,8 @@ const videos: Video[] = [
     thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
     videoId: "Mwe9xCaLLBM",
     platform: "youtube",
-    creator: "Ion Tong & Evan Rene",
-    description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man. The looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.",
+    creator: "United Studio Collective",
+    description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.\n\nDirector: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nProduced By: Evan Rene\nDP: Evan Rene\nTalent: Tommy Ice\nFirst AC: CPark Photogenix\nGaffer: Kane E. Thompson",
   },
   {
     id: "5",
@@ -98,7 +98,7 @@ const videos: Video[] = [
     videoId: "",
     platform: "pending",
     creator: "Evan Rene",
-    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA. Directed By: Evan Rene. Produced By: Evaon Pictures & Mike Shaffer. DP: Ion Tong.",
+    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA.\n\nDirected By: Evan Rene\nProduced By: Evaon Pictures & Mike Shaffer\nDP: Ion Tong",
   },
 ];
 
@@ -236,16 +236,25 @@ export default function FilmmakingPage() {
                         autoPlay
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white">
-                        <p>Video coming soon</p>
+                      <div className="w-full h-full flex items-center justify-center text-white relative">
+                        <Image
+                          src={selectedVideo.thumbnail}
+                          alt={selectedVideo.title}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <p className="text-white text-lg">Video coming soon</p>
+                        </div>
                       </div>
                     )}
                   </div>
                   {/* Info Panel */}
                   <div className="w-full md:w-1/3 flex flex-col justify-start md:max-h-[50vh] md:overflow-y-auto">
                     <h3
-                      className="text-white text-2xl md:text-3xl font-light italic mb-4"
-                      style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                      className="text-white text-2xl md:text-3xl font-extralight mb-4"
+                      style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
                     >
                       {selectedVideo.title}
                     </h3>
