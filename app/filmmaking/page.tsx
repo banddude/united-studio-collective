@@ -324,17 +324,17 @@ export default function FilmmakingPage() {
           {thumbnailIndex > 0 && (
             <button
               onClick={handlePrevThumbnails}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 text-black/60 hover:text-black transition-colors z-10"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={32} strokeWidth={1.5} />
             </button>
           )}
           {thumbnailIndex < maxIndex && (
             <button
               onClick={handleNextThumbnails}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-black/60 hover:text-black transition-colors z-10"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={32} strokeWidth={1.5} />
             </button>
           )}
         </div>
