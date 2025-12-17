@@ -178,7 +178,7 @@ export default function FilmmakingPage() {
         {/* Main Video Player Section */}
         <div className="relative w-full z-10">
           {isPlaying ? (
-            /* Video Embed with Info Panel */}
+            /* Video Embed with Info Panel */
             <div className="relative bg-[#f5f5f5] py-8">
               {/* Close button */}
               <button
