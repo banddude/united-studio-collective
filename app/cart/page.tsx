@@ -97,7 +97,7 @@ export default function CartPage() {
                           >
                             <Minus size={14} />
                           </button>
-                          <span className="w-10 h-8 flex items-center justify-center text-sm">
+                          <span className="w-10 h-8 flex items-center justify-center text-sm text-black bg-gray-100">
                             {item.quantity}
                           </span>
                           <button
