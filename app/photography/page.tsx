@@ -9,95 +9,95 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 const allPhotos = [
   {
     src: "https://static.wixstatic.com/media/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",
-    alt: "B&W silhouette person at window",
+    alt: "Black and white silhouette of person standing at window",
   },
   {
     src: "https://static.wixstatic.com/media/963954_fac333b082b54599afa0d5a3ed3f18b8~mv2.jpg",
-    alt: "Blurry abstract B&W",
+    alt: "Abstract blurry black and white artistic photograph",
   },
   {
     src: "https://static.wixstatic.com/media/963954_c62af60703dd4601859d5cee56ff3e17~mv2.jpg",
-    alt: "Sand dunes with person",
+    alt: "Person walking on desert sand dunes at golden hour",
   },
   {
     src: "https://static.wixstatic.com/media/963954_81382f1afcf74f6d83d8f3d9063801b8~mv2.jpg",
-    alt: "Dark hallway with light",
+    alt: "Moody dark hallway with dramatic light at the end",
   },
   {
     src: "https://static.wixstatic.com/media/963954_68c785f9dcc04d579553545aeba44046~mv2.jpg",
-    alt: "Woman portrait in greenery",
+    alt: "Portrait of woman surrounded by lush green foliage",
   },
   {
     src: "https://static.wixstatic.com/media/963954_6f8bb6be5e1e487c80d32a1e7b748e53~mv2.jpg",
-    alt: "Woman on rooftop blue sky",
+    alt: "Woman posing on rooftop against bright blue sky",
   },
   {
     src: "https://static.wixstatic.com/media/963954_d1783f6f4df14475a4b284c0613f5421~mv2.jpg",
-    alt: "Photography 7",
+    alt: "Artistic portrait with natural lighting",
   },
   {
     src: "https://static.wixstatic.com/media/963954_eb2bd2b814ae463cb4ece85f31f3ba82~mv2.jpg",
-    alt: "Photography 8",
+    alt: "Urban street photography scene",
   },
   {
     src: "https://static.wixstatic.com/media/963954_d27a6224206d4d16ab6ef4b1bf0dd22f~mv2.jpg",
-    alt: "Photography 9",
+    alt: "Candid lifestyle photograph",
   },
   {
     src: "https://static.wixstatic.com/media/963954_ef108d6e5a8d45df802b42e2fbb1a622~mv2.jpg",
-    alt: "Photography 10",
+    alt: "Outdoor portrait in natural environment",
   },
   {
     src: "https://static.wixstatic.com/media/963954_791e46b96a10452a9528d133d5502f8d~mv2.jpg",
-    alt: "Photography 11",
+    alt: "Creative composition with geometric elements",
   },
   {
     src: "https://static.wixstatic.com/media/963954_9162cbdd78c549109f68bfb3681de0eb~mv2.jpg",
-    alt: "Photography 12",
+    alt: "Portrait photography with dramatic shadows",
   },
   {
     src: "https://static.wixstatic.com/media/963954_11cb3155ab8e4e38a0f9717be22b92cb~mv2.jpg",
-    alt: "Photography 13",
+    alt: "Environmental portrait in urban setting",
   },
   {
     src: "https://static.wixstatic.com/media/963954_4933b5ab12464294b400991231229f57~mv2.jpg",
-    alt: "Photography 14",
+    alt: "Fashion inspired photography with bold styling",
   },
   {
     src: "https://static.wixstatic.com/media/963954_b7ee330edde1484c8467994fa2055a68~mv2.jpg",
-    alt: "Photography 15",
+    alt: "Intimate portrait with soft lighting",
   },
   {
     src: "https://static.wixstatic.com/media/963954_2bcbe6c57e684d578daebd843560ad51~mv2.jpg",
-    alt: "Photography 16",
+    alt: "Documentary style candid moment",
   },
   {
     src: "https://static.wixstatic.com/media/963954_936141ee69a7494bbdd7b525e2ea9966~mv2.jpg",
-    alt: "Photography 17",
+    alt: "Landscape photography with human element",
   },
   {
     src: "https://static.wixstatic.com/media/963954_947b53c1c87042ce9cbabae881ff2a86~mv2.jpg",
-    alt: "Photography 18",
+    alt: "Moody atmospheric photograph",
   },
   {
     src: "https://static.wixstatic.com/media/963954_49cf68b436e549588d240e653afd521c~mv2.jpg",
-    alt: "Photography 19",
+    alt: "Editorial style portrait session",
   },
   {
     src: "https://static.wixstatic.com/media/963954_f91dc0ebdd0646abb543ffa4822b4dfb~mv2.jpg",
-    alt: "Photography 20",
+    alt: "Creative portrait with artistic lighting",
   },
   {
     src: "https://static.wixstatic.com/media/963954_8c4bad9f1361409ea1d1b00c130a7842~mv2.jpg",
-    alt: "Photography 21",
+    alt: "Natural light photography outdoors",
   },
   {
     src: "https://static.wixstatic.com/media/963954_8faeddd94cc54360b396f40c2c878ab3~mv2.jpg",
-    alt: "Photography 22",
+    alt: "Fine art inspired photographic composition",
   },
   {
     src: "https://static.wixstatic.com/media/963954_4c232f8a81a4448a93a48944e4fb3488~mv2.jpg",
-    alt: "Photography 23",
+    alt: "Cinematic portrait with film aesthetic",
   },
 ];
 
@@ -110,13 +110,23 @@ export default function PhotographyPage() {
 
   const openLightbox = (index: number) => {
     setSelectedImageIndex(index);
-    document.body.style.overflow = "hidden";
   };
 
   const closeLightbox = () => {
     setSelectedImageIndex(null);
-    document.body.style.overflow = "unset";
   };
+
+  // Handle body overflow when lightbox is open
+  useEffect(() => {
+    if (selectedImageIndex !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedImageIndex]);
 
   const goToPrevious = useCallback(() => {
     if (selectedImageIndex === null) return;

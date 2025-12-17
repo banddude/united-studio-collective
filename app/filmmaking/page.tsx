@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -116,8 +116,13 @@ export default function FilmmakingPage() {
   const maxIndex = Math.max(0, filteredVideos.length - visibleThumbnails);
 
   // Reset thumbnail index when search changes
+  const previousSearchQuery = useRef(searchQuery);
   useEffect(() => {
-    setThumbnailIndex(0);
+    if (previousSearchQuery.current !== searchQuery) {
+      previousSearchQuery.current = searchQuery;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setThumbnailIndex(0);
+    }
   }, [searchQuery]);
 
   const handlePlayVideo = () => {

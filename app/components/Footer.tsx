@@ -45,9 +45,9 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Left: Copyright */}
           <div className="text-sm font-light">
-            <a href="/" className="underline hover:opacity-70 transition-opacity">
+            <Link href="/" className="underline hover:opacity-70 transition-opacity">
               © 2024 United Studio Collective
-            </a>
+            </Link>
             <div className="text-xs mt-1 opacity-70">© Copyright</div>
           </div>
 

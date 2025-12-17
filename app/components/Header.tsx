@@ -51,7 +51,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           </button>
 
           {/* Title - Responsive sizing */}
-          <h1 className="text-center mb-1 md:mb-2">
+          <div className="text-center mb-1 md:mb-2">
             <Link
               href="/"
               className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} text-[18px] sm:text-[24px] md:text-[32px] lg:text-[42px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity`}
@@ -59,7 +59,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             >
               UNITED STUDIO COLLECTIVE
             </Link>
-          </h1>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex justify-center items-center flex-wrap">
