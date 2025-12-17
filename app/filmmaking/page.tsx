@@ -262,82 +262,92 @@ export default function FilmmakingPage() {
               </div>
             </div>
           ) : (
-            /* Thumbnail with Play Button */
-            <div className="relative w-full aspect-video max-h-[70vh]">
-              <Image
-                src={selectedVideo.thumbnail}
-                alt={selectedVideo.title}
-                fill
-                className="object-cover"
-                unoptimized
-                priority
-              />
-              {/* Dark overlay */}
-              <div className="absolute inset-0 bg-black/30" />
-
-              {/* Centered Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                {/* Subtitle */}
-                <p
-                  className="text-white/80 text-sm md:text-base tracking-[0.3em] uppercase mb-4"
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
-                >
-                  United Studio Collective
-                </p>
-                {/* Video Title */}
-                <h2
-                  className="text-white text-3xl md:text-4xl lg:text-5xl font-extralight italic mb-8 text-center px-4"
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
-                >
-                  {selectedVideo.title}
-                </h2>
-                <button
-                  onClick={handlePlayVideo}
-                  className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity group"
-                >
-                  <div className="w-14 h-14 rounded-full border-2 border-white flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                    <Play className="w-6 h-6 ml-1" fill="white" />
-                  </div>
-                  <span className="text-lg underline underline-offset-4">
-                    Play Video
-                  </span>
-                </button>
-              </div>
-
-              {/* Bottom Controls */}
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                {/* Search Input */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search video..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent border-b border-white/50 text-white placeholder-white/70 py-2 px-1 w-48 focus:outline-none focus:border-white text-sm"
-                  />
-                </div>
-
-              </div>
-
-              {/* Previous Video Arrow */}
+            /* Thumbnail with Play Button and Info Panel */
+            <div className="relative bg-[#f5f5f5] py-8">
+              {/* Previous Arrow */}
               {currentVideoIndex > 0 && (
                 <button
                   onClick={handlePrevVideo}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors z-20"
                 >
                   <ChevronLeft size={48} strokeWidth={1} />
                 </button>
               )}
 
-              {/* Next Video Arrow */}
+              {/* Next Arrow */}
               {currentVideoIndex < filteredVideos.length - 1 && (
                 <button
                   onClick={handleNextVideo}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors z-20"
                 >
                   <ChevronRight size={48} strokeWidth={1} />
                 </button>
               )}
+
+              <div className="max-w-6xl mx-auto px-16 md:px-24">
+                <div className="flex flex-col md:flex-row gap-8">
+                  {/* Thumbnail with Play Button */}
+                  <div className="relative w-full md:w-2/3 aspect-video shadow-lg cursor-pointer group" onClick={handlePlayVideo}>
+                    <Image
+                      src={selectedVideo.thumbnail}
+                      alt={selectedVideo.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                      priority
+                    />
+                    {/* Dark overlay */}
+                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+
+                    {/* Centered Content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      {/* Subtitle */}
+                      <p
+                        className="text-white/80 text-sm md:text-base tracking-[0.3em] uppercase mb-3"
+                        style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+                      >
+                        United Studio Collective
+                      </p>
+                      {/* Video Title */}
+                      <h2
+                        className="text-white text-2xl md:text-3xl lg:text-4xl font-light italic mb-6 text-center px-4"
+                        style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                      >
+                        {selectedVideo.title}
+                      </h2>
+                      <button
+                        className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity"
+                      >
+                        <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                          <Play className="w-5 h-5 ml-1" fill="white" />
+                        </div>
+                        <span className="text-base">Play Video</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Info Panel */}
+                  <div className="w-full md:w-1/3 flex flex-col justify-center">
+                    <h3
+                      className="text-[#2d2d2d] text-2xl md:text-3xl font-light italic mb-4"
+                      style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                    >
+                      {selectedVideo.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-gray-500 text-sm mb-4">
+                      <span>{selectedVideo.creator}</span>
+                      <span>•</span>
+                      <span>{selectedVideo.duration}</span>
+                    </div>
+                    <p
+                      className="text-gray-600 text-sm leading-relaxed italic"
+                      style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                    >
+                      {selectedVideo.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
