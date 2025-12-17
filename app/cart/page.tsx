@@ -26,7 +26,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header variant="light" currentPage="Store" />
 
-      <main className="flex-1 pt-[120px] md:pt-[160px] pb-16 px-4 md:px-8">
+      <main className="flex-1 pt-[100px] md:pt-[130px] pb-16 px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl md:text-3xl font-medium text-black mb-8">Your Cart</h1>
 

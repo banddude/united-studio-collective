@@ -9,7 +9,7 @@ export default function NotFound() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header variant="light" />
 
-      <main className="flex-1 flex items-center justify-center pt-[120px] md:pt-[160px] pb-16 px-4">
+      <main className="flex-1 flex items-center justify-center pt-[100px] md:pt-[130px] pb-16 px-4">
         <div className="text-center">
           <h1 className="text-6xl md:text-8xl font-light text-black mb-4">404</h1>
           <h2 className="text-xl md:text-2xl font-medium text-black mb-4">

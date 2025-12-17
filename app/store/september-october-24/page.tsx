@@ -85,7 +85,7 @@ export default function SeptemberOctoberCatalogPage() {
       <Header variant="light" currentPage="Store" />
 
       {/* Main Content */}
-      <div className="pt-[120px] md:pt-[160px] pb-16">
+      <div className="pt-[100px] md:pt-[130px] pb-16">
         {/* Breadcrumb */}
         <div className="px-6 mb-2">
           <nav className="flex items-center text-sm text-gray-600">

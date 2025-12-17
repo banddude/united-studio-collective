@@ -38,35 +38,29 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
 
   return (
     <>
-      {/* Top bar with Cart - always black background */}
-      <div className={`${scrollable ? 'absolute' : 'fixed'} top-0 left-0 right-0 z-[100] bg-black`}>
-        <div className="flex justify-between items-center px-4 md:px-8 py-2">
-          {/* Mobile menu button */}
+      {/* Main header with title, nav, and cart */}
+      <header className={`${scrollable ? 'absolute' : 'fixed'} top-0 left-0 right-0 z-[100] px-4 md:px-6 pt-3 md:pt-4 pb-2 md:pb-3 ${!isDark ? 'bg-white' : ''}`}>
+        <div className="w-full relative">
+          {/* Mobile menu button - left side */}
           <button
-            className="md:hidden text-white hover:opacity-70 transition-opacity"
+            className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Spacer for desktop */}
-          <div className="hidden md:block" />
-
-          {/* Cart */}
+          {/* Cart - right side */}
           <Link
             href="/cart"
-            className="flex items-center gap-1 md:gap-2 text-white hover:opacity-70 transition-opacity"
+            className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
           >
             <ShoppingCart size={20} strokeWidth={1} />
-            <span className="text-sm md:text-base font-light tracking-wide">{totalItems}</span>
+            {totalItems > 0 && (
+              <span className="text-sm font-light tracking-wide">{totalItems}</span>
+            )}
           </Link>
-        </div>
-      </div>
 
-      {/* Main header with title and nav - overlaid on content */}
-      <header className={`${scrollable ? 'absolute' : 'fixed'} top-[44px] left-0 right-0 z-[90] px-4 md:px-6 pt-2 md:pt-3 pb-2 md:pb-3 ${!isDark ? 'bg-white' : ''}`}>
-        <div className="w-full">
           {/* Title - Responsive sizing */}
           <h1 className="text-center mb-1 md:mb-2">
             <Link

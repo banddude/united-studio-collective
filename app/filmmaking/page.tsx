@@ -33,7 +33,7 @@ const videos: Video[] = [
     title: "Light / Dark",
     duration: "01:24",
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "/videos/light-dark.mp4",
+    videoId: "/united-studio-collective/videos/light-dark.mp4",
     platform: "local",
     creator: "Ion Tong & Evan Rene",
     description: "A collaboration of architecture and fashion. Directed By: Ion Tong & Evan Rene. Produced By: United Studio Collective. Director of Photography: Ion Tong. Fashion Designer/Artist: Simon. Model: Jessie Rainbow. Makeup Artist: Jena Mogensen, Sarai Diaz.",
@@ -172,7 +172,7 @@ export default function FilmmakingPage() {
       <Header variant="light" currentPage="Filmmaking" />
 
       {/* Main Content */}
-      <main className="flex-1 pt-[120px] md:pt-[160px]">
+      <main className="flex-1 pt-[100px] md:pt-[130px]">
         {/* Main Video Player Section */}
         <div className="relative w-full z-10">
           {isPlaying ? (
