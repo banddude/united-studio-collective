@@ -12,7 +12,7 @@ interface Video {
   duration: string;
   thumbnail: string;
   videoId: string;
-  platform: "youtube" | "vimeo" | "pending";
+  platform: "youtube" | "vimeo" | "local" | "pending";
 }
 
 const videos: Video[] = [
@@ -29,8 +29,8 @@ const videos: Video[] = [
     title: "Light / Dark",
     duration: "01:24",
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "",
-    platform: "pending", // TODO: Evan needs to upload this to YouTube/Vimeo
+    videoId: "/videos/light-dark.mp4",
+    platform: "local",
   },
   {
     id: "3",
@@ -175,6 +175,13 @@ export default function FilmmakingPage() {
                   className="w-full h-full"
                   allow="autoplay; fullscreen; picture-in-picture"
                   allowFullScreen
+                />
+              ) : selectedVideo.platform === "local" ? (
+                <video
+                  src={selectedVideo.videoId}
+                  className="w-full h-full"
+                  controls
+                  autoPlay
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white">
