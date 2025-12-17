@@ -190,8 +190,8 @@ export default function FilmmakingPage() {
                 </p>
                 {/* Video Title */}
                 <h2
-                  className="text-white text-3xl md:text-4xl lg:text-5xl font-light italic mb-8 text-center px-4"
-                  style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
+                  className="text-white text-3xl md:text-4xl lg:text-5xl font-extralight italic mb-8 text-center px-4"
+                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
                 >
                   {selectedVideo.title}
                 </h2>
