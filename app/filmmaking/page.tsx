@@ -18,37 +18,58 @@ const videos: Video[] = [
   {
     id: "1",
     title: "United Studio Collective 2024 Reel",
-    duration: "00:37",
+    duration: "00:36",
     thumbnail: "https://img.youtube.com/vi/NO4KgrvH4Dg/maxresdefault.jpg",
     youtubeId: "NO4KgrvH4Dg",
   },
   {
     id: "2",
-    title: "Delikate Rayne Desert Fashion Shoot",
-    duration: "01:55",
+    title: "Light / Dark",
+    duration: "01:24",
+    thumbnail: "https://img.youtube.com/vi/NO4KgrvH4Dg/maxresdefault.jpg",
+    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
+  },
+  {
+    id: "3",
+    title: "Delikate Rayne Fashion Shoot",
+    duration: "01:54",
     thumbnail: "https://img.youtube.com/vi/yPN2Bydj7Ec/maxresdefault.jpg",
     youtubeId: "yPN2Bydj7Ec",
   },
   {
-    id: "3",
+    id: "4",
     title: "The Seasons of Fall",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
     youtubeId: "Mwe9xCaLLBM",
   },
   {
-    id: "4",
+    id: "5",
     title: "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
     duration: "00:59",
     thumbnail: "https://img.youtube.com/vi/HBXVsbKGq4s/maxresdefault.jpg",
     youtubeId: "HBXVsbKGq4s",
   },
   {
-    id: "5",
+    id: "6",
     title: "Through The Night",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
     youtubeId: "kg1EDL-O5zI",
+  },
+  {
+    id: "7",
+    title: "A Friendship Divided",
+    duration: "01:30",
+    thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
+    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
+  },
+  {
+    id: "8",
+    title: "Box Chocolate: We Have Your Delivery",
+    duration: "00:00",
+    thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
+    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
   },
 ];
 
