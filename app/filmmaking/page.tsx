@@ -178,77 +178,86 @@ export default function FilmmakingPage() {
         {/* Main Video Player Section */}
         <div className="relative w-full z-10">
           {isPlaying ? (
-            /* Video Embed with Info Panel */
-            <div className="flex flex-col md:flex-row bg-black">
-              {/* Video Player */}
-              <div className="relative w-full md:w-2/3 aspect-video">
-                {selectedVideo.platform === "youtube" ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
-                    title={selectedVideo.title}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : selectedVideo.platform === "vimeo" ? (
-                  <iframe
-                    src={`https://player.vimeo.com/video/${selectedVideo.videoId}?autoplay=1`}
-                    title={selectedVideo.title}
-                    className="w-full h-full"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : selectedVideo.platform === "local" ? (
-                  <video
-                    src={`${basePath}/videos/${selectedVideo.videoId}`}
-                    className="w-full h-full"
-                    controls
-                    autoPlay
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white">
-                    <p>Video coming soon</p>
+            /* Video Embed with Info Panel */}
+            <div className="relative bg-[#f5f5f5] py-8">
+              {/* Close button */}
+              <button
+                onClick={handleCloseVideo}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors z-20"
+              >
+                <X size={28} strokeWidth={1.5} />
+              </button>
+
+              {/* Previous Arrow */}
+              {currentVideoIndex > 0 && (
+                <button
+                  onClick={handlePrevVideo}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors z-20"
+                >
+                  <ChevronLeft size={48} strokeWidth={1} />
+                </button>
+              )}
+
+              {/* Next Arrow */}
+              {currentVideoIndex < filteredVideos.length - 1 && (
+                <button
+                  onClick={handleNextVideo}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors z-20"
+                >
+                  <ChevronRight size={48} strokeWidth={1} />
+                </button>
+              )}
+
+              <div className="max-w-6xl mx-auto px-16 md:px-24">
+                <div className="flex flex-col md:flex-row gap-8">
+                  {/* Video Player with border */}
+                  <div className="relative w-full md:w-2/3 aspect-video bg-black shadow-lg">
+                    {selectedVideo.platform === "youtube" ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
+                        title={selectedVideo.title}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : selectedVideo.platform === "vimeo" ? (
+                      <iframe
+                        src={`https://player.vimeo.com/video/${selectedVideo.videoId}?autoplay=1`}
+                        title={selectedVideo.title}
+                        className="w-full h-full"
+                        allow="autoplay; fullscreen; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : selectedVideo.platform === "local" ? (
+                      <video
+                        src={`${basePath}/videos/${selectedVideo.videoId}`}
+                        className="w-full h-full"
+                        controls
+                        autoPlay
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white">
+                        <p>Video coming soon</p>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              {/* Info Panel */}
-              <div className="w-full md:w-1/3 bg-[#1a1a1a] p-6 flex flex-col">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-white text-xl font-medium">{selectedVideo.title}</h3>
-                  <button
-                    onClick={handleCloseVideo}
-                    className="text-white/70 hover:text-white transition-colors"
-                  >
-                    <X size={24} />
-                  </button>
-                </div>
-                <div className="flex items-center gap-4 text-white/70 text-sm mb-4">
-                  <span>{selectedVideo.creator}</span>
-                  <span>{selectedVideo.duration}</span>
-                </div>
-                <p className="text-white/80 text-sm leading-relaxed flex-1">
-                  {selectedVideo.description}
-                </p>
-                {/* Navigation */}
-                <div className="flex justify-between mt-6 pt-4 border-t border-white/20">
-                  {currentVideoIndex > 0 ? (
-                    <button
-                      onClick={handlePrevVideo}
-                      className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+                  {/* Info Panel */}
+                  <div className="w-full md:w-1/3 flex flex-col justify-center">
+                    <h3
+                      className="text-[#2d2d2d] text-2xl md:text-3xl font-light italic mb-4"
+                      style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                     >
-                      <ChevronLeft size={20} />
-                      <span className="text-sm">Previous</span>
-                    </button>
-                  ) : <div />}
-                  {currentVideoIndex < filteredVideos.length - 1 && (
-                    <button
-                      onClick={handleNextVideo}
-                      className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
-                    >
-                      <span className="text-sm">Next</span>
-                      <ChevronRight size={20} />
-                    </button>
-                  )}
+                      {selectedVideo.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-gray-500 text-sm mb-4">
+                      <span>{selectedVideo.creator}</span>
+                      <span>•</span>
+                      <span>{selectedVideo.duration}</span>
+                    </div>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {selectedVideo.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
