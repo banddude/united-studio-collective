@@ -11,7 +11,7 @@ export default function About() {
       <Header variant="light" currentPage="About" />
 
       {/* Main Content */}
-      <main className="pt-[100px] md:pt-[130px] pb-16 px-4 md:px-8 max-w-4xl mx-auto">
+      <main className="pt-[120px] md:pt-[150px] pb-16 px-4 md:px-8 max-w-4xl mx-auto">
         {/* What We Strive For Section */}
         <section className="mb-10">
           <h2

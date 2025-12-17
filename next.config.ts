@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   basePath: "/united-studio-collective",
   assetPrefix: "/united-studio-collective",
   images: {
-    unoptimized: true,
+    unoptimized: true, // Required for static export - optimize images manually instead
     remotePatterns: [
       {
         protocol: "https",

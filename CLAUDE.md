@@ -6,10 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 United Studio Collective website, a Next.js 16 static site deployed to GitHub Pages. This is a recreation of the original Wix site at www.unitedstudiocollective.com featuring filmmaking, photography, and an e-commerce store.
 
-- **Repository**: https://github.com/banddude/united-studio-collective
-- **Live Site**: https://banddude.github.io/united-studio-collective/
-- **Original Site**: https://www.unitedstudiocollective.com
-
 ## Commands
 
 ```bash

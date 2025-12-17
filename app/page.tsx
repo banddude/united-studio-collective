@@ -37,7 +37,7 @@ export default function Home() {
               priority={index < 2}
               className="object-cover"
               sizes="100vw"
-              quality={100}
+              quality={80}
             />
           </Link>
         ))}
