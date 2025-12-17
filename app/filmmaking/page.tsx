@@ -181,11 +181,19 @@ export default function FilmmakingPage() {
 
               {/* Centered Content */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <h2
-                  className="text-white text-4xl md:text-5xl lg:text-6xl font-extralight tracking-[0.2em] uppercase mb-8 text-center px-4"
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
+                {/* Subtitle */}
+                <p
+                  className="text-white/80 text-sm md:text-base tracking-[0.3em] uppercase mb-4"
+                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
                 >
-                  UNITED STUDIO COLLECTIVE
+                  United Studio Collective
+                </p>
+                {/* Video Title */}
+                <h2
+                  className="text-white text-3xl md:text-4xl lg:text-5xl font-light italic mb-8 text-center px-4"
+                  style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
+                >
+                  {selectedVideo.title}
                 </h2>
                 <button
                   onClick={handlePlayVideo}
