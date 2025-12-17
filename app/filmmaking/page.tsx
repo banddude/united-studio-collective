@@ -11,7 +11,8 @@ interface Video {
   title: string;
   duration: string;
   thumbnail: string;
-  youtubeId: string;
+  videoId: string;
+  platform: "youtube" | "vimeo" | "pending";
 }
 
 const videos: Video[] = [
@@ -19,57 +20,65 @@ const videos: Video[] = [
     id: "1",
     title: "United Studio Collective 2024 Reel",
     duration: "00:36",
-    thumbnail: "https://img.youtube.com/vi/NO4KgrvH4Dg/maxresdefault.jpg",
-    youtubeId: "NO4KgrvH4Dg",
+    thumbnail: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    videoId: "NO4KgrvH4Dg",
+    platform: "youtube",
   },
   {
     id: "2",
     title: "Light / Dark",
     duration: "01:24",
-    thumbnail: "https://img.youtube.com/vi/NO4KgrvH4Dg/maxresdefault.jpg",
-    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
+    thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    videoId: "",
+    platform: "pending", // TODO: Evan needs to upload this to YouTube/Vimeo
   },
   {
     id: "3",
     title: "Delikate Rayne Fashion Shoot",
     duration: "01:54",
-    thumbnail: "https://img.youtube.com/vi/yPN2Bydj7Ec/maxresdefault.jpg",
-    youtubeId: "yPN2Bydj7Ec",
+    thumbnail: "https://vumbnail.com/867541676.jpg",
+    videoId: "867541676",
+    platform: "vimeo",
   },
   {
     id: "4",
     title: "The Seasons of Fall",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
-    youtubeId: "Mwe9xCaLLBM",
+    videoId: "Mwe9xCaLLBM",
+    platform: "youtube",
   },
   {
     id: "5",
     title: "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
     duration: "00:59",
     thumbnail: "https://img.youtube.com/vi/HBXVsbKGq4s/maxresdefault.jpg",
-    youtubeId: "HBXVsbKGq4s",
+    videoId: "HBXVsbKGq4s",
+    platform: "youtube",
   },
   {
     id: "6",
     title: "Through The Night",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
-    youtubeId: "kg1EDL-O5zI",
+    videoId: "kg1EDL-O5zI",
+    platform: "youtube",
   },
   {
     id: "7",
     title: "A Friendship Divided",
     duration: "01:30",
-    thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
-    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
+    thumbnail: "https://vumbnail.com/534300555.jpg",
+    videoId: "534300555",
+    platform: "vimeo",
   },
   {
     id: "8",
     title: "Box Chocolate: We Have Your Delivery",
     duration: "00:00",
     thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
-    youtubeId: "NEEDS_YOUTUBE_UPLOAD", // TODO: Evan needs to upload this to YouTube
+    videoId: "",
+    platform: "pending", // TODO: Evan needs to upload this to YouTube/Vimeo
   },
 ];
 
@@ -149,15 +158,29 @@ export default function FilmmakingPage() {
         {/* Main Video Player Section */}
         <div className="relative w-full aspect-video max-h-[70vh] z-10">
           {isPlaying ? (
-            /* YouTube Embed */
+            /* Video Embed (YouTube or Vimeo) */
             <div className="absolute inset-0 bg-black z-20">
-              <iframe
-                src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0`}
-                title={selectedVideo.title}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              {selectedVideo.platform === "youtube" ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
+                  title={selectedVideo.title}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : selectedVideo.platform === "vimeo" ? (
+                <iframe
+                  src={`https://player.vimeo.com/video/${selectedVideo.videoId}?autoplay=1`}
+                  title={selectedVideo.title}
+                  className="w-full h-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-white">
+                  <p>Video coming soon</p>
+                </div>
+              )}
               <button
                 onClick={handleCloseVideo}
                 className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-10"
