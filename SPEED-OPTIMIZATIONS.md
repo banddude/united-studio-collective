@@ -1,71 +1,51 @@
 # Speed Optimizations for United Studio Collective
 
-## HIGH PRIORITY (Biggest Impact)
+**Estimated Performance Score: ~75-85/100**
 
-| # | Optimization | Issue | Fix |
-|---|--------------|-------|-----|
-| 1 | **Enable image optimization** | `unoptimized: true` disables Next.js optimization | Remove from next.config.ts |
-| 2 | **Compress large images** | homepage-full.png (16MB), image_3.jpg (5MB), etc. ~35MB total | Compress to <500KB each |
-| 3 | **Remove quality={100}** | Homepage forces max quality | Remove or set to 75-85 |
-| 4 | **Delete unused fonts** | custom_font.ttf/woff/woff2 (274KB) unused | Delete files from public/fonts |
+## Completed
 
-## MEDIUM PRIORITY
-
-| # | Optimization | Issue | Fix |
-|---|--------------|-------|-----|
-| 5 | **Lazy load gallery** | Photography page loads all 23 images at once | Add lazy loading |
-| 6 | **Dynamic imports** | Heavy components load immediately | Use next/dynamic for video player, cart |
-| 7 | **Compress video** | light-dark.mp4 is 27MB | Compress or use streaming |
-
-## LOW PRIORITY
-
-| # | Optimization | Issue | Fix |
-|---|--------------|-------|-----|
-| 8 | **Add blur placeholders** | No loading placeholders | Add blurDataURL to images |
-| 9 | **Preconnect to CDNs** | No hints for external domains | Add preconnect links for static.wixstatic.com, img.youtube.com |
+| # | Optimization | Status |
+|---|--------------|--------|
+| 1 | Compress large images | ✅ Done (~35MB to ~6.6MB total) |
+| 2 | Compress video | ✅ Done (27MB to 10MB) |
+| 3 | Remove quality={100} | ✅ Done (changed to quality={80}) |
+| 4 | Delete unused fonts | ✅ Done |
+| 5 | Lazy load gallery | ✅ Done (first 6 eager, rest lazy) |
+| 6 | Preconnect to CDNs | ✅ Done |
+| 7 | Delete unused screenshots | ✅ Done (~33MB removed) |
+| 8 | Static store data | ✅ Done (no runtime JSON fetches) |
 
 ## Current Stats
 
-- **Total image size in /public:** ~35MB
-- **Video file:** 27MB (light-dark.mp4)
-- **Unused fonts:** 274KB
+- **Total image size in /public:** ~6.6MB (was ~35MB)
+- **Video file:** 10MB (was 27MB)
 - **Bundle size:** ~1MB (good)
 
-## Estimated Impact
+## File Sizes After Optimization
 
-If HIGH PRIORITY items are implemented:
-- Initial page load: **~20MB to ~2-3MB** (85% reduction)
-- Time to Interactive: **~8s to ~1-2s** (75% faster)
-- Lighthouse Performance Score: **~40 to ~85+**
+| File | Size |
+|------|------|
+| homepage-full.jpg | 3.2MB |
+| image_3.jpg | 1.5MB |
+| image_5.jpg | 664KB |
+| image_1.jpg | 532KB |
+| image_2.jpg | 516KB |
+| image_4.jpg | 208KB |
+| logo.png | 24KB |
+| light-dark.mp4 | 10MB |
 
-## Implementation Notes
+## What's Implemented
 
-### 1. Enable Image Optimization
-Edit `next.config.ts` and remove the `unoptimized: true` line from images config.
+- Images compressed using sips (macOS)
+- Video compressed using ffmpeg
+- Photography gallery uses lazy loading (first 6 images load immediately)
+- Preconnect hints for static.wixstatic.com and img.youtube.com
+- Store data loaded at build time, not runtime
+- Removed ~33MB of unused screenshot files
 
-**Note:** This requires external images to be in `remotePatterns`. Add:
-```ts
-images: {
-  remotePatterns: [
-    { protocol: 'https', hostname: 'static.wixstatic.com' },
-    { protocol: 'https', hostname: 'img.youtube.com' },
-  ],
-},
-```
+## Future Improvements (Optional)
 
-### 2. Compress Images
-Use a tool like ImageOptim, Squoosh, or TinyPNG to compress:
-- `public/homepage-full.png` (16MB -> target <1MB)
-- `public/image_3.jpg` (5MB -> target <500KB)
-- `public/image_5.jpg` (2.9MB -> target <500KB)
-- Other large images in public folder
-
-### 3. Remove quality={100}
-In `app/page.tsx`, remove `quality={100}` prop or change to `quality={80}`.
-
-### 4. Delete Unused Fonts
-```bash
-rm public/fonts/custom_font.ttf
-rm public/fonts/custom_font.woff
-rm public/fonts/custom_font.woff2
-```
+- Enable Next.js image optimization (requires server, not compatible with static export)
+- Add blur placeholders (blurDataURL) for better perceived performance
+- Use dynamic imports for heavy components (video player)
+- Further compress homepage-full.jpg if needed

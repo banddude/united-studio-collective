@@ -15,31 +15,27 @@
 
 ### 2. Box Chocolate Video (Optional)
 - Provide the video file to replace "Video coming soon" placeholder
-- File location on Mike's computer: `/Users/mikeshaffer/Documents/Family/RACHEL/Box Chocolate/Box_Commercial/BoxChocolate_220225.mp4` (stuck in iCloud)
-
-## Content Verification (Optional)
-
-### 3. Video Descriptions
-- Delikate Rayne Fashion Shoot: Only has creator name, no detailed description on Wix site
-- Verify other video descriptions match exactly if needed
 
 ## Completed
 
-- [x] Homepage with video background
+- [x] Homepage with full-screen images
 - [x] Filmmaking page with video gallery/player
-- [x] Photography page
+- [x] Photography page with lightbox
 - [x] Store with JSON-based product database
 - [x] Shopping cart with localStorage persistence
 - [x] Cart page with checkout ready for Stripe
-- [x] About page (matches Wix)
-- [x] Contact page with mailto form
+- [x] About page
+- [x] Contact page with mailto form and validation
 - [x] 404 error page
-- [x] Header with cart in nav (removed login button)
-- [x] Footer with Instagram link and "Connect with us!" link
+- [x] Header with cart in nav
+- [x] Footer with Instagram link
 - [x] Mobile responsive design
 - [x] Video search filter on filmmaking page
-- [x] Video autoplay when navigating with arrows
-- [x] Black background video player with info panel
+- [x] SEO: sitemap, robots.txt, Open Graph, Twitter Cards, JSON-LD
+- [x] Speed: compressed images/video, lazy loading, preconnect hints
+- [x] Accessibility: ARIA labels, form validation
+- [x] ESLint: all errors fixed
+- [x] Static store data (build-time, no runtime fetches)
 
 ## How to Enable Stripe Checkout
 
@@ -63,20 +59,6 @@
 
 ## How to Add New Products
 
-Edit `public/config/store.json` and add a new entry to the `products` array:
-
-```json
-{
-  "id": 11,
-  "name": "New Product Name",
-  "price": 85.00,
-  "image": "https://url-to-product-image.jpg",
-  "stripe": {
-    "frameless": "",
-    "framed_black": "",
-    "framed_white": ""
-  }
-}
-```
-
-Then update `app/store/product/[id]/page.tsx` to include the new ID in `generateStaticParams()`.
+1. Edit `public/config/store.json`
+2. Add a new entry to the `products` array
+3. The site will automatically pick up new products on next build (products are loaded at build time from the JSON)
