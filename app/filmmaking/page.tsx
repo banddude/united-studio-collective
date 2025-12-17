@@ -90,6 +90,33 @@ export default function FilmmakingPage() {
     setIsPlaying(false);
   };
 
+  // Get current index of selected video in filtered list
+  const currentVideoIndex = filteredVideos.findIndex(v => v.id === selectedVideo.id);
+
+  const handleNextVideo = () => {
+    if (currentVideoIndex < filteredVideos.length - 1) {
+      const nextVideo = filteredVideos[currentVideoIndex + 1];
+      setSelectedVideo(nextVideo);
+      setIsPlaying(false);
+      // Auto-scroll thumbnails to keep selected video visible
+      if (currentVideoIndex + 1 >= thumbnailIndex + visibleThumbnails) {
+        setThumbnailIndex(prev => Math.min(prev + 1, maxIndex));
+      }
+    }
+  };
+
+  const handlePrevVideo = () => {
+    if (currentVideoIndex > 0) {
+      const prevVideo = filteredVideos[currentVideoIndex - 1];
+      setSelectedVideo(prevVideo);
+      setIsPlaying(false);
+      // Auto-scroll thumbnails to keep selected video visible
+      if (currentVideoIndex - 1 < thumbnailIndex) {
+        setThumbnailIndex(prev => Math.max(prev - 1, 0));
+      }
+    }
+  };
+
   const handleNextThumbnails = () => {
     setThumbnailIndex((prev) => Math.min(prev + 1, maxIndex));
   };
@@ -175,9 +202,9 @@ export default function FilmmakingPage() {
               </div>
 
               {/* Previous Video Arrow */}
-              {thumbnailIndex > 0 && (
+              {currentVideoIndex > 0 && (
                 <button
-                  onClick={handlePrevThumbnails}
+                  onClick={handlePrevVideo}
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   <ChevronLeft size={48} strokeWidth={1} />
@@ -185,9 +212,9 @@ export default function FilmmakingPage() {
               )}
 
               {/* Next Video Arrow */}
-              {thumbnailIndex < maxIndex && (
+              {currentVideoIndex < filteredVideos.length - 1 && (
                 <button
-                  onClick={handleNextThumbnails}
+                  onClick={handleNextVideo}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   <ChevronRight size={48} strokeWidth={1} />
