@@ -11,7 +11,7 @@ export default function About() {
       <Header variant="light" currentPage="About" />
 
       {/* Main Content */}
-      <main className="pt-[140px] md:pt-[211px] pb-16 px-4 md:px-8 max-w-4xl mx-auto">
+      <main className="pt-[120px] md:pt-[160px] pb-16 px-4 md:px-8 max-w-4xl mx-auto">
         {/* What We Strive For Section */}
         <section className="mb-10">
           <h2
@@ -20,7 +20,7 @@ export default function About() {
           >
             What We Strive For
           </h2>
-          <p className="text-[15px] leading-relaxed text-gray-700 text-justify">
+          <p className="text-[15px] leading-relaxed text-black text-justify">
             United Studio Collective is a gateway to creative expression. Our mission is to use a diverse range of specialty artists and transform the everyday into something different and exquisite. We specialize in producing fashion films, experimental short films, and delving into the timeless worlds of analog and digital photography. Our team of talented creative individuals is continuously growing, so come and join us on this exciting adventure of visual storytelling.
           </p>
         </section>
@@ -48,7 +48,7 @@ export default function About() {
               >
                 Evan Rene
               </h3>
-              <p className="text-sm leading-relaxed text-gray-700 text-justify">
+              <p className="text-sm leading-relaxed text-black text-justify">
                 How do we expand upon the standard? That is the constant question that lingers in Evan Rene&apos;s mind! Film is a creative medium that has thrived in pop culture. Amazing trends have started and bad trends have come from it. Evan&apos;s goal isn&apos;t to completely revitalize the film industry or even bring it back to its former self. Evan&apos;s goal is to make art count and to tell compelling thought-provoking stories through filmmaking &amp; photography.
               </p>
             </div>
@@ -76,7 +76,7 @@ export default function About() {
               >
                 Katie Chew
               </h3>
-              <p className="text-sm leading-relaxed text-gray-700 text-justify">
+              <p className="text-sm leading-relaxed text-black text-justify">
                 Katie is a fashion photographer from the Midwest who moved to Los Angeles to achieve her dreams of working with other creatives in fashion. She is a skilled photographer who gets her inspiration from movies and current high fashion magazines she carefully studies. She enjoys working with everyone as a collective effort and believes the best ideas come from working with others.
               </p>
             </div>

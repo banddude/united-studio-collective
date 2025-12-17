@@ -151,7 +151,7 @@ export default function PhotographyPage() {
       <Header variant="light" currentPage="Photography" />
 
       {/* Main Content */}
-      <main className="pt-[140px] md:pt-[211px]">
+      <main className="pt-[120px] md:pt-[160px]">
         {/* Photo Gallery - 3 column grid with small gaps */}
         <div className="grid grid-cols-3 gap-[5px] bg-white">
           {allPhotos.map((photo, index) => (
@@ -189,7 +189,7 @@ export default function PhotographyPage() {
       {/* Lightbox Modal */}
       {selectedImageIndex !== null && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center"
           onClick={closeLightbox}
         >
           {/* Close Button */}

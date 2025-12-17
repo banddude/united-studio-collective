@@ -38,7 +38,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
     <>
       {/* Top bar with Login and Cart - always black background */}
       <div className={`${scrollable ? 'absolute' : 'fixed'} top-0 left-0 right-0 z-[100] bg-black`}>
-        <div className="flex justify-between items-center px-4 md:px-8 py-3">
+        <div className="flex justify-between items-center px-4 md:px-8 py-2">
           {/* Mobile menu button */}
           <button
             className="md:hidden text-white hover:opacity-70 transition-opacity"
@@ -66,13 +66,13 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
       </div>
 
       {/* Main header with title and nav - overlaid on content */}
-      <header className={`${scrollable ? 'absolute' : 'fixed'} top-[52px] left-0 right-0 z-[90] px-4 md:px-6 pt-4 md:pt-6 pb-3 md:pb-4 ${!isDark ? 'bg-white' : ''}`}>
+      <header className={`${scrollable ? 'absolute' : 'fixed'} top-[44px] left-0 right-0 z-[90] px-4 md:px-6 pt-2 md:pt-3 pb-2 md:pb-3 ${!isDark ? 'bg-white' : ''}`}>
         <div className="w-full">
           {/* Title - Responsive sizing */}
-          <h1 className="text-center mb-2 md:mb-4">
+          <h1 className="text-center mb-1 md:mb-2">
             <Link
               href="/"
-              className="text-[#3d3d3d] text-[18px] sm:text-[24px] md:text-[36px] lg:text-[50px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity"
+              className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} text-[18px] sm:text-[24px] md:text-[32px] lg:text-[42px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity`}
               style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
             >
               UNITED STUDIO COLLECTIVE

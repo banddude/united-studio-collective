@@ -175,7 +175,7 @@ export default function ProductClient({ productId }: ProductClientProps) {
     <div className="min-h-screen bg-white">
       <Header variant="light" currentPage="Store" />
 
-      <main className="pt-[140px] md:pt-[227px] pb-16">
+      <main className="pt-[120px] md:pt-[170px] pb-16">
 
         {/* Breadcrumb and Navigation */}
         <div className="px-4 md:px-6 mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">

@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const images = [
-  `${basePath}/image_4.jpg`, // Sand dunes with person
-  `${basePath}/image_3.jpg`, // Blurry subway/train
-  `${basePath}/image_5.jpg`, // Band in bar
-  `${basePath}/image_2.jpg`, // B&W two people window
-  `${basePath}/image_1.jpg`, // B&W single person window
+  { src: `${basePath}/image_4.jpg`, alt: "Sand dunes with person", link: "/filmmaking" },
+  { src: `${basePath}/image_3.jpg`, alt: "Blurry subway/train", link: "/photography" },
+  { src: `${basePath}/image_5.jpg`, alt: "Band in bar", link: "/store" },
+  { src: `${basePath}/image_2.jpg`, alt: "B&W two people window", link: "/about" },
+  { src: `${basePath}/image_1.jpg`, alt: "B&W single person window", link: "/contact" },
 ];
 
 export default function Home() {
@@ -23,21 +24,22 @@ export default function Home() {
       {/* Full-viewport images stacked vertically */}
       <div className="flex flex-col">
         {images.map((image, index) => (
-          <section
-            key={image}
-            className="relative w-full"
+          <Link
+            key={image.src}
+            href={image.link}
+            className="relative w-full block"
             style={{ height: '100vh' }}
           >
             <Image
-              src={image}
-              alt={`Gallery image ${index + 1}`}
+              src={image.src}
+              alt={image.alt}
               fill
               priority={index < 2}
               className="object-cover"
               sizes="100vw"
               quality={100}
             />
-          </section>
+          </Link>
         ))}
       </div>
 
