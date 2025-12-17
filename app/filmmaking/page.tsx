@@ -6,6 +6,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
+const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collective" : "";
+
 interface Video {
   id: string;
   title: string;
@@ -33,7 +35,7 @@ const videos: Video[] = [
     title: "Light / Dark",
     duration: "01:24",
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "/united-studio-collective/videos/light-dark.mp4",
+    videoId: "light-dark.mp4",
     platform: "local",
     creator: "Ion Tong & Evan Rene",
     description: "A collaboration of architecture and fashion. Directed By: Ion Tong & Evan Rene. Produced By: United Studio Collective. Director of Photography: Ion Tong. Fashion Designer/Artist: Simon. Model: Jessie Rainbow. Makeup Artist: Jena Mogensen, Sarai Diaz.",
@@ -198,7 +200,7 @@ export default function FilmmakingPage() {
                   />
                 ) : selectedVideo.platform === "local" ? (
                   <video
-                    src={selectedVideo.videoId}
+                    src={`${basePath}/videos/${selectedVideo.videoId}`}
                     className="w-full h-full"
                     controls
                     autoPlay
