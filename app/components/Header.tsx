@@ -50,17 +50,6 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Cart - top right */}
-          <Link
-            href="/cart"
-            className="absolute right-0 top-0 flex items-center gap-1 md:gap-2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
-          >
-            <ShoppingCart size={20} strokeWidth={1.5} />
-            {totalItems > 0 && (
-              <span className="text-sm font-light tracking-wide">{totalItems}</span>
-            )}
-          </Link>
-
           {/* Title - Responsive sizing */}
           <h1 className="text-center mb-1 md:mb-2">
             <Link
@@ -91,6 +80,15 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
                 </Link>
               );
             })}
+            {/* Cart in nav */}
+            <Link
+              href="/cart"
+              className="text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 text-[#2d2d2d] flex items-center gap-2"
+              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+            >
+              <ShoppingCart size={18} strokeWidth={1.5} />
+              {totalItems > 0 && <span>({totalItems})</span>}
+            </Link>
           </nav>
         </div>
       </header>
@@ -118,6 +116,16 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
                 </Link>
               );
             })}
+            {/* Cart in mobile menu */}
+            <Link
+              href="/cart"
+              onClick={closeMobileMenu}
+              className="text-2xl font-light tracking-wider transition-opacity text-gray-400 hover:text-white flex items-center gap-3"
+              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+            >
+              <ShoppingCart size={24} strokeWidth={1.5} />
+              Cart{totalItems > 0 && ` (${totalItems})`}
+            </Link>
           </nav>
         </div>
       )}
