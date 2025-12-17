@@ -175,20 +175,20 @@ export default function ProductClient({ productId }: ProductClientProps) {
     <div className="min-h-screen bg-white">
       <Header variant="light" currentPage="Store" />
 
-      <main className="pt-[227px] pb-16">
+      <main className="pt-[140px] md:pt-[227px] pb-16">
 
         {/* Breadcrumb and Navigation */}
-        <div className="px-6 mb-4 flex items-center justify-between">
-          <nav className="flex items-center text-sm text-gray-600">
+        <div className="px-4 md:px-6 mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <nav className="flex items-center text-xs md:text-sm text-gray-600 flex-wrap">
             <Link href="/" className="hover:text-gray-900">
               Home
             </Link>
-            <span className="mx-2">/</span>
+            <span className="mx-1 md:mx-2">/</span>
             <Link href="/store" className="hover:text-gray-900">
               All Products
             </Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">{product.name}</span>
+            <span className="mx-1 md:mx-2">/</span>
+            <span className="text-gray-900 truncate max-w-[150px] md:max-w-none">{product.name}</span>
           </nav>
 
           <div className="flex items-center gap-3 text-sm">
@@ -232,8 +232,8 @@ export default function ProductClient({ productId }: ProductClientProps) {
         </div>
 
         {/* Product Content */}
-        <div className="px-6 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="px-4 md:px-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
             {/* Left: Product Image */}
             <div className="space-y-4">
               <div className="relative aspect-square bg-gray-100">

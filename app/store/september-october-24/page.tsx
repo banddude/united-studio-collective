@@ -85,7 +85,7 @@ export default function SeptemberOctoberCatalogPage() {
       <Header variant="light" currentPage="Store" />
 
       {/* Main Content */}
-      <div className="pt-[211px] pb-16">
+      <div className="pt-[140px] md:pt-[211px] pb-16">
         {/* Breadcrumb */}
         <div className="px-6 mb-2">
           <nav className="flex items-center text-sm text-gray-600">
@@ -98,17 +98,17 @@ export default function SeptemberOctoberCatalogPage() {
         </div>
 
         {/* Page Title and Description */}
-        <div className="px-6 mb-6">
-          <h1 className="text-2xl font-medium text-black mb-2">September - October &apos;24 Catalog</h1>
+        <div className="px-4 md:px-6 mb-6">
+          <h1 className="text-xl md:text-2xl font-medium text-black mb-2">September - October &apos;24 Catalog</h1>
           <p className="text-sm text-gray-600">
             Prints available for purchase during September - October Catalog. Stay tuned for bi-monthly catalog updates!
           </p>
         </div>
 
         {/* Content Area */}
-        <div className="flex px-6">
-          {/* Left Sidebar */}
-          <aside className="w-44 flex-shrink-0 mr-8">
+        <div className="flex flex-col md:flex-row px-4 md:px-6">
+          {/* Left Sidebar - Hidden on mobile */}
+          <aside className="hidden md:block w-44 flex-shrink-0 mr-8">
             <div className="bg-black text-white p-4">
               <h2 className="text-sm font-medium mb-4 border-b border-gray-600 pb-2">
                 Browse by
@@ -136,8 +136,8 @@ export default function SeptemberOctoberCatalogPage() {
               <p className="text-sm text-gray-600">{products.length} products</p>
             </div>
 
-            {/* Product Grid - 4 columns */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Product Grid - Responsive columns */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
               {products.map((product) => (
                 <Link
                   key={product.id}

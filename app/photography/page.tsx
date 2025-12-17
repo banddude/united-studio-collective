@@ -151,7 +151,7 @@ export default function PhotographyPage() {
       <Header variant="light" currentPage="Photography" />
 
       {/* Main Content */}
-      <main className="pt-[211px]">
+      <main className="pt-[140px] md:pt-[211px]">
         {/* Photo Gallery - 3 column grid with small gaps */}
         <div className="grid grid-cols-3 gap-[5px] bg-white">
           {allPhotos.map((photo, index) => (
