@@ -174,7 +174,7 @@ export default function FilmmakingPage() {
       <Header variant="light" currentPage="Filmmaking" />
 
       {/* Main Content */}
-      <main className="flex-1 pt-[100px] md:pt-[130px]">
+      <main className="flex-1 pt-[120px] md:pt-[150px]">
         {/* Main Video Player Section */}
         <div className="relative w-full z-10">
           {isPlaying ? (

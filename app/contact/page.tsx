@@ -39,7 +39,7 @@ export default function ContactPage() {
       <Header variant="light" currentPage="Contact" />
 
       {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center pt-[100px] md:pt-[130px] pb-16 px-4">
+      <main className="flex-grow flex items-center justify-center pt-[120px] md:pt-[150px] pb-16 px-4">
         {/* Contact Card with Background Image */}
         <div className="relative w-full max-w-sm overflow-hidden">
           {/* Background Image - Griffith Observatory */}
