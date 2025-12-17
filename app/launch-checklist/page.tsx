@@ -119,6 +119,36 @@ const checklistItems: ChecklistItem[] = [
     description: "Replace 'Video coming soon' placeholder with actual video (optional)",
     owner: "Evan",
   },
+  {
+    id: "15",
+    task: "Make logo bolder/bigger",
+    description: "Evan will provide the actual font used on Wix so we can match it exactly",
+    owner: "Both",
+  },
+  {
+    id: "16",
+    task: "Update copyright to 2026",
+    description: "Change footer copyright year from 2024 to 2026",
+    owner: "Mike",
+  },
+  {
+    id: "17",
+    task: "Video auto-play decision",
+    description: "Decide if main filmmaking video should auto-play on page load",
+    owner: "Evan",
+  },
+  {
+    id: "18",
+    task: "Fix video scroll arrow visibility",
+    description: "The black arrow to scroll through videos is hard to see, make it more visible",
+    owner: "Mike",
+  },
+  {
+    id: "19",
+    task: "Fix store frame options",
+    description: "Remove 'natural and dark wood' options, only offer what Evan actually sells",
+    owner: "Mike",
+  },
 ];
 
 export default function LaunchChecklist() {
