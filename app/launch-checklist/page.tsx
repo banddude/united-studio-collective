@@ -450,47 +450,118 @@ export default function LaunchChecklist() {
           </div>
         </section>
 
-        {/* DNS Instructions */}
-        <section className="mt-12 bg-blue-50 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-blue-900 mb-4">DNS Setup Instructions</h2>
-          <p className="text-sm text-blue-800 mb-4">Add these records in Cloudflare DNS:</p>
-          <div className="bg-white rounded border border-blue-200 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-blue-100">
-                <tr>
-                  <th className="text-left px-4 py-2 text-blue-900">Type</th>
-                  <th className="text-left px-4 py-2 text-blue-900">Name</th>
-                  <th className="text-left px-4 py-2 text-blue-900">Content</th>
-                </tr>
-              </thead>
-              <tbody className="font-mono text-xs">
-                <tr className="border-t border-blue-100">
-                  <td className="px-4 py-2">A</td>
-                  <td className="px-4 py-2">@</td>
-                  <td className="px-4 py-2">185.199.108.153</td>
-                </tr>
-                <tr className="border-t border-blue-100">
-                  <td className="px-4 py-2">A</td>
-                  <td className="px-4 py-2">@</td>
-                  <td className="px-4 py-2">185.199.109.153</td>
-                </tr>
-                <tr className="border-t border-blue-100">
-                  <td className="px-4 py-2">A</td>
-                  <td className="px-4 py-2">@</td>
-                  <td className="px-4 py-2">185.199.110.153</td>
-                </tr>
-                <tr className="border-t border-blue-100">
-                  <td className="px-4 py-2">A</td>
-                  <td className="px-4 py-2">@</td>
-                  <td className="px-4 py-2">185.199.111.153</td>
-                </tr>
-                <tr className="border-t border-blue-100">
-                  <td className="px-4 py-2">CNAME</td>
-                  <td className="px-4 py-2">www</td>
-                  <td className="px-4 py-2">banddude.github.io</td>
-                </tr>
-              </tbody>
-            </table>
+        {/* Instructions Section */}
+        <section className="mt-12 space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900">Setup Instructions</h2>
+
+          {/* Step 1: Domain Transfer */}
+          <div className="bg-blue-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
+              <span className="w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">1</span>
+              Transfer Domain to Cloudflare
+            </h3>
+            <ol className="text-sm text-blue-800 space-y-2 ml-9 list-decimal">
+              <li>Go to <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">dash.cloudflare.com</a></li>
+              <li>Click &quot;Add a Site&quot; and enter <strong>unitedstudiocollective.com</strong></li>
+              <li>Select the Free plan</li>
+              <li>Cloudflare will give you 2 nameservers (e.g., ada.ns.cloudflare.com)</li>
+              <li>Go to your current domain registrar (Wix, GoDaddy, etc.)</li>
+              <li>Update the nameservers to the Cloudflare ones</li>
+              <li>Wait up to 24 hours for propagation (usually faster)</li>
+            </ol>
+          </div>
+
+          {/* Step 2: DNS Records */}
+          <div className="bg-green-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
+              <span className="w-7 h-7 bg-green-600 text-white rounded-full flex items-center justify-center text-sm">2</span>
+              Add DNS Records in Cloudflare
+            </h3>
+            <p className="text-sm text-green-800 mb-4 ml-9">Once the domain is on Cloudflare, add these DNS records:</p>
+            <div className="bg-white rounded border border-green-200 overflow-hidden ml-9">
+              <table className="w-full text-sm">
+                <thead className="bg-green-100">
+                  <tr>
+                    <th className="text-left px-4 py-2 text-green-900">Type</th>
+                    <th className="text-left px-4 py-2 text-green-900">Name</th>
+                    <th className="text-left px-4 py-2 text-green-900">Content</th>
+                    <th className="text-left px-4 py-2 text-green-900">Proxy</th>
+                  </tr>
+                </thead>
+                <tbody className="font-mono text-xs">
+                  <tr className="border-t border-green-100">
+                    <td className="px-4 py-2">A</td>
+                    <td className="px-4 py-2">@</td>
+                    <td className="px-4 py-2">185.199.108.153</td>
+                    <td className="px-4 py-2 text-gray-500">DNS only</td>
+                  </tr>
+                  <tr className="border-t border-green-100">
+                    <td className="px-4 py-2">A</td>
+                    <td className="px-4 py-2">@</td>
+                    <td className="px-4 py-2">185.199.109.153</td>
+                    <td className="px-4 py-2 text-gray-500">DNS only</td>
+                  </tr>
+                  <tr className="border-t border-green-100">
+                    <td className="px-4 py-2">A</td>
+                    <td className="px-4 py-2">@</td>
+                    <td className="px-4 py-2">185.199.110.153</td>
+                    <td className="px-4 py-2 text-gray-500">DNS only</td>
+                  </tr>
+                  <tr className="border-t border-green-100">
+                    <td className="px-4 py-2">A</td>
+                    <td className="px-4 py-2">@</td>
+                    <td className="px-4 py-2">185.199.111.153</td>
+                    <td className="px-4 py-2 text-gray-500">DNS only</td>
+                  </tr>
+                  <tr className="border-t border-green-100">
+                    <td className="px-4 py-2">CNAME</td>
+                    <td className="px-4 py-2">www</td>
+                    <td className="px-4 py-2">banddude.github.io</td>
+                    <td className="px-4 py-2 text-gray-500">DNS only</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-green-700 mt-3 ml-9">
+              Note: Turn OFF the orange cloud (Proxy) for all records. Set to &quot;DNS only&quot; (gray cloud).
+            </p>
+          </div>
+
+          {/* Step 3: GitHub Pages */}
+          <div className="bg-purple-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-purple-900 mb-3 flex items-center gap-2">
+              <span className="w-7 h-7 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm">3</span>
+              Configure GitHub Pages
+            </h3>
+            <ol className="text-sm text-purple-800 space-y-2 ml-9 list-decimal">
+              <li>Go to <a href="https://github.com/banddude/united-studio-collective/settings/pages" target="_blank" rel="noopener noreferrer" className="underline font-medium">GitHub repo Settings → Pages</a></li>
+              <li>Under &quot;Custom domain&quot;, enter <strong>unitedstudiocollective.com</strong></li>
+              <li>Click Save</li>
+              <li>Wait for DNS check to pass (may take a few minutes)</li>
+              <li>Check &quot;Enforce HTTPS&quot; once available</li>
+            </ol>
+          </div>
+
+          {/* Step 4: Stripe */}
+          <div className="bg-orange-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-orange-900 mb-3 flex items-center gap-2">
+              <span className="w-7 h-7 bg-orange-600 text-white rounded-full flex items-center justify-center text-sm">4</span>
+              Set Up Stripe Payments
+            </h3>
+            <ol className="text-sm text-orange-800 space-y-2 ml-9 list-decimal">
+              <li>Create account at <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener noreferrer" className="underline font-medium">stripe.com</a></li>
+              <li>Go to <a href="https://dashboard.stripe.com/payment-links" target="_blank" rel="noopener noreferrer" className="underline font-medium">Products → Payment Links</a></li>
+              <li>For each print, create 3 payment links:
+                <ul className="list-disc ml-5 mt-1">
+                  <li>Frameless ($85)</li>
+                  <li>Framed Black ($85)</li>
+                  <li>Framed White ($85)</li>
+                </ul>
+              </li>
+              <li>Edit <a href="https://github.com/banddude/united-studio-collective/edit/main/public/config/store.json" target="_blank" rel="noopener noreferrer" className="underline font-medium">public/config/store.json</a></li>
+              <li>Set <code className="bg-orange-100 px-1 rounded">&quot;stripeEnabled&quot;: true</code></li>
+              <li>Add payment link URLs for each product</li>
+            </ol>
           </div>
         </section>
       </main>
