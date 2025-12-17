@@ -50,12 +50,12 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Cart - right side */}
+          {/* Cart - top right */}
           <Link
             href="/cart"
-            className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1 md:gap-2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
+            className="absolute right-0 top-0 flex items-center gap-1 md:gap-2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
           >
-            <ShoppingCart size={20} strokeWidth={1} />
+            <ShoppingCart size={20} strokeWidth={1.5} />
             {totalItems > 0 && (
               <span className="text-sm font-light tracking-wide">{totalItems}</span>
             )}
