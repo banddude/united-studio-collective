@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,128 +9,28 @@ import Footer from "../../../components/Footer";
 import { useCart } from "../../../context/CartContext";
 import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
 
-const products = [
-  {
-    id: 1,
-    slug: "an-evening-with-a-cherry-blossom-tree",
-    name: "An Evening With A Cherry Blossom Tree",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_7d3c9ccd3b27414eb6485414f9e186dc~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_7d3c9ccd3b27414eb6485414f9e186dc~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 2,
-    slug: "the-ocean-as-seen-by-portra",
-    name: "The Ocean As Seen By Portra",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_908459ee9e1146b89c711c9b8498f44b~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_908459ee9e1146b89c711c9b8498f44b~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 3,
-    slug: "sunsets-in-the-city",
-    name: "Sunsets In The City",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_0549c7a359d44ebd8c3a88462a9c5b76~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_0549c7a359d44ebd8c3a88462a9c5b76~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 4,
-    slug: "glass-verticality",
-    name: "Glass Verticality",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_465ea9bdeb424542b3d8fb4d7c271b3d~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_465ea9bdeb424542b3d8fb4d7c271b3d~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 5,
-    slug: "passing-in-the-night",
-    name: "Passing In The Night",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_4bb4be2d33604c97964b78ae9505a311~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_4bb4be2d33604c97964b78ae9505a311~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 6,
-    slug: "endless-movement",
-    name: "Endless Movement",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_1686cc4a6d3d418290051f9816509d9b~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_1686cc4a6d3d418290051f9816509d9b~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 7,
-    slug: "the-beacon-of-los-feliz",
-    name: "The Beacon Of Los Feliz",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_2bcbe6c57e684d578daebd843560ad51~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_2bcbe6c57e684d578daebd843560ad51~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 8,
-    slug: "colored-streaks",
-    name: "Colored Streaks",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_44bf21a091f84cd8a349ed22767901ec~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_44bf21a091f84cd8a349ed22767901ec~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 9,
-    slug: "night-at-the-opera",
-    name: "Night At The Opera",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_650f99281b1b4346b8626471dd20cc68~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_650f99281b1b4346b8626471dd20cc68~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-  {
-    id: 10,
-    slug: "jefferson",
-    name: "Jefferson",
-    price: 85.0,
-    image:
-      "https://static.wixstatic.com/media/963954_509815faf01144a58c8193ff429e3740~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_509815faf01144a58c8193ff429e3740~mv2.jpg",
-    artist: "Evan Rene",
-    size: "16x20",
-    description:
-      "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
-  },
-];
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  artist?: string;
+  size?: string;
+  description?: string;
+  stripe: {
+    frameless: string;
+    framed_black: string;
+    framed_white: string;
+  };
+}
+
+interface StoreConfig {
+  stripeEnabled: boolean;
+  defaultArtist: string;
+  defaultSize: string;
+  defaultDescription: string;
+  products: Product[];
+}
 
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White", "Natural Wood", "Dark Wood"];
@@ -140,17 +40,46 @@ interface ProductClientProps {
 }
 
 export default function ProductClient({ productId }: ProductClientProps) {
-  const product = products.find((p) => p.id === productId);
   const router = useRouter();
   const { addItem } = useCart();
 
+  const [storeConfig, setStoreConfig] = useState<StoreConfig | null>(null);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [frameOption, setFrameOption] = useState("");
   const [frameColor, setFrameColor] = useState("");
   const [showAdded, setShowAdded] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    fetch("/config/store.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setStoreConfig(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load store config:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  const products = storeConfig?.products || [];
+  const product = products.find((p) => p.id === productId);
+
   const isFrameless = frameOption === "Frameless Photograph";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header variant="light" currentPage="Store" />
+        <main className="pt-40 pb-16 px-6 text-center">
+          <p className="text-gray-600">Loading...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -170,6 +99,10 @@ export default function ProductClient({ productId }: ProductClientProps) {
   const currentIndex = products.findIndex((p) => p.id === productId);
   const prevProduct = currentIndex > 0 ? products[currentIndex - 1] : null;
   const nextProduct = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
+
+  const artist = product.artist || storeConfig?.defaultArtist || "Evan Rene";
+  const size = product.size || storeConfig?.defaultSize || "16x20";
+  const description = product.description || storeConfig?.defaultDescription || "";
 
   const decrementQuantity = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -212,6 +145,24 @@ export default function ProductClient({ productId }: ProductClientProps) {
   const handleBuyNow = () => {
     if (!validateSelection()) return;
 
+    // Check if Stripe is enabled and we have a payment link
+    if (storeConfig?.stripeEnabled) {
+      let stripeLink = "";
+      if (isFrameless) {
+        stripeLink = product.stripe.frameless;
+      } else if (frameColor === "Black") {
+        stripeLink = product.stripe.framed_black;
+      } else if (frameColor === "White") {
+        stripeLink = product.stripe.framed_white;
+      }
+
+      if (stripeLink) {
+        window.location.href = stripeLink;
+        return;
+      }
+    }
+
+    // Fallback to cart
     addItem({
       productId: product.id,
       name: product.name,
@@ -302,9 +253,9 @@ export default function ProductClient({ productId }: ProductClientProps) {
               </div>
               {/* Product Info below image */}
               <div className="text-sm text-gray-600 space-y-1">
-                <p>Image Size: {product.size}</p>
-                <p>Artist: {product.artist}</p>
-                <p className="mt-4">{product.description}</p>
+                <p>Image Size: {size}</p>
+                <p>Artist: {artist}</p>
+                <p className="mt-4">{description}</p>
               </div>
             </div>
 

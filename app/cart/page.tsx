@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
@@ -7,19 +8,81 @@ import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 import { Minus, Plus, X } from "lucide-react";
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  stripe: {
+    frameless: string;
+    framed_black: string;
+    framed_white: string;
+  };
+}
+
+interface StoreConfig {
+  stripeEnabled: boolean;
+  products: Product[];
+}
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
+  const [storeConfig, setStoreConfig] = useState<StoreConfig | null>(null);
 
-  // Placeholder Stripe checkout URL - replace with real one when available
-  const STRIPE_CHECKOUT_URL = "#stripe-checkout-placeholder";
+  useEffect(() => {
+    fetch("/config/store.json")
+      .then((res) => res.json())
+      .then((data) => setStoreConfig(data))
+      .catch(() => setStoreConfig(null));
+  }, []);
+
+  const getStripeLink = (productId: number, frameOption: string, frameColor: string | undefined) => {
+    if (!storeConfig || !storeConfig.stripeEnabled) return null;
+
+    const product = storeConfig.products.find(p => p.id === productId);
+    if (!product) return null;
+
+    if (frameOption === "Frameless Photograph") {
+      return product.stripe.frameless || null;
+    } else if (frameColor === "Black") {
+      return product.stripe.framed_black || null;
+    } else if (frameColor === "White") {
+      return product.stripe.framed_white || null;
+    }
+    return null;
+  };
 
   const handleCheckout = () => {
     if (items.length === 0) return;
 
-    // When Stripe is set up, this will redirect to Stripe checkout
-    // For now, show an alert
+    // Check if Stripe is configured
+    if (storeConfig?.stripeEnabled) {
+      // For single item, redirect directly to that product's payment link
+      if (items.length === 1) {
+        const item = items[0];
+        const link = getStripeLink(item.productId, item.frameOption, item.frameColor || undefined);
+        if (link) {
+          window.location.href = link;
+          return;
+        }
+      }
+
+      // For multiple items, show individual checkout links
+      alert("Please check out each item individually using the checkout buttons below, or contact Unitedstudiocollective@gmail.com for bulk orders.");
+      return;
+    }
+
+    // Stripe not configured yet
     alert("Stripe checkout coming soon! Contact Unitedstudiocollective@gmail.com to place an order.");
-    // window.location.href = STRIPE_CHECKOUT_URL;
+  };
+
+  const handleItemCheckout = (item: typeof items[0]) => {
+    const link = getStripeLink(item.productId, item.frameOption, item.frameColor || undefined);
+    if (link) {
+      window.location.href = link;
+    } else {
+      alert("Checkout link not available. Contact Unitedstudiocollective@gmail.com to place an order.");
+    }
   };
 
   return (
@@ -120,6 +183,16 @@ export default function CartPage() {
                           ${(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
+
+                      {/* Individual checkout button when Stripe is enabled and multiple items */}
+                      {storeConfig?.stripeEnabled && items.length > 1 && getStripeLink(item.productId, item.frameOption, item.frameColor || undefined) && (
+                        <button
+                          onClick={() => handleItemCheckout(item)}
+                          className="mt-3 text-sm text-blue-600 hover:text-blue-800 underline"
+                        >
+                          Checkout this item
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
