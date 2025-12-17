@@ -10,6 +10,7 @@ import { useCart } from "../../../context/CartContext";
 import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
 import type { Product } from "../../../lib/store-data";
 
+const baseUrl = "https://banddude.github.io/united-studio-collective";
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White", "Natural Wood", "Dark Wood"];
 
@@ -115,8 +116,70 @@ export default function ProductClient({
     router.push("/cart");
   };
 
+  // Product schema for SEO
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: description,
+    image: product.image,
+    brand: {
+      "@type": "Brand",
+      name: "United Studio Collective",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `${baseUrl}/store/product/${product.id}`,
+      priceCurrency: "USD",
+      price: product.price.toFixed(2),
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "United Studio Collective",
+      },
+    },
+    category: "Fine Art Photography",
+    material: "Premium Photography Print",
+  };
+
+  // Breadcrumb schema for SEO
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Store",
+        item: `${baseUrl}/store`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: `${baseUrl}/store/product/${product.id}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      {/* Product Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      {/* Breadcrumb Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header variant="light" currentPage="Store" />
 
       <main className="pt-[120px] md:pt-[170px] pb-16">

@@ -74,6 +74,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://static.wixstatic.com" />
         <link rel="preconnect" href="https://img.youtube.com" />
         <link rel="preconnect" href="https://i.vimeocdn.com" />
+        {/* Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -98,6 +99,55 @@ export default function RootLayout({
                 email: "Unitedstudiocollective@gmail.com",
                 contactType: "customer service",
               },
+            }),
+          }}
+        />
+        {/* LocalBusiness Schema for local SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "@id": `${baseUrl}/#localbusiness`,
+              name: "United Studio Collective",
+              image: `${baseUrl}/logo.png`,
+              url: baseUrl,
+              description: "Los Angeles video production company specializing in fashion films, experimental shorts, analog and digital photography.",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Los Angeles",
+                addressRegion: "CA",
+                addressCountry: "US",
+              },
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: 34.0522,
+                longitude: -118.2437,
+              },
+              areaServed: [
+                {
+                  "@type": "City",
+                  name: "Los Angeles",
+                },
+                {
+                  "@type": "State",
+                  name: "California",
+                },
+              ],
+              priceRange: "$$",
+              email: "Unitedstudiocollective@gmail.com",
+              sameAs: [
+                "https://www.instagram.com/unitedstudiocollective",
+              ],
+              knowsAbout: [
+                "Video Production",
+                "Fashion Films",
+                "Photography",
+                "Filmmaking",
+                "Creative Content",
+                "Experimental Films",
+              ],
             }),
           }}
         />
