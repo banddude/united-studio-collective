@@ -43,7 +43,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
         <div className="w-full relative">
           {/* Mobile menu button - left side */}
           <button
-            className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
+            className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -62,24 +62,19 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex justify-center items-center flex-nowrap">
+          <nav className="hidden md:flex justify-center items-center flex-wrap">
             {navItems.map((item) => {
               const isActive = currentPage ? item.name === currentPage : pathname === item.path;
               return (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`font-normal tracking-wide hover:opacity-60 transition-opacity py-2 whitespace-nowrap ${
+                  className={`text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 ${
                     isActive
                       ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
                       : "text-[#2d2d2d]"
                   }`}
-                  style={{
-                    fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
-                    fontSize: "clamp(14px, 1.4vw, 18px)",
-                    paddingLeft: "clamp(16px, 2.5vw, 40px)",
-                    paddingRight: "clamp(16px, 2.5vw, 40px)"
-                  }}
+                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
                 >
                   {item.name}
                 </Link>
@@ -88,13 +83,8 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             {/* Cart in nav */}
             <Link
               href="/cart"
-              className="font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-2 whitespace-nowrap"
-              style={{
-                fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
-                fontSize: "clamp(14px, 1.4vw, 18px)",
-                paddingLeft: "clamp(16px, 2.5vw, 40px)",
-                paddingRight: "clamp(16px, 2.5vw, 40px)"
-              }}
+              className="text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 text-[#2d2d2d] flex items-center gap-2"
+              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
             >
               <ShoppingCart size={18} strokeWidth={1.5} />
               {totalItems > 0 && <span>({totalItems})</span>}
@@ -106,7 +96,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
       {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-[95] bg-black/95 lg:hidden"
+          className="fixed inset-0 z-[95] bg-black/95 md:hidden"
           onClick={closeMobileMenu}
         >
           <nav className="flex flex-col items-center justify-center h-full gap-6">
