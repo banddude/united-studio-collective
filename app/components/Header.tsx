@@ -68,8 +68,13 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             <Link
               ref={titleRef}
               href="/"
-              className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} text-[18px] sm:text-[24px] md:text-[32px] lg:text-[42px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity inline-block`}
-              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
+              className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} font-extralight uppercase hover:opacity-80 transition-opacity inline-block`}
+              style={{
+                fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
+                fontWeight: 200,
+                fontSize: "clamp(18px, 4.5vw, 42px)",
+                letterSpacing: "clamp(0.15em, 0.5vw, 0.3em)"
+              }}
             >
               UNITED STUDIO COLLECTIVE
             </Link>
