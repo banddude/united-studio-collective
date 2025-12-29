@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingCart, Menu, X } from "lucide-react";
@@ -16,6 +16,19 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  const titleRef = useRef<HTMLAnchorElement>(null);
+  const [titleWidth, setTitleWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (titleRef.current) {
+        setTitleWidth(titleRef.current.offsetWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -53,8 +66,9 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           {/* Title - Responsive sizing */}
           <div className="text-center mb-1 md:mb-2">
             <Link
+              ref={titleRef}
               href="/"
-              className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} text-[18px] sm:text-[24px] md:text-[32px] lg:text-[42px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity`}
+              className={`${isDark ? 'text-black' : 'text-[#3d3d3d]'} text-[18px] sm:text-[24px] md:text-[32px] lg:text-[42px] font-extralight tracking-[0.15em] md:tracking-[0.3em] uppercase hover:opacity-80 transition-opacity inline-block`}
               style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
             >
               UNITED STUDIO COLLECTIVE
@@ -63,7 +77,10 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
 
           {/* Desktop Navigation - matches title width */}
           <div className="hidden md:flex justify-center">
-            <nav className="flex justify-between items-center flex-nowrap w-full max-w-[500px] lg:max-w-[800px]">
+            <nav
+              className="flex justify-between items-center flex-nowrap"
+              style={{ width: titleWidth ? `${titleWidth}px` : "auto" }}
+            >
               {navItems.map((item) => {
                 const isActive = currentPage ? item.name === currentPage : pathname === item.path;
                 return (
