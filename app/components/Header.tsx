@@ -43,7 +43,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
         <div className="w-full relative">
           {/* Mobile menu button - left side */}
           <button
-            className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
+            className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -62,14 +62,14 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex justify-center items-center flex-wrap">
+          <nav className="hidden lg:flex justify-center items-center flex-nowrap">
             {navItems.map((item) => {
               const isActive = currentPage ? item.name === currentPage : pathname === item.path;
               return (
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 ${
+                  className={`text-[12px] xl:text-[14px] 2xl:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-2 xl:px-4 2xl:px-10 py-2 whitespace-nowrap ${
                     isActive
                       ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
                       : "text-[#2d2d2d]"
@@ -83,7 +83,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             {/* Cart in nav */}
             <Link
               href="/cart"
-              className="text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 text-[#2d2d2d] flex items-center gap-2"
+              className="text-[12px] xl:text-[14px] 2xl:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-2 xl:px-4 2xl:px-10 py-2 text-[#2d2d2d] flex items-center gap-2 whitespace-nowrap"
               style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
             >
               <ShoppingCart size={18} strokeWidth={1.5} />
@@ -96,7 +96,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
       {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-[95] bg-black/95 md:hidden"
+          className="fixed inset-0 z-[95] bg-black/95 lg:hidden"
           onClick={closeMobileMenu}
         >
           <nav className="flex flex-col items-center justify-center h-full gap-6">
