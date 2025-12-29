@@ -63,7 +63,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
 
           {/* Desktop Navigation - matches title width */}
           <div className="hidden md:flex justify-center">
-            <nav className="flex justify-between items-center flex-nowrap w-full" style={{ maxWidth: "min(100%, 800px)" }}>
+            <nav className="flex justify-between items-center flex-nowrap w-full max-w-[500px] lg:max-w-[800px]">
               {navItems.map((item) => {
                 const isActive = currentPage ? item.name === currentPage : pathname === item.path;
                 return (
