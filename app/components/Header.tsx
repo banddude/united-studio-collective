@@ -61,35 +61,37 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex justify-center items-center flex-wrap">
-            {navItems.map((item) => {
-              const isActive = currentPage ? item.name === currentPage : pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 ${
-                    isActive
-                      ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
-                      : "text-[#2d2d2d]"
-                  }`}
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-            {/* Cart in nav */}
-            <Link
-              href="/cart"
-              className="text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 lg:px-10 py-2 text-[#2d2d2d] flex items-center gap-2"
-              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
-            >
-              <ShoppingCart size={18} strokeWidth={1.5} />
-              {totalItems > 0 && <span>({totalItems})</span>}
-            </Link>
-          </nav>
+          {/* Desktop Navigation - matches title width */}
+          <div className="hidden md:flex justify-center">
+            <nav className="flex justify-between items-center flex-nowrap w-full" style={{ maxWidth: "min(100%, 800px)" }}>
+              {navItems.map((item) => {
+                const isActive = currentPage ? item.name === currentPage : pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    className={`text-[11px] sm:text-[12px] md:text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 whitespace-nowrap ${
+                      isActive
+                        ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
+                        : "text-[#2d2d2d]"
+                    }`}
+                    style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+              {/* Cart in nav */}
+              <Link
+                href="/cart"
+                className="text-[11px] sm:text-[12px] md:text-[14px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-1 whitespace-nowrap"
+                style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+              >
+                <ShoppingCart className="w-4 h-4 lg:w-[18px] lg:h-[18px]" strokeWidth={1.5} />
+                {totalItems > 0 && <span>({totalItems})</span>}
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 
