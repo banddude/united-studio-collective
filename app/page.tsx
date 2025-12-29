@@ -5,14 +5,12 @@ import Link from "next/link";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
 const images = [
-  { src: `${basePath}/image_4.jpg`, alt: "Sand dunes with person", link: "/filmmaking" },
-  { src: `${basePath}/image_3.jpg`, alt: "Blurry subway/train", link: "/photography" },
-  { src: `${basePath}/image_5.jpg`, alt: "Band in bar", link: "/store" },
-  { src: `${basePath}/image_2.jpg`, alt: "B&W two people window", link: "/about" },
-  { src: `${basePath}/image_1.jpg`, alt: "B&W single person window", link: "/contact" },
+  { src: "/image_4.jpg", alt: "Sand dunes with person", link: "/filmmaking" },
+  { src: "/image_3.jpg", alt: "Blurry subway/train", link: "/photography" },
+  { src: "/image_5.jpg", alt: "Band in bar", link: "/store" },
+  { src: "/image_2.jpg", alt: "B&W two people window", link: "/about" },
+  { src: "/image_1.jpg", alt: "B&W single person window", link: "/contact" },
 ];
 
 export default function Home() {
