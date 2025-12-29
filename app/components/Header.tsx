@@ -79,7 +79,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           <div className="hidden md:flex justify-center">
             <nav
               className="flex justify-between items-center flex-nowrap"
-              style={{ width: titleWidth ? `${titleWidth}px` : "auto" }}
+              style={{ width: titleWidth ? `${titleWidth * 0.9}px` : "auto" }}
             >
               {navItems.map((item) => {
                 const isActive = currentPage ? item.name === currentPage : pathname === item.path;
