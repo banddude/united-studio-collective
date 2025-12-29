@@ -12,7 +12,7 @@ import type { Product } from "../../../lib/store-data";
 
 const baseUrl = "https://banddude.github.io/united-studio-collective";
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
-const frameColors = ["Black", "White", "Natural Wood", "Dark Wood"];
+const frameColors = ["Black", "White"];
 
 interface ProductClientProps {
   product: Product;

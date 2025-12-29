@@ -46,7 +46,7 @@ export default function Footer() {
           {/* Left: Copyright */}
           <div className="text-sm font-light">
             <Link href="/" className="underline hover:opacity-70 transition-opacity">
-              © 2024 United Studio Collective
+              © 2026 United Studio Collective
             </Link>
             <div className="text-xs mt-1 opacity-70">© Copyright</div>
           </div>
