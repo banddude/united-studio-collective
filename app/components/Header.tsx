@@ -76,9 +76,9 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
                   }`}
                   style={{
                     fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
-                    fontSize: "clamp(12px, 1.2vw, 18px)",
-                    paddingLeft: "clamp(8px, 2vw, 40px)",
-                    paddingRight: "clamp(8px, 2vw, 40px)"
+                    fontSize: "clamp(14px, 1.4vw, 18px)",
+                    paddingLeft: "clamp(16px, 2.5vw, 40px)",
+                    paddingRight: "clamp(16px, 2.5vw, 40px)"
                   }}
                 >
                   {item.name}
@@ -91,9 +91,9 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
               className="font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-2 whitespace-nowrap"
               style={{
                 fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
-                fontSize: "clamp(12px, 1.2vw, 18px)",
-                paddingLeft: "clamp(8px, 2vw, 40px)",
-                paddingRight: "clamp(8px, 2vw, 40px)"
+                fontSize: "clamp(14px, 1.4vw, 18px)",
+                paddingLeft: "clamp(16px, 2.5vw, 40px)",
+                paddingRight: "clamp(16px, 2.5vw, 40px)"
               }}
             >
               <ShoppingCart size={18} strokeWidth={1.5} />
