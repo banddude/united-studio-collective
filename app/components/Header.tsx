@@ -69,12 +69,17 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`text-[14px] xl:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 xl:px-10 py-2 whitespace-nowrap ${
+                  className={`font-normal tracking-wide hover:opacity-60 transition-opacity py-2 whitespace-nowrap ${
                     isActive
                       ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
                       : "text-[#2d2d2d]"
                   }`}
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+                  style={{
+                    fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
+                    fontSize: "clamp(12px, 1.2vw, 18px)",
+                    paddingLeft: "clamp(8px, 2vw, 40px)",
+                    paddingRight: "clamp(8px, 2vw, 40px)"
+                  }}
                 >
                   {item.name}
                 </Link>
@@ -83,8 +88,13 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
             {/* Cart in nav */}
             <Link
               href="/cart"
-              className="text-[14px] xl:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity px-4 xl:px-10 py-2 text-[#2d2d2d] flex items-center gap-2 whitespace-nowrap"
-              style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+              className="font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-2 whitespace-nowrap"
+              style={{
+                fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
+                fontSize: "clamp(12px, 1.2vw, 18px)",
+                paddingLeft: "clamp(8px, 2vw, 40px)",
+                paddingRight: "clamp(8px, 2vw, 40px)"
+              }}
             >
               <ShoppingCart size={18} strokeWidth={1.5} />
               {totalItems > 0 && <span>({totalItems})</span>}
