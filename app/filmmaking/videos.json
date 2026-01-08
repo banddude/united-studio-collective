@@ -1,53 +1,65 @@
 [
   {
+    "id": "eGznsWwAf28",
+    "title": "Remain On Hold",
+    "duration": "03:13",
+    "thumbnail": "https://img.youtube.com/vi/eGznsWwAf28/sddefault.jpg",
+    "videoId": "eGznsWwAf28",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "Super 8 fashion film. Directed By: Evan Rene"
+  },
+  {
+    "id": "NO4KgrvH4Dg",
+    "title": "United Studio Collective Reel",
+    "duration": "00:37",
+    "thumbnail": "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    "videoId": "NO4KgrvH4Dg",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "United Studio Collective's Reel"
+  },
+  {
+    "id": "HBXVsbKGq4s",
+    "title": "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
+    "duration": "00:59",
+    "thumbnail": "https://img.youtube.com/vi/HBXVsbKGq4s/sddefault.jpg",
+    "videoId": "HBXVsbKGq4s",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
+    "backgroundSize": "135%"
+  },
+  {
     "id": "Mwe9xCaLLBM",
     "title": "The Seasons of Fall",
     "duration": "03:30",
-    "thumbnail": "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
+    "thumbnail": "https://img.youtube.com/vi/Mwe9xCaLLBM/sddefault.jpg",
     "videoId": "Mwe9xCaLLBM",
     "platform": "youtube",
     "creator": "United Studio Collective",
-    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming..."
+    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.",
+    "backgroundSize": "135%"
   },
   {
     "id": "kg1EDL-O5zI",
     "title": "Through The Night",
     "duration": "03:30",
-    "thumbnail": "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
+    "thumbnail": "https://img.youtube.com/vi/kg1EDL-O5zI/sddefault.jpg",
     "videoId": "kg1EDL-O5zI",
     "platform": "youtube",
     "creator": "United Studio Collective",
     "description": "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro."
   },
   {
-    "id": "HBXVsbKGq4s",
-    "title": "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
-    "duration": "00:59",
-    "thumbnail": "https://img.youtube.com/vi/HBXVsbKGq4s/maxresdefault.jpg",
-    "videoId": "HBXVsbKGq4s",
-    "platform": "youtube",
-    "creator": "United Studio Collective",
-    "description": "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters"
-  },
-  {
     "id": "yPN2Bydj7Ec",
     "title": "Delikate Rayne Desert Fashion Shoot",
     "duration": "01:55",
-    "thumbnail": "https://img.youtube.com/vi/yPN2Bydj7Ec/maxresdefault.jpg",
+    "thumbnail": "https://img.youtube.com/vi/yPN2Bydj7Ec/sddefault.jpg",
     "videoId": "yPN2Bydj7Ec",
     "platform": "youtube",
     "creator": "United Studio Collective",
     "description": "A mystical journey through the desert, looking through the eyes of LA-based vegan fashion brand, Delikate Rayne."
-  },
-  {
-    "id": "NO4KgrvH4Dg",
-    "title": "United Studio Collective Reel",
-    "duration": "00:37",
-    "thumbnail": "https://img.youtube.com/vi/NO4KgrvH4Dg/maxresdefault.jpg",
-    "videoId": "NO4KgrvH4Dg",
-    "platform": "youtube",
-    "creator": "United Studio Collective",
-    "description": "A snippet of fashion videos we have stitched together to represent our body of work. We are obsessed with combining fashion and the elements together. We are here to represent your brand with..."
   },
   {
     "id": "light-dark",
