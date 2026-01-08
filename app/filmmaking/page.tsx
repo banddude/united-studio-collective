@@ -182,7 +182,7 @@ export default function FilmmakingPage() {
                     )}
                   </div>
                   {/* Info Panel */}
-                  <div className="w-full md:w-1/3 flex flex-col justify-start md:max-h-[50vh] md:overflow-y-auto">
+                  <div className="w-full md:w-1/3 flex flex-col justify-start max-h-[50vh] overflow-y-auto pr-2">
                     <h3
                       className="text-white text-2xl md:text-3xl font-extralight mb-4"
                       style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
