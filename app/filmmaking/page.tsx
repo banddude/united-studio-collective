@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collective" : "";
+const basePath = "";
 
 interface Video {
   id: string;
@@ -111,7 +111,7 @@ const videos: Video[] = [
     videoId: "",
     platform: "pending",
     creator: "Evan Rene",
-    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA.\n\nDirected By: Evan Rene\nProduced By: Evaon Pictures & Mike Shaffer\nDP: Ion Tong",
+    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA.\n\nDirected By: Evan Rene\nProduced By: United Studio Collective & Mike Shaffer\nDP: Ion Tong",
   },
 ];
 
