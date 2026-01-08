@@ -256,7 +256,7 @@ export default function FilmmakingPage() {
                           className="absolute inset-0"
                           style={{
                             backgroundImage: `url(${selectedVideo.thumbnail})`,
-                            backgroundSize: 'cover',
+                            backgroundSize: '100% 100%',
                             backgroundPosition: 'center',
                             backgroundRepeat: 'no-repeat'
                           }}
@@ -294,7 +294,7 @@ export default function FilmmakingPage() {
                 className="absolute inset-0"
                 style={{
                   backgroundImage: `url(${selectedVideo.thumbnail})`,
-                  backgroundSize: 'cover',
+                  backgroundSize: '100% 100%',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat'
                 }}
@@ -390,7 +390,7 @@ export default function FilmmakingPage() {
                     className="relative aspect-video"
                     style={{
                       backgroundImage: `url(${video.thumbnail})`,
-                      backgroundSize: 'cover',
+                      backgroundSize: '100% 100%',
                       backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat'
                     }}
