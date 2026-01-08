@@ -71,7 +71,7 @@ const videos: Video[] = [
     platform: "youtube",
     creator: "United Studio Collective",
     description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.\n\nDirector: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nProduced By: Evan Rene\nDP: Evan Rene\nTalent: Tommy Ice\nFirst AC: CPark Photogenix\nGaffer: Kane E. Thompson",
-    backgroundSize: "125%",
+    backgroundSize: "135%",
   },
   {
     id: "6",
@@ -82,7 +82,7 @@ const videos: Video[] = [
     platform: "youtube",
     creator: "United Studio Collective",
     description: "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
-    backgroundSize: "125%",
+    backgroundSize: "135%",
   },
   {
     id: "7",
