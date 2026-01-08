@@ -104,10 +104,6 @@ const allPhotos = [
 export default function PhotographyPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
-  const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   const openLightbox = (index: number) => {
     setSelectedImageIndex(index);
   };
@@ -162,8 +158,8 @@ export default function PhotographyPage() {
 
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
-        {/* Photo Gallery - 3 column grid with small gaps */}
-        <div className="grid grid-cols-3 gap-[5px] bg-white">
+        {/* Photo Gallery - 2 columns on mobile, 3 on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[2px] sm:gap-[5px] bg-white">
           {allPhotos.map((photo, index) => (
             <div
               key={index}
@@ -181,16 +177,6 @@ export default function PhotographyPage() {
               />
             </div>
           ))}
-        </div>
-
-        {/* Back to Top Button */}
-        <div className="flex justify-center py-12">
-          <button
-            onClick={handleBackToTop}
-            className="px-10 py-3 bg-black text-white text-sm tracking-wide hover:bg-gray-800 transition-colors"
-          >
-            Back to Top
-          </button>
         </div>
       </main>
 
