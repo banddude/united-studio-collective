@@ -24,7 +24,7 @@ const videos: Video[] = [
     id: "1",
     title: "Remain On Hold",
     duration: "03:13",
-    thumbnail: "https://img.youtube.com/vi/eGznsWwAf28/maxresdefault.jpg",
+    thumbnail: "https://img.youtube.com/vi/eGznsWwAf28/sddefault.jpg",
     videoId: "eGznsWwAf28",
     platform: "youtube",
     creator: "United Studio Collective",
