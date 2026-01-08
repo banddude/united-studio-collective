@@ -50,6 +50,18 @@ try {
     const remainingSeconds = Math.floor(duration % 60);
     const formattedDuration = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 
+    // Fetch full description for each video individually
+    let fullDescription = entry.description;
+    try {
+      fullDescription = execSync(
+        `yt-dlp --print "%(description)s" "https://www.youtube.com/watch?v=${videoId}"`,
+        { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
+      ).trim();
+    } catch (e) {
+      // Fall back to playlist description if fetch fails
+      fullDescription = entry.description;
+    }
+
     // Use sddefault for thumbnails (better than maxresdefault for avoiding black bars)
     const defaultThumbnail = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
 
@@ -64,7 +76,7 @@ try {
       videoId: videoId,
       platform: "youtube",
       creator: "United Studio Collective",
-      description: special.description || entry.description || undefined,
+      description: special.description || fullDescription || undefined,
       ...(special.backgroundSize && { backgroundSize: special.backgroundSize })
     };
   });
