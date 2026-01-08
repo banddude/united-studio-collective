@@ -16,6 +16,20 @@ const localVideos = [
   }
 ];
 
+// Videos with custom thumbnails or special settings
+const specialCases = {
+  "NO4KgrvH4Dg": {
+    thumbnail: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    description: "United Studio Collective's Reel"
+  },
+  "HBXVsbKGq4s": {
+    backgroundSize: "135%"
+  },
+  "Mwe9xCaLLBM": {
+    backgroundSize: "135%"
+  }
+};
+
 try {
   // Fetch video data as JSON from yt-dlp
   const jsonOutput = execSync(
@@ -36,18 +50,22 @@ try {
     const remainingSeconds = Math.floor(duration % 60);
     const formattedDuration = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 
-    // Use YouTube thumbnail URL
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    // Use sddefault for thumbnails (better than maxresdefault for avoiding black bars)
+    const defaultThumbnail = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
+
+    // Apply special cases if any
+    const special = specialCases[videoId] || {};
 
     return {
       id: videoId,
       title: title,
       duration: formattedDuration,
-      thumbnail: thumbnailUrl,
+      thumbnail: special.thumbnail || defaultThumbnail,
       videoId: videoId,
       platform: "youtube",
       creator: "United Studio Collective",
-      description: entry.description || undefined
+      description: special.description || entry.description || undefined,
+      ...(special.backgroundSize && { backgroundSize: special.backgroundSize })
     };
   });
 

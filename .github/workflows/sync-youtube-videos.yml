@@ -1,10 +1,10 @@
 name: Sync YouTube Videos
 
 on:
-  # Disabled - manual control of video list
-  # schedule:
-  #   - cron: '0 */6 * * *'
-  workflow_dispatch: # Allow manual trigger only
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
   sync:
