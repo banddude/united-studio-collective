@@ -22,22 +22,6 @@ const evanSchema = {
   ],
 };
 
-// Person schema for Katie Chew
-const katieSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Katie Chew",
-  jobTitle: "Fashion Photographer",
-  description: "Fashion photographer from the Midwest who moved to Los Angeles to work with other creatives in fashion. Gets inspiration from movies and high fashion magazines.",
-  image: "https://static.wixstatic.com/media/2e5994_ee9ab9817e874646a6eefb52054c52a8~mv2.png",
-  worksFor: {
-    "@type": "Organization",
-    name: "United Studio Collective",
-    url: baseUrl,
-  },
-  knowsAbout: ["Fashion Photography", "Creative Direction", "Photography"],
-};
-
 // AboutPage schema
 const aboutPageSchema = {
   "@context": "https://schema.org",
@@ -56,11 +40,6 @@ const aboutPageSchema = {
         name: "Evan Rene",
         jobTitle: "Filmmaker & Director",
       },
-      {
-        "@type": "Person",
-        name: "Katie Chew",
-        jobTitle: "Fashion Photographer",
-      },
     ],
   },
 };
@@ -75,10 +54,6 @@ export default function AboutLayout({ children }: { children: ReactNode }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(evanSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(katieSchema) }}
       />
       {children}
     </>

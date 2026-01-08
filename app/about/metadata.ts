@@ -4,7 +4,7 @@ const baseUrl = "https://banddude.github.io/united-studio-collective";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Meet the team behind United Studio Collective. Evan Rene and Katie Chew lead our Los Angeles based video production company specializing in filmmaking and photography.",
+  description: "Meet the team behind United Studio Collective. Evan Rene leads our Los Angeles based video production company specializing in filmmaking and photography.",
   openGraph: {
     title: "About Us | United Studio Collective",
     description: "Meet the team behind United Studio Collective, a Los Angeles based video production company.",

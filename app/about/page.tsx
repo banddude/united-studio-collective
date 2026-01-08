@@ -66,34 +66,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* Katie Chew Section */}
-        <section className="mb-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <div>
-              <h3
-                className="text-xl italic mb-4 font-normal text-black"
-                style={{ fontFamily: "'Times New Roman', Georgia, serif" }}
-              >
-                Katie Chew
-              </h3>
-              <p className="text-sm leading-relaxed text-black text-justify">
-                Katie is a fashion photographer from the Midwest who moved to Los Angeles to achieve her dreams of working with other creatives in fashion. She is a skilled photographer who gets her inspiration from movies and current high fashion magazines she carefully studies. She enjoys working with everyone as a collective effort and believes the best ideas come from working with others.
-              </p>
-            </div>
-            <div className="flex justify-center md:justify-end">
-              <div className="relative w-40 h-52">
-                <Image
-                  src="https://static.wixstatic.com/media/2e5994_ee9ab9817e874646a6eefb52054c52a8~mv2.png/v1/fill/w_173,h_219,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/240308_KatieChew.png"
-                  alt="Katie Chew"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Fashion Brands Section */}
         <section className="mb-8">
           <h2
