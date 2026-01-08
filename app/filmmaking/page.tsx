@@ -251,13 +251,15 @@ export default function FilmmakingPage() {
                         autoPlay
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white relative overflow-hidden">
-                        <Image
-                          src={selectedVideo.thumbnail}
-                          alt={selectedVideo.title}
-                          fill
-                          className="!object-cover"
-                          unoptimized
+                      <div className="w-full h-full flex items-center justify-center text-white relative">
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            backgroundImage: `url(${selectedVideo.thumbnail})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat'
+                          }}
                         />
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                           <p className="text-white text-lg">Video coming soon</p>
@@ -287,15 +289,15 @@ export default function FilmmakingPage() {
             </div>
           ) : (
             /* Original Full-Width Thumbnail Gallery */
-            <div className="relative w-full aspect-video max-h-[70vh] overflow-hidden">
-              <Image
-                src={selectedVideo.thumbnail}
-                alt={selectedVideo.title}
-                fill
-                className="!object-cover"
-                unoptimized
-                priority
-                sizes="100vw"
+            <div className="relative w-full aspect-video max-h-[70vh]">
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `url(${selectedVideo.thumbnail})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
               />
               {/* Dark overlay */}
               <div className="absolute inset-0 bg-black/30" />
@@ -384,15 +386,15 @@ export default function FilmmakingPage() {
                   }`}
                   onClick={() => handleSelectVideo(video)}
                 >
-                  <div className="relative aspect-video overflow-hidden">
-                    <Image
-                      src={video.thumbnail}
-                      alt={video.title}
-                      fill
-                      className="!object-cover"
-                      unoptimized
-                      sizes="(max-width: 768px) 33vw, 25vw"
-                    />
+                  <div
+                    className="relative aspect-video"
+                    style={{
+                      backgroundImage: `url(${video.thumbnail})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  />
 
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col items-center justify-center">
