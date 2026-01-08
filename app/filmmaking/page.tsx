@@ -310,21 +310,18 @@ export default function FilmmakingPage() {
                 </p>
                 {/* Video Title */}
                 <h2
-                  className="text-white text-3xl md:text-4xl lg:text-5xl font-extralight italic mb-8 text-center px-4"
+                  className="text-white text-3xl md:text-4xl lg:text-5xl font-extralight italic mb-4 text-center px-4"
                   style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
                 >
                   {selectedVideo.title}
                 </h2>
                 <button
                   onClick={handlePlayVideo}
-                  className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity group"
+                  className="flex items-center justify-center text-white hover:opacity-80 transition-opacity group"
                 >
-                  <div className="w-14 h-14 rounded-full border-2 border-white flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                    <Play className="w-6 h-6 ml-1" fill="white" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                    <Play className="w-7 h-7 md:w-8 md:h-8 ml-1" fill="white" />
                   </div>
-                  <span className="text-lg underline underline-offset-4">
-                    Play Video
-                  </span>
                 </button>
               </div>
 
