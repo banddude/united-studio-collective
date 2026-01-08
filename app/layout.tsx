@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     canonical: baseUrl,
   },
   verification: {
-    google: "_DXuSIKqFsKW9CDfQ2Eix8H37HD_2wEmJbOoR3agvtU",
+    google: "-l8DpRyO13i5q5CCnzQjjTpI6nlZCUmATrx8h8IgkIk",
   },
 };
 
