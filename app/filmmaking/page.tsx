@@ -303,18 +303,26 @@ export default function FilmmakingPage() {
               <div className="absolute inset-0 bg-black/30" />
 
               {/* Centered Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
                 {/* Subtitle */}
                 <p
-                  className="text-white/80 text-sm md:text-base tracking-[0.3em] uppercase mb-4"
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+                  className="text-white/80 uppercase mb-4 text-center"
+                  style={{
+                    fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
+                    fontSize: "clamp(10px, 1.5vw, 16px)",
+                    letterSpacing: "clamp(0.2em, 0.4vw, 0.3em)"
+                  }}
                 >
                   United Studio Collective
                 </p>
                 {/* Video Title */}
                 <h2
-                  className="text-white text-3xl md:text-4xl lg:text-5xl font-extralight italic mb-4 text-center px-4"
-                  style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif", fontWeight: 200 }}
+                  className="text-white font-extralight italic mb-4 text-center"
+                  style={{
+                    fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif",
+                    fontWeight: 200,
+                    fontSize: "clamp(18px, 4vw, 48px)"
+                  }}
                 >
                   {selectedVideo.title}
                 </h2>
