@@ -21,13 +21,13 @@ export default function StorePage() {
               Home
             </Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-gray-900">All Products</span>
+            <span className="text-gray-900">Winter Spring &apos;26 Catalog</span>
           </nav>
         </div>
 
         {/* Page Title */}
         <div className="px-4 md:px-6 mb-6">
-          <h1 className="text-xl md:text-2xl font-medium text-black">All Products</h1>
+          <h1 className="text-xl md:text-2xl font-medium text-black">Winter Spring &apos;26 Catalog</h1>
         </div>
 
         {/* Content Area */}
