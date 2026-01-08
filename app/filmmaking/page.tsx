@@ -22,16 +22,26 @@ interface Video {
 const videos: Video[] = [
   {
     id: "1",
-    title: "United Studio Collective 2024 Reel",
+    title: "Remain On Hold - Super 8 Fashion Film",
+    duration: "03:13",
+    thumbnail: "https://img.youtube.com/vi/eGznsWwAf28/maxresdefault.jpg",
+    videoId: "eGznsWwAf28",
+    platform: "youtube",
+    creator: "United Studio Collective",
+    description: "Super 8 fashion film.\n\nDirected By: Evan Rene",
+  },
+  {
+    id: "2",
+    title: "United Studio Collective Reel",
     duration: "00:36",
     thumbnail: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
     videoId: "NO4KgrvH4Dg",
     platform: "youtube",
     creator: "United Studio Collective",
-    description: "United Studio Collective's 2024 Reel",
+    description: "United Studio Collective's Reel",
   },
   {
-    id: "2",
+    id: "3",
     title: "Light / Dark",
     duration: "01:24",
     thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
@@ -41,7 +51,7 @@ const videos: Video[] = [
     description: "A collaboration of architecture and fashion\n\nDirected By: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nDirector of Photography: Ion Tong\nFashion Designer/Artist: Simon\nModel: Jessie Rainbow\nMakeup Artist: Jena Mogensen, Sarai Diaz",
   },
   {
-    id: "3",
+    id: "4",
     title: "Delikate Rayne Fashion Shoot",
     duration: "01:54",
     thumbnail: "https://vumbnail.com/867541676.jpg",
@@ -51,7 +61,7 @@ const videos: Video[] = [
     description: "Fashion shoot for Delikate Rayne.",
   },
   {
-    id: "4",
+    id: "5",
     title: "The Seasons of Fall",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/maxresdefault.jpg",
@@ -61,7 +71,7 @@ const videos: Video[] = [
     description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.\n\nDirector: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nProduced By: Evan Rene\nDP: Evan Rene\nTalent: Tommy Ice\nFirst AC: CPark Photogenix\nGaffer: Kane E. Thompson",
   },
   {
-    id: "5",
+    id: "6",
     title: "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
     duration: "00:59",
     thumbnail: "https://img.youtube.com/vi/HBXVsbKGq4s/maxresdefault.jpg",
@@ -71,7 +81,7 @@ const videos: Video[] = [
     description: "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
   },
   {
-    id: "6",
+    id: "7",
     title: "Through The Night",
     duration: "03:30",
     thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/maxresdefault.jpg",
@@ -81,7 +91,7 @@ const videos: Video[] = [
     description: "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro.",
   },
   {
-    id: "7",
+    id: "8",
     title: "A Friendship Divided",
     duration: "01:30",
     thumbnail: "https://static.wixstatic.com/media/963954_5d4dbea05d6b47f3bf62b0e182a08190~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
@@ -91,7 +101,7 @@ const videos: Video[] = [
     description: "A collection of shots from various films shot by Ion Tong and Evan Rene. Directed by Ion Tong.",
   },
   {
-    id: "8",
+    id: "9",
     title: "Box Chocolate: We Have Your Delivery",
     duration: "00:00",
     thumbnail: "https://i.vimeocdn.com/video/1401443224-d8abccfdb8e26a6ce6bd46eed625f0aa1baa9c3430aa65ab9bb4d3ba98fc085d-d_1920x1080",
