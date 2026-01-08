@@ -257,7 +257,6 @@ export default function FilmmakingPage() {
                           alt={selectedVideo.title}
                           fill
                           className="!object-cover"
-                          style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                           unoptimized
                         />
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -294,7 +293,6 @@ export default function FilmmakingPage() {
                 alt={selectedVideo.title}
                 fill
                 className="!object-cover"
-                style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                 unoptimized
                 priority
                 sizes="100vw"
@@ -392,7 +390,6 @@ export default function FilmmakingPage() {
                       alt={video.title}
                       fill
                       className="!object-cover"
-                      style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                       unoptimized
                       sizes="(max-width: 768px) 33vw, 25vw"
                     />
