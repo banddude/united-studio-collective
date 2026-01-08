@@ -1,34 +1,13 @@
 [
   {
     "id": "eGznsWwAf28",
-    "title": "Remain On Hold",
-    "duration": "03:13",
+    "title": "Remain On Hold - Super 8 Fashion Film",
+    "duration": "03:14",
     "thumbnail": "https://img.youtube.com/vi/eGznsWwAf28/sddefault.jpg",
     "videoId": "eGznsWwAf28",
     "platform": "youtube",
     "creator": "United Studio Collective",
-    "description": "Super 8 fashion film. Directed By: Evan Rene"
-  },
-  {
-    "id": "NO4KgrvH4Dg",
-    "title": "United Studio Collective Reel",
-    "duration": "00:37",
-    "thumbnail": "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    "videoId": "NO4KgrvH4Dg",
-    "platform": "youtube",
-    "creator": "United Studio Collective",
-    "description": "United Studio Collective's Reel"
-  },
-  {
-    "id": "HBXVsbKGq4s",
-    "title": "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
-    "duration": "00:59",
-    "thumbnail": "https://img.youtube.com/vi/HBXVsbKGq4s/sddefault.jpg",
-    "videoId": "HBXVsbKGq4s",
-    "platform": "youtube",
-    "creator": "United Studio Collective",
-    "description": "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
-    "backgroundSize": "135%"
+    "description": "Remain On Hold - Super 8 Fashion Film\n\nFashion film inspired by 60s/70s style, clothing, and architecture. Two friends have a conversation around the city discussing the potential of getting..."
   },
   {
     "id": "Mwe9xCaLLBM",
@@ -38,7 +17,7 @@
     "videoId": "Mwe9xCaLLBM",
     "platform": "youtube",
     "creator": "United Studio Collective",
-    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.",
+    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming...",
     "backgroundSize": "135%"
   },
   {
@@ -52,6 +31,17 @@
     "description": "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro."
   },
   {
+    "id": "HBXVsbKGq4s",
+    "title": "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
+    "duration": "00:59",
+    "thumbnail": "https://img.youtube.com/vi/HBXVsbKGq4s/sddefault.jpg",
+    "videoId": "HBXVsbKGq4s",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters",
+    "backgroundSize": "135%"
+  },
+  {
     "id": "yPN2Bydj7Ec",
     "title": "Delikate Rayne Desert Fashion Shoot",
     "duration": "01:55",
@@ -60,6 +50,16 @@
     "platform": "youtube",
     "creator": "United Studio Collective",
     "description": "A mystical journey through the desert, looking through the eyes of LA-based vegan fashion brand, Delikate Rayne."
+  },
+  {
+    "id": "NO4KgrvH4Dg",
+    "title": "United Studio Collective Reel",
+    "duration": "00:37",
+    "thumbnail": "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    "videoId": "NO4KgrvH4Dg",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "United Studio Collective's Reel"
   },
   {
     "id": "light-dark",
