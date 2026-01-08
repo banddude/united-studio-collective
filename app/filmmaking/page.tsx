@@ -22,13 +22,13 @@ interface Video {
 const videos: Video[] = [
   {
     id: "1",
-    title: "Remain On Hold - Super 8 Fashion Film",
+    title: "Remain On Hold",
     duration: "03:13",
     thumbnail: "https://img.youtube.com/vi/eGznsWwAf28/maxresdefault.jpg",
     videoId: "eGznsWwAf28",
     platform: "youtube",
     creator: "United Studio Collective",
-    description: "Super 8 fashion film.\n\nDirected By: Evan Rene",
+    description: "Super 8 fashion film. Directed By: Evan Rene",
   },
   {
     id: "2",
