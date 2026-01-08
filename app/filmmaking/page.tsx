@@ -256,7 +256,7 @@ export default function FilmmakingPage() {
                           className="absolute inset-0"
                           style={{
                             backgroundImage: `url(${selectedVideo.thumbnail})`,
-                            backgroundSize: '100% 100%',
+                            backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             backgroundRepeat: 'no-repeat'
                           }}
@@ -294,7 +294,7 @@ export default function FilmmakingPage() {
                 className="absolute inset-0"
                 style={{
                   backgroundImage: `url(${selectedVideo.thumbnail})`,
-                  backgroundSize: '100% 100%',
+                  backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat'
                 }}
@@ -379,23 +379,19 @@ export default function FilmmakingPage() {
             {filteredVideos
               .slice(thumbnailIndex, thumbnailIndex + visibleThumbnails)
               .map((video) => (
-                <div
-                  key={video.id}
-                  className={`group cursor-pointer relative overflow-hidden ${
-                    selectedVideo.id === video.id ? "ring-2 ring-black" : ""
-                  }`}
-                  onClick={() => handleSelectVideo(video)}
-                >
                   <div
-                    className="relative aspect-video"
+                    key={video.id}
+                    className={`group cursor-pointer relative overflow-hidden aspect-video ${
+                      selectedVideo.id === video.id ? "ring-2 ring-black" : ""
+                    }`}
+                    onClick={() => handleSelectVideo(video)}
                     style={{
                       backgroundImage: `url(${video.thumbnail})`,
-                      backgroundSize: '100% 100%',
+                      backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       backgroundRepeat: 'no-repeat'
                     }}
-                  />
-
+                  >
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col items-center justify-center">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
@@ -414,7 +410,6 @@ export default function FilmmakingPage() {
                       </div>
                     </div>
                   </div>
-                </div>
               ))}
           </div>
 
