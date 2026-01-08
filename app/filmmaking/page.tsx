@@ -8,6 +8,9 @@ import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const basePath = "";
 
+// Import videos from JSON file (auto-synced from YouTube)
+import videosData from "./videos.json";
+
 interface Video {
   id: string;
   title: string;
@@ -21,102 +24,7 @@ interface Video {
   hidden?: boolean;
 }
 
-const videos: Video[] = [
-  {
-    id: "1",
-    title: "Remain On Hold",
-    duration: "03:13",
-    thumbnail: "https://img.youtube.com/vi/eGznsWwAf28/sddefault.jpg",
-    videoId: "eGznsWwAf28",
-    platform: "youtube",
-    creator: "United Studio Collective",
-    description: "Super 8 fashion film. Directed By: Evan Rene",
-  },
-  {
-    id: "2",
-    title: "United Studio Collective Reel",
-    duration: "00:36",
-    thumbnail: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "NO4KgrvH4Dg",
-    platform: "youtube",
-    creator: "United Studio Collective",
-    description: "United Studio Collective's Reel",
-  },
-  {
-    id: "3",
-    title: "Light / Dark",
-    duration: "01:24",
-    thumbnail: "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "light-dark.mp4",
-    platform: "local",
-    creator: "United Studio Collective",
-    description: "A collaboration of architecture and fashion\n\nDirected By: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nDirector of Photography: Ion Tong\nFashion Designer/Artist: Simon\nModel: Jessie Rainbow\nMakeup Artist: Jena Mogensen, Sarai Diaz",
-  },
-  {
-    id: "4",
-    title: "Delikate Rayne Desert Fashion Shoot",
-    duration: "01:55",
-    thumbnail: "https://img.youtube.com/vi/yPN2Bydj7Ec/sddefault.jpg",
-    videoId: "yPN2Bydj7Ec",
-    platform: "youtube",
-    creator: "Evan Rene",
-    description: "Fashion shoot for Delikate Rayne.",
-  },
-  {
-    id: "5",
-    title: "The Seasons of Fall",
-    duration: "03:30",
-    thumbnail: "https://img.youtube.com/vi/Mwe9xCaLLBM/sddefault.jpg",
-    videoId: "Mwe9xCaLLBM",
-    platform: "youtube",
-    creator: "United Studio Collective",
-    description: "A piece of trash on the corner of the street. Oozing black goo floating in the Pacific. A recovery effort to save the animals. The continual hatred growing towards your fellow man.\n\nThe looming extinction of Mankind. We want. We need. We take. Without care, with no remorse.\n\nDirector: Ion Tong & Evan Rene\nProduced By: United Studio Collective\nProduced By: Evan Rene\nDP: Evan Rene\nTalent: Tommy Ice\nFirst AC: CPark Photogenix\nGaffer: Kane E. Thompson",
-    backgroundSize: "135%",
-  },
-  {
-    id: "6",
-    title: "Blackmagic URSA Mini Pro Fashion Film: The Rae Sisters",
-    duration: "00:59",
-    thumbnail: "https://img.youtube.com/vi/HBXVsbKGq4s/sddefault.jpg",
-    videoId: "HBXVsbKGq4s",
-    platform: "youtube",
-    creator: "United Studio Collective",
-    description: "Using the Blackmagic URSA Mini Pro, we asked some friends to help us with a short fashion film/camera test. Featuring: The Rae Sisters.",
-    backgroundSize: "135%",
-  },
-  {
-    id: "7",
-    title: "Through The Night",
-    duration: "03:30",
-    thumbnail: "https://img.youtube.com/vi/kg1EDL-O5zI/sddefault.jpg",
-    videoId: "kg1EDL-O5zI",
-    platform: "youtube",
-    creator: "United Studio Collective",
-    description: "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro.",
-  },
-  {
-    id: "8",
-    title: "A Friendship Divided",
-    duration: "01:30",
-    thumbnail: "https://static.wixstatic.com/media/963954_5d4dbea05d6b47f3bf62b0e182a08190~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    videoId: "534300555",
-    platform: "vimeo",
-    creator: "Ion Tong",
-    description: "A collection of shots from various films shot by Ion Tong and Evan Rene. Directed by Ion Tong.",
-    hidden: true,
-  },
-  {
-    id: "9",
-    title: "Box Chocolate: We Have Your Delivery",
-    duration: "00:00",
-    thumbnail: "https://i.vimeocdn.com/video/1401443224-d8abccfdb8e26a6ce6bd46eed625f0aa1baa9c3430aa65ab9bb4d3ba98fc085d-d_1920x1080",
-    videoId: "",
-    platform: "pending",
-    creator: "Evan Rene",
-    description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA.\n\nDirected By: Evan Rene\nProduced By: United Studio Collective & Mike Shaffer\nDP: Ion Tong",
-    hidden: true,
-  },
-];
+const videos: Video[] = videosData as Video[];
 
 export default function FilmmakingPage() {
   const [selectedVideo, setSelectedVideo] = useState<Video>(videos[0]);

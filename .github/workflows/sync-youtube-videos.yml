@@ -1,0 +1,35 @@
+name: Sync YouTube Videos
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yt-dlp
+        run: |
+          curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o yt-dlp
+          chmod +x yt-dlp
+
+      - name: Fetch videos from YouTube
+        run: |
+          # Parse and create JSON (script fetches directly from YouTube)
+          node scripts/parse-videos.js > app/filmmaking/videos.json
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add app/filmmaking/videos.json
+          git diff --staged --quiet || git commit -m "Auto-sync YouTube videos [skip ci]"
+          git push
