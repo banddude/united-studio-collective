@@ -78,7 +78,7 @@ const products = [
   },
 ];
 
-export default function SeptemberOctoberCatalogPage() {
+export default function WinterSpringCatalogPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -93,15 +93,15 @@ export default function SeptemberOctoberCatalogPage() {
               Home
             </Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-gray-900">September - October &apos;24 Catalog</span>
+            <span className="text-gray-900">Winter Spring &apos;26 Catalog</span>
           </nav>
         </div>
 
         {/* Page Title and Description */}
         <div className="px-4 md:px-6 mb-6">
-          <h1 className="text-xl md:text-2xl font-medium text-black mb-2">September - October &apos;24 Catalog</h1>
+          <h1 className="text-xl md:text-2xl font-medium text-black mb-2">Winter Spring &apos;26 Catalog</h1>
           <p className="text-sm text-gray-600">
-            Prints available for purchase during September - October Catalog. Stay tuned for bi-monthly catalog updates!
+            Prints available for purchase during Winter Spring Catalog. Stay tuned for seasonal catalog updates!
           </p>
         </div>
 
@@ -121,10 +121,10 @@ export default function SeptemberOctoberCatalogPage() {
                   All Products
                 </Link>
                 <Link
-                  href="/store/september-october-24"
+                  href="/store/winter-spring-26"
                   className="block text-sm hover:text-gray-300 transition-colors text-white"
                 >
-                  September - October &apos;24 Catalog
+                  Winter Spring &apos;26 Catalog
                 </Link>
               </nav>
             </div>

@@ -46,10 +46,10 @@ export default function StorePage() {
                   All Products
                 </Link>
                 <Link
-                  href="/store/september-october-24"
+                  href="/store/winter-spring-26"
                   className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
                 >
-                  September - October &apos;24 Catalog
+                  Winter Spring &apos;26 Catalog
                 </Link>
               </nav>
             </div>
