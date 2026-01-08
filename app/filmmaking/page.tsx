@@ -251,13 +251,13 @@ export default function FilmmakingPage() {
                         autoPlay
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white relative">
+                      <div className="w-full h-full flex items-center justify-center text-white relative overflow-hidden">
                         <Image
                           src={selectedVideo.thumbnail}
                           alt={selectedVideo.title}
                           fill
-                          className="object-cover"
-                          style={{ objectFit: 'cover', objectPosition: 'center' }}
+                          className="!object-cover"
+                          style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                           unoptimized
                         />
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -288,13 +288,13 @@ export default function FilmmakingPage() {
             </div>
           ) : (
             /* Original Full-Width Thumbnail Gallery */
-            <div className="relative w-full aspect-video max-h-[70vh]">
+            <div className="relative w-full aspect-video max-h-[70vh] overflow-hidden">
               <Image
                 src={selectedVideo.thumbnail}
                 alt={selectedVideo.title}
                 fill
-                className="object-cover"
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                className="!object-cover"
+                style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                 unoptimized
                 priority
                 sizes="100vw"
@@ -386,13 +386,13 @@ export default function FilmmakingPage() {
                   }`}
                   onClick={() => handleSelectVideo(video)}
                 >
-                  <div className="relative aspect-video">
+                  <div className="relative aspect-video overflow-hidden">
                     <Image
                       src={video.thumbnail}
                       alt={video.title}
                       fill
-                      className="object-cover"
-                      style={{ objectFit: 'cover', objectPosition: 'center' }}
+                      className="!object-cover"
+                      style={{ objectFit: 'cover !important', objectPosition: 'center' }}
                       unoptimized
                       sizes="(max-width: 768px) 33vw, 25vw"
                     />
