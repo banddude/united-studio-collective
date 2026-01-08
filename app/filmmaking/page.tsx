@@ -18,6 +18,7 @@ interface Video {
   creator?: string;
   description?: string;
   backgroundSize?: string;
+  hidden?: boolean;
 }
 
 const videos: Video[] = [
@@ -102,6 +103,7 @@ const videos: Video[] = [
     platform: "vimeo",
     creator: "Ion Tong",
     description: "A collection of shots from various films shot by Ion Tong and Evan Rene. Directed by Ion Tong.",
+    hidden: true,
   },
   {
     id: "9",
@@ -112,6 +114,7 @@ const videos: Video[] = [
     platform: "pending",
     creator: "Evan Rene",
     description: "We're Box Chocolate — but our friends just call us Box. We're a team of chocolate lovers based in Los Angeles, CA.\n\nDirected By: Evan Rene\nProduced By: United Studio Collective & Mike Shaffer\nDP: Ion Tong",
+    hidden: true,
   },
 ];
 
@@ -122,7 +125,7 @@ export default function FilmmakingPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredVideos = videos.filter((video) =>
-    video.title.toLowerCase().includes(searchQuery.toLowerCase())
+    video.title.toLowerCase().includes(searchQuery.toLowerCase()) && !video.hidden
   );
 
   const visibleThumbnails = 3;
