@@ -80,3 +80,27 @@ body.no-scroll {
 .text-shadow {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* Image protection - prevent downloads */
+img,
+img[src],
+video {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Enable pointer events for interactive image containers */
+img[role="button"],
+img[onclick],
+button img,
+a img {
+  pointer-events: auto;
+}
