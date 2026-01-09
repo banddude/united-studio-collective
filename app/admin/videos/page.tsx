@@ -17,6 +17,15 @@ import {
   Settings,
 } from "lucide-react";
 
+// Import local config if available (for development)
+let LOCAL_CONFIG: { githubToken?: string } | undefined;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  LOCAL_CONFIG = require('@/app/admin/config.local.ts').LOCAL_ADMIN_CONFIG;
+} catch {
+  // Local config doesn't exist, use empty
+}
+
 interface Video {
   id: string;
   title: string;
@@ -36,6 +45,8 @@ const DEFAULT_CONFIG = {
   repo: "united-studio-collective",
   branch: "main",
   password: "usc2024", // Default password
+  // GitHub token from local config (if available)
+  githubToken: LOCAL_CONFIG?.githubToken || "",
 };
 
 export default function AdminVideosPage() {
@@ -67,15 +78,18 @@ export default function AdminVideosPage() {
       setConfig(JSON.parse(savedConfig));
     }
 
-    if (savedAuth === "true" && savedToken) {
+    // Use hardcoded token if available, otherwise use saved token
+    const tokenToUse = savedToken || DEFAULT_CONFIG.githubToken;
+
+    if (savedAuth === "true" && tokenToUse) {
       setIsAuthenticated(true);
-      setGithubToken(savedToken);
-      fetchVideos(savedToken, savedConfig ? JSON.parse(savedConfig) : DEFAULT_CONFIG);
+      setGithubToken(tokenToUse);
+      fetchVideos(tokenToUse, savedConfig ? JSON.parse(savedConfig) : DEFAULT_CONFIG);
     }
   }, []);
 
   const fetchVideos = async (token?: string, cfg?: typeof DEFAULT_CONFIG) => {
-    const tokenToUse = token || githubToken;
+    const tokenToUse = token || githubToken || DEFAULT_CONFIG.githubToken;
     const configToUse = cfg || config;
 
     if (!tokenToUse) return;
@@ -110,17 +124,25 @@ export default function AdminVideosPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!password || !githubToken) {
-      setAuthError("Please enter both password and GitHub token");
+    // Use hardcoded token or entered token
+    const tokenToUse = githubToken || DEFAULT_CONFIG.githubToken;
+
+    if (!password) {
+      setAuthError("Please enter password");
+      return;
+    }
+
+    if (!tokenToUse) {
+      setAuthError("GitHub token required - add it to config.local.ts or enter below");
       return;
     }
 
     if (password === config.password) {
       setIsAuthenticated(true);
       localStorage.setItem("usc_admin_auth", "true");
-      localStorage.setItem("usc_github_token", githubToken);
+      localStorage.setItem("usc_github_token", tokenToUse);
       localStorage.setItem("usc_admin_config", JSON.stringify(config));
-      fetchVideos(githubToken, config);
+      fetchVideos(tokenToUse, config);
     } else {
       setAuthError("Invalid password");
     }
@@ -313,38 +335,40 @@ export default function AdminVideosPage() {
   };
 
   if (!isAuthenticated) {
+    const hasHardcodedToken = DEFAULT_CONFIG.githubToken.length > 0;
+
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">
+          <h1 className="text-2xl font-bold mb-2 text-center text-black">
             United Studio Collective
           </h1>
           <p className="text-gray-600 text-center mb-6">Admin Login</p>
 
           {showConfig && (
             <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-semibold mb-2">GitHub Configuration</h3>
+              <h3 className="font-semibold mb-2 text-black">GitHub Configuration</h3>
               <div className="space-y-2">
                 <input
                   type="text"
                   value={config.owner}
                   onChange={(e) => setConfig({ ...config, owner: e.target.value })}
                   placeholder="Repository owner"
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  className="w-full px-3 py-2 border rounded-lg text-sm text-black"
                 />
                 <input
                   type="text"
                   value={config.repo}
                   onChange={(e) => setConfig({ ...config, repo: e.target.value })}
                   placeholder="Repository name"
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  className="w-full px-3 py-2 border rounded-lg text-sm text-black"
                 />
                 <input
                   type="text"
                   value={config.branch}
                   onChange={(e) => setConfig({ ...config, branch: e.target.value })}
                   placeholder="Branch"
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  className="w-full px-3 py-2 border rounded-lg text-sm text-black"
                 />
               </div>
             </div>
@@ -352,7 +376,7 @@ export default function AdminVideosPage() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-900 mb-1">
                 Admin Password
               </label>
               <input
@@ -360,30 +384,32 @@ export default function AdminVideosPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                GitHub Personal Access Token
-              </label>
-              <input
-                type="password"
-                value={githubToken}
-                onChange={(e) => setGithubToken(e.target.value)}
-                placeholder="ghp_xxxxxxxxxxxx"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Create at github.com/settings/tokens with repo scope
-              </p>
-            </div>
+            {!hasHardcodedToken && (
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-1">
+                  GitHub Personal Access Token
+                </label>
+                <input
+                  type="password"
+                  value={githubToken}
+                  onChange={(e) => setGithubToken(e.target.value)}
+                  placeholder="ghp_xxxxxxxxxxxx"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm text-black"
+                />
+                <p className="text-xs text-gray-600 mt-1">
+                  Create at github.com/settings/tokens with repo scope
+                </p>
+              </div>
+            )}
             {authError && (
-              <p className="text-red-500 text-sm">{authError}</p>
+              <p className="text-red-600 text-sm font-medium">{authError}</p>
             )}
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors font-medium"
             >
               Login
             </button>
