@@ -10,7 +10,7 @@ import {
   isStripeEnabled,
 } from "../../../lib/store-data";
 
-const baseUrl = "https://banddude.github.io/united-studio-collective";
+const baseUrl = "https://unitedstudiocollective.com";
 
 // Generate static params for all product IDs from the JSON
 export function generateStaticParams() {

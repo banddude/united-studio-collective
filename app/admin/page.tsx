@@ -56,7 +56,7 @@ export default function AdminDashboard() {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black font-mono text-sm text-black"
               />
               <p className="text-xs text-gray-500 mt-2">
-                Requires 'repo' scope access to banddude/united-studio-collective
+                Requires 'repo' scope access to banddude
               </p>
             </div>
             {error && (

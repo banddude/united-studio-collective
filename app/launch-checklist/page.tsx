@@ -18,9 +18,9 @@ interface ChecklistStatus {
   items: Record<string, { done: boolean }>;
 }
 
-const basePath = process.env.NODE_ENV === "production" ? "/united-studio-collective" : "";
+const basePath = process.env.NODE_ENV === "production" ? "" : "";
 
-const GITHUB_REPO = "banddude/united-studio-collective";
+const GITHUB_REPO = "banddude";
 const GITHUB_FILE_PATH = "public/config/checklist.json";
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN || "";
 
@@ -58,9 +58,9 @@ const checklistItems: ChecklistItem[] = [
   {
     id: "6",
     task: "Deploy to GitHub Pages",
-    description: "Site is live at banddude.github.io/united-studio-collective",
+    description: "Site is live at banddude.github.io",
     owner: "Mike",
-    link: "https://banddude.github.io/united-studio-collective",
+    link: "https://unitedstudiocollective.com",
   },
   {
     id: "7",
@@ -81,7 +81,7 @@ const checklistItems: ChecklistItem[] = [
     task: "Configure custom domain in GitHub",
     description: "Add unitedstudiocollective.com in repo Settings > Pages",
     owner: "Evan",
-    link: "https://github.com/banddude/united-studio-collective/settings/pages",
+    link: "https://github.com/banddude/settings/pages",
     blockedBy: "8",
   },
   {
@@ -591,7 +591,7 @@ export default function LaunchChecklist() {
                 <div className="bg-zinc-900/50 rounded-xl border border-white/5 p-6">
                   <h3 className="text-xs uppercase tracking-[0.15em] text-purple-400/60 mb-4">3. Configure GitHub Pages</h3>
                   <ol className="text-sm text-zinc-400 space-y-2 list-decimal list-inside">
-                    <li>Go to <a href="https://github.com/banddude/united-studio-collective/settings/pages" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">repo Settings → Pages</a></li>
+                    <li>Go to <a href="https://github.com/banddude/settings/pages" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">repo Settings → Pages</a></li>
                     <li>Enter unitedstudiocollective.com under Custom domain</li>
                     <li>Click Save</li>
                     <li>Enable &quot;Enforce HTTPS&quot; once available</li>
@@ -605,7 +605,7 @@ export default function LaunchChecklist() {
                     <li>Create account at <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">stripe.com</a></li>
                     <li>Go to Products → Payment Links</li>
                     <li>Create links for each variant (Frameless $85, Black Frame $85, White Frame $85)</li>
-                    <li>Edit <a href="https://github.com/banddude/united-studio-collective/edit/main/public/config/store.json" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">store.json</a></li>
+                    <li>Edit <a href="https://github.com/banddude/edit/main/public/config/store.json" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">store.json</a></li>
                     <li>Set stripeEnabled: true and add URLs</li>
                   </ol>
                 </div>

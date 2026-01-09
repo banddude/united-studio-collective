@@ -10,7 +10,7 @@ import { useCart } from "../../../context/CartContext";
 import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
 import type { Product } from "../../../lib/store-data";
 
-const baseUrl = "https://banddude.github.io/united-studio-collective";
+const baseUrl = "https://unitedstudiocollective.com";
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White"];
 const FRAME_PRICE_ADDITION = 25;

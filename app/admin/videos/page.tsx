@@ -15,7 +15,7 @@ import {
   AlertCircle,
   Crown,
   ChevronLeft,
-  Image as ImageIcon,
+  Pencil,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
 
@@ -388,7 +388,7 @@ export default function AdminVideosPage() {
                           {video.hidden ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-600" />}
                         </button>
                         <button onClick={() => startEdit(video)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-600">
-                          <ImageIcon className="w-4 h-4" />
+                          <Pencil className="w-4 h-4" />
                         </button>
                         <button onClick={() => deleteVideo(video.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-600">
                           <Trash2 className="w-4 h-4" />

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 export { metadata } from "./metadata";
 
-const baseUrl = "https://banddude.github.io/united-studio-collective";
+const baseUrl = "https://unitedstudiocollective.com";
 
 // Person schema for Evan Rene
 const evanSchema = {

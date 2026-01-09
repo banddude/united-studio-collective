@@ -44,7 +44,7 @@ To access the admin panel, you'll need:
 
 ## Configuration
 
-The admin panel comes pre-configured for the `banddude/united-studio-collective` repository.
+The admin panel comes pre-configured for the `banddude` repository.
 
 If you need to change the repository settings, click "Show GitHub Config" on the login page to modify:
 - Repository owner

@@ -8,11 +8,15 @@ import {
   Trash2,
   GripVertical,
   Plus,
+  Eye,
+  EyeOff,
   Loader2,
   CheckCircle,
   AlertCircle,
+  Crown,
   ChevronLeft,
-  Image as ImageIcon,
+  Pencil,
+  Image as LucideImage,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
 

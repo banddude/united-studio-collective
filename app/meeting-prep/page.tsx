@@ -199,8 +199,8 @@ export default function MeetingPrep() {
             <h2 className="text-xs uppercase tracking-[0.15em] text-zinc-500 mb-4">Quick Links</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Live Site", href: "https://banddude.github.io/united-studio-collective" },
-                { label: "GitHub", href: "https://github.com/banddude/united-studio-collective" },
+                { label: "Live Site", href: "https://unitedstudiocollective.com" },
+                { label: "GitHub", href: "https://github.com/banddude" },
                 { label: "Cloudflare", href: "https://dash.cloudflare.com" },
                 { label: "Stripe", href: "https://dashboard.stripe.com" },
               ].map((link) => (

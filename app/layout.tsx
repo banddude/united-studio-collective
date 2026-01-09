@@ -10,7 +10,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const baseUrl = "https://banddude.github.io/united-studio-collective";
+const baseUrl = "https://unitedstudiocollective.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

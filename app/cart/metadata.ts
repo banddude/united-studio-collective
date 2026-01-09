@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const baseUrl = "https://banddude.github.io/united-studio-collective";
+const baseUrl = "https://unitedstudiocollective.com";
 
 export const metadata: Metadata = {
   title: "Your Cart",

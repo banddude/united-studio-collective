@@ -1,0 +1,7 @@
+name = "usc-checkout"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+account_id = "8e83fee9ba5b2bf423d5ffddaaee74c6"
+
+[placement]
+mode = "smart"

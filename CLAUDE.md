@@ -20,7 +20,7 @@ Deployment happens automatically via GitHub Actions on push to main branch.
 
 ### Static Export Configuration
 - `next.config.ts` sets `output: "export"` for static HTML generation
-- `basePath: "/united-studio-collective"` is required for GitHub Pages subdirectory hosting
+- `basePath: ""` is required for GitHub Pages subdirectory hosting
 - All images use `unoptimized: true` since static export doesn't support image optimization
 
 ### Store Data (JSON-Driven)
@@ -49,9 +49,9 @@ Filmmaking page videos are defined inline in `app/filmmaking/page.tsx`. Each vid
 
 ## GitHub Pages Deployment
 
-The site deploys to: `https://banddude.github.io/united-studio-collective/`
+The site deploys to: `https://unitedstudiocollective.com/`
 
 Key deployment considerations:
-- All internal links must work with the `/united-studio-collective` basePath
-- Local video/asset paths use dynamic basePath: `process.env.NODE_ENV === "production" ? "/united-studio-collective" : ""`
+- All internal links must work with the `` basePath
+- Local video/asset paths use dynamic basePath: `process.env.NODE_ENV === "production" ? "" : ""`
 - Static params must be generated for dynamic routes (see `app/store/product/[id]/page.tsx`)
