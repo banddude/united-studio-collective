@@ -1,5 +1,5 @@
 {
-  "stripeEnabled": false,
+  "stripeEnabled": true,
   "defaultArtist": "Evan Rene",
   "defaultSize": "16x20",
   "defaultDescription": "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
@@ -10,9 +10,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_7d3c9ccd3b27414eb6485414f9e186dc~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_7d3c9ccd3b27414eb6485414f9e186dc~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/3cI7sKb6Cfcg8Yh8eG00003",
+        "framed_black": "https://buy.stripe.com/5kQ7sK2A65BGdexamO00004",
+        "framed_white": "https://buy.stripe.com/4gM9ASa2y9RWb6p66y00005"
       }
     },
     {
@@ -21,9 +21,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_908459ee9e1146b89c711c9b8498f44b~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_908459ee9e1146b89c711c9b8498f44b~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/eVqdR80rYaW08Yh8eG00006",
+        "framed_black": "https://buy.stripe.com/eVq9ASa2ye8c5M53Yq00007",
+        "framed_white": "https://buy.stripe.com/8x24gy6QmaW0b6p7aC00008"
       }
     },
     {
@@ -32,9 +32,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_0549c7a359d44ebd8c3a88462a9c5b76~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_0549c7a359d44ebd8c3a88462a9c5b76~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/dRm6oGfmS1lq4I12Um00009",
+        "framed_black": "https://buy.stripe.com/3cIcN4eiOd48fmF3Yq0000a",
+        "framed_white": "https://buy.stripe.com/28E00i5Mi1lq0rLcuW0000b"
       }
     },
     {
@@ -43,9 +43,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_465ea9bdeb424542b3d8fb4d7c271b3d~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_465ea9bdeb424542b3d8fb4d7c271b3d~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/cNi00i2A6e8ceiB3Yq0000c",
+        "framed_black": "https://buy.stripe.com/dRm9AS7Uq0hm4I166y0000d",
+        "framed_white": "https://buy.stripe.com/3cIaEWfmSd48a2lamO0000e"
       }
     },
     {
@@ -54,9 +54,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_4bb4be2d33604c97964b78ae9505a311~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_4bb4be2d33604c97964b78ae9505a311~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/9B628q1w2aW0dexeD40000f",
+        "framed_black": "https://buy.stripe.com/fZubJ0gqWe8ceiBcuW0000g",
+        "framed_white": "https://buy.stripe.com/8x214m2A61lq4I1amO0000h"
       }
     },
     {
@@ -65,9 +65,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_1686cc4a6d3d418290051f9816509d9b~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_1686cc4a6d3d418290051f9816509d9b~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/8x29AS4Ied48gqJdz00000i",
+        "framed_black": "https://buy.stripe.com/dRmdR80rYfcga2lbqS0000j",
+        "framed_white": "https://buy.stripe.com/bJe6oG6Qmfcg7Ud2Um0000k"
       }
     },
     {
@@ -76,9 +76,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_2bcbe6c57e684d578daebd843560ad51~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_2bcbe6c57e684d578daebd843560ad51~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/14A4gyeiOfcg4I1amO0000l",
+        "framed_black": "https://buy.stripe.com/fZuaEWgqW6FKfmFcuW0000m",
+        "framed_white": "https://buy.stripe.com/8x25kCgqW9RW6Q966y0000n"
       }
     },
     {
@@ -87,9 +87,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_44bf21a091f84cd8a349ed22767901ec~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_44bf21a091f84cd8a349ed22767901ec~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/28E5kC5Mi4xCfmF52u0000o",
+        "framed_black": "https://buy.stripe.com/fZuaEWgqWaW07UdcuW0000p",
+        "framed_white": "https://buy.stripe.com/6oU3cufmS2pu1vPcuW0000q"
       }
     },
     {
@@ -98,9 +98,9 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_650f99281b1b4346b8626471dd20cc68~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_650f99281b1b4346b8626471dd20cc68~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/9B66oG3Ea9RW3DX9iK0000r",
+        "framed_black": "https://buy.stripe.com/00w7sK7Uq6FK2zT9iK0000s",
+        "framed_white": "https://buy.stripe.com/9B68wO0rYe8ca2l2Um0000t"
       }
     },
     {
@@ -109,11 +109,10 @@
       "price": 85.00,
       "image": "https://static.wixstatic.com/media/963954_509815faf01144a58c8193ff429e3740~mv2.jpg/v1/fill/w_542,h_542,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/963954_509815faf01144a58c8193ff429e3740~mv2.jpg",
       "stripe": {
-        "frameless": "",
-        "framed_black": "",
-        "framed_white": ""
+        "frameless": "https://buy.stripe.com/28E6oGdeKfcg1vPgLc0000u",
+        "framed_black": "https://buy.stripe.com/5kQfZg6Qm8NS5M5eD40000v",
+        "framed_white": "https://buy.stripe.com/00w9AS7Uq6FKdex9iK0000w"
       }
     }
-  ],
-  "_instructions": "To enable Stripe checkout: 1) Set 'stripeEnabled' to true. 2) For each product, add Payment Link URLs for each variant (frameless, framed_black, framed_white). Create Payment Links at: https://dashboard.stripe.com/payment-links. To add a new product, add a new entry to the products array with id, name, price, image URL, and empty stripe links."
+  ]
 }
