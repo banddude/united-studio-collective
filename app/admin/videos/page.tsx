@@ -92,6 +92,7 @@ export default function AdminVideosPage() {
 
     if (!tokenToUse) return;
 
+    setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
       const response = await fetch(
@@ -106,7 +107,12 @@ export default function AdminVideosPage() {
 
       if (response.ok) {
         const data = await response.json();
-        const content = Buffer.from(data.content, "base64").toString("utf-8");
+        // Use browser-native decoding instead of Buffer
+        const content = new TextDecoder().decode(
+          Uint8Array.from(atob(data.content.replace(/\s/g, "")), (c) =>
+            c.charCodeAt(0)
+          )
+        );
         const parsedVideos = JSON.parse(content);
         setVideos(parsedVideos);
       } else {
@@ -173,7 +179,8 @@ export default function AdminVideosPage() {
 
       const fileData = await getFileResponse.json();
       const fileSha = fileData.sha;
-      const contentBase64 = Buffer.from(JSON.stringify(videos, null, 2)).toString("base64");
+      // Use browser-native encoding
+      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(videos, null, 2))));
 
       // Step 2: Update videos.json directly on the main branch
       const updateFileResponse = await fetch(
