@@ -18,20 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check PR for approval
+      - name: Check PR for admin label
         id: check_approval
         run: |
-          # Get PR body and check for password
-          PR_BODY='${{ github.event.pull_request.body }}'
-          ADMIN_PASSWORD='usc2024'
-
-          # Check if PR body contains the password
-          if echo "$PR_BODY" | grep -q "password: $ADMIN_PASSWORD"; then
+          # Check if PR has the admin-update label
+          # The labels are available in the event payload
+          LABELS='${{ toJSON(github.event.pull_request.labels) }}'
+          
+          if echo "$LABELS" | grep -q "admin-update"; then
             echo "approved=true" >> $GITHUB_OUTPUT
-            echo "✓ Password verified, will auto-merge"
+            echo "✓ Admin label found, will auto-merge"
           else
             echo "approved=false" >> $GITHUB_OUTPUT
-            echo "✗ Invalid or missing password"
+            echo "✗ Missing 'admin-update' label"
             exit 1
           fi
 
