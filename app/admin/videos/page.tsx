@@ -206,7 +206,7 @@ export default function AdminVideosPage() {
 
       setSaveStatus({
         type: "success",
-        message: "Saved successfully! Site is rebuilding (takes ~1-2 mins)."
+        message: "Published successfully! Site is rebuilding (takes ~1-2 mins)."
       });
 
     } catch (error: any) {
@@ -266,16 +266,6 @@ export default function AdminVideosPage() {
     }
   };
 
-  const setAsHero = (videoId: string) => {
-    const videoIndex = videos.findIndex((v) => v.id === videoId);
-    if (videoIndex > 0) {
-      const newVideos = [...videos];
-      const [heroVideo] = newVideos.splice(videoIndex, 1);
-      newVideos.unshift(heroVideo);
-      setVideos(newVideos);
-    }
-  };
-
   const addYouTubeVideo = async () => {
     const match = newVideoUrl.match(
       /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/
@@ -286,8 +276,21 @@ export default function AdminVideosPage() {
     }
 
     const youtubeId = match[1];
+    
+    // Default video object (fallback)
+    const newVideo: Video = {
+      id: youtubeId,
+      videoId: youtubeId,
+      title: "New Video (Edit Title)",
+      thumbnail: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
+      duration: "00:00",
+      platform: "youtube",
+      creator: "United Studio Collective",
+      description: "",
+      hidden: false,
+    };
 
-    // Fetch video info from YouTube oEmbed
+    // Try to fetch video info, but ignore errors (CORS, etc)
     try {
       const oembedResponse = await fetch(
         `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${youtubeId}&format=json`
@@ -295,43 +298,16 @@ export default function AdminVideosPage() {
 
       if (oembedResponse.ok) {
         const oembedData = await oembedResponse.json();
-
-        const newVideo: Video = {
-          id: youtubeId,
-          videoId: youtubeId,
-          title: oembedData.title,
-          thumbnail: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
-          duration: "00:00",
-          platform: "youtube",
-          creator: "United Studio Collective",
-          description: "",
-          hidden: false,
-        };
-
-        setVideos([...videos, newVideo]);
-        setNewVideoUrl("");
-        setShowAddForm(false);
-      } else {
-        throw new Error("Failed to fetch video info");
+        newVideo.title = oembedData.title || newVideo.title;
       }
     } catch (error) {
-      // Fallback: add with minimal info
-      const newVideo: Video = {
-        id: youtubeId,
-        videoId: youtubeId,
-        title: "New Video",
-        thumbnail: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
-        duration: "00:00",
-        platform: "youtube",
-        creator: "United Studio Collective",
-        description: "",
-        hidden: false,
-      };
-
-      setVideos([...videos, newVideo]);
-      setNewVideoUrl("");
-      setShowAddForm(false);
+      // Ignore fetch error, use default values
+      console.log("Could not fetch YouTube info, using defaults");
     }
+
+    setVideos([...videos, newVideo]);
+    setNewVideoUrl("");
+    setShowAddForm(false);
   };
 
   if (!isAuthenticated) {
@@ -400,7 +376,7 @@ export default function AdminVideosPage() {
               ) : (
                 <Save className="w-4 h-4" />
               )}
-              Save Changes
+              Publish Changes
             </button>
             <button
               onClick={handleLogout}
@@ -590,7 +566,7 @@ export default function AdminVideosPage() {
                               onClick={saveEdit}
                               className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
                             >
-                              Save
+                              Done
                             </button>
                             <button
                               onClick={cancelEdit}
@@ -630,15 +606,6 @@ export default function AdminVideosPage() {
                     {/* Actions */}
                     {editingVideo !== video.id && (
                       <div className="flex items-center gap-2">
-                        {index !== 0 && (
-                          <button
-                            onClick={() => setAsHero(video.id)}
-                            className="p-2 rounded-lg hover:bg-yellow-100 text-yellow-700"
-                            title="Set as Hero"
-                          >
-                            <Crown className="w-4 h-4" />
-                          </button>
-                        )}
                         <button
                           onClick={() => toggleHidden(video.id)}
                           className="p-2 rounded-lg hover:bg-gray-100"
@@ -689,12 +656,11 @@ export default function AdminVideosPage() {
                 How to use this panel:
               </h3>
               <ul className="text-sm text-blue-800 space-y-1">
-                <li>• <strong>Drag</strong> videos to reorder them (first is the hero)</li>
-                <li>• Click the <strong>Crown icon</strong> to set a video as the hero</li>
+                <li>• <strong>Drag</strong> videos to reorder them (first is the Hero)</li>
                 <li>• <strong>Edit</strong> titles, descriptions, and other info</li>
                 <li>• <strong>Hide/Show</strong> videos using the eye icon</li>
                 <li>• <strong>Add</strong> YouTube videos by pasting a URL</li>
-                <li>• Don't forget to <strong>Save Changes</strong> when done!</li>
+                <li>• Don't forget to <strong>Publish Changes</strong> when done!</li>
               </ul>
             </div>
           </>
