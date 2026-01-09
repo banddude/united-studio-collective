@@ -70,5 +70,16 @@
     "platform": "youtube",
     "creator": "United Studio Collective",
     "description": "United Studio Collective's Reel"
+  },
+  {
+    "id": "jVAqu6EeT6g",
+    "videoId": "jVAqu6EeT6g",
+    "title": "The Collective: Jessica N Maxwell",
+    "thumbnail": "https://img.youtube.com/vi/jVAqu6EeT6g/maxresdefault.jpg",
+    "duration": "00:00",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "",
+    "hidden": false
   }
 ]
