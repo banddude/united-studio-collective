@@ -69,8 +69,8 @@ export default function PhotographyPage() {
 
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
-        {/* Photo Gallery - 2 columns on mobile, 3 on tablet, 5 on desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[2px] sm:gap-[5px] bg-white">
+        {/* Photo Gallery - 2 columns on mobile, 3 on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[2px] sm:gap-[5px] bg-white">
           {allPhotos.map((photo, index) => (
             <div
               key={index}
