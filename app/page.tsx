@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import homepageData from "../content/homepage-images.json";
 
-const images = [
-  { src: "/image_4.jpg", alt: "Sand dunes with person", link: "/filmmaking" },
-  { src: "/image_3.jpg", alt: "Blurry subway/train", link: "/photography" },
-  { src: "/image_5.jpg", alt: "Band in bar", link: "/store" },
-  { src: "/image_2.jpg", alt: "B&W two people window", link: "/about" },
-  { src: "/image_1.jpg", alt: "B&W single person window", link: "/contact" },
-];
+const images = homepageData.gallery_images.map((img) => ({
+  src: img.src,
+  alt: img.description || img.alt,
+  link: img.link || "/"
+}));
 
 export default function Home() {
   return (
