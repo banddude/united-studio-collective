@@ -13,6 +13,7 @@ import type { Product } from "../../../lib/store-data";
 const baseUrl = "https://banddude.github.io/united-studio-collective";
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
 const frameColors = ["Black", "White"];
+const FRAME_PRICE_ADDITION = 25;
 
 interface ProductClientProps {
   product: Product;
@@ -43,6 +44,7 @@ export default function ProductClient({
   const [error, setError] = useState("");
 
   const isFrameless = frameOption === "Frameless Photograph";
+  const currentPrice = frameOption === "Framed Photograph" ? product.price + FRAME_PRICE_ADDITION : product.price;
 
   const decrementQuantity = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -71,7 +73,7 @@ export default function ProductClient({
     addItem({
       productId: product.id,
       name: product.name,
-      price: product.price,
+      price: currentPrice,
       image: product.image,
       frameOption,
       frameColor: isFrameless ? null : frameColor,
@@ -106,7 +108,7 @@ export default function ProductClient({
     addItem({
       productId: product.id,
       name: product.name,
-      price: product.price,
+      price: currentPrice,
       image: product.image,
       frameOption,
       frameColor: isFrameless ? null : frameColor,
@@ -131,7 +133,7 @@ export default function ProductClient({
       "@type": "Offer",
       url: `${baseUrl}/store/product/${product.id}`,
       priceCurrency: "USD",
-      price: product.price.toFixed(2),
+      price: currentPrice.toFixed(2),
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
@@ -264,7 +266,7 @@ export default function ProductClient({
             {/* Right: Product Details */}
             <div>
               <h1 className="text-3xl font-medium text-black mb-4">{product.name}</h1>
-              <p className="text-2xl text-black mb-6">${product.price.toFixed(2)}</p>
+              <p className="text-2xl text-black mb-6">${currentPrice.toFixed(2)}</p>
 
               {/* Error Message */}
               {error && (
