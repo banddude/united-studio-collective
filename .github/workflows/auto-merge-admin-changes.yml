@@ -1,0 +1,49 @@
+name: Auto-merge Admin Video Updates
+
+on:
+  pull_request:
+    types: [opened, edited, labeled]
+    paths:
+      - 'app/filmmaking/videos.json'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  validate-and-merge:
+    runs-on: ubuntu-latest
+    if: github.repository == 'banddude/united-studio-collective'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check PR for approval
+        id: check_approval
+        run: |
+          # Get PR body and check for password
+          PR_BODY='${{ github.event.pull_request.body }}'
+          ADMIN_PASSWORD='usc2024'
+
+          # Check if PR body contains the password
+          if echo "$PR_BODY" | grep -q "password: $ADMIN_PASSWORD"; then
+            echo "approved=true" >> $GITHUB_OUTPUT
+            echo "✓ Password verified, will auto-merge"
+          else
+            echo "approved=false" >> $GITHUB_OUTPUT
+            echo "✗ Invalid or missing password"
+            exit 1
+          fi
+
+      - name: Auto-merge PR
+        if: steps.check_approval.outputs.approved == 'true'
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
+
+      - name: Delete branch after merge
+        if: steps.check_approval.outputs.approved == 'true' && github.event.pull_request.merged == true
+        run: |
+          git push origin --delete ${{ github.event.pull_request.head.ref }}

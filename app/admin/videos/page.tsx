@@ -157,7 +157,9 @@ export default function AdminVideosPage() {
   };
 
   const handleSave = async () => {
-    if (!githubToken) {
+    const tokenToUse = githubToken || DEFAULT_CONFIG.githubToken;
+
+    if (!tokenToUse) {
       setSaveStatus({ type: "error", message: "No GitHub token found" });
       return;
     }
@@ -166,54 +168,158 @@ export default function AdminVideosPage() {
     setSaveStatus({ type: null, message: "" });
 
     try {
-      // Get current file SHA
-      const getResponse = await fetch(
-        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/app/filmmaking/videos.json?ref=${config.branch}`,
+      // Create unique branch name
+      const branchName = `admin/videos-update-${Date.now()}`;
+
+      // Step 1: Get the current commit SHA from main branch
+      const mainRefResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/git/refs/heads/${config.branch}`,
         {
           headers: {
-            Authorization: `Bearer ${githubToken}`,
+            Authorization: `Bearer ${tokenToUse}`,
             Accept: "application/vnd.github.v3+json",
           },
         }
       );
 
-      if (!getResponse.ok) {
+      if (!mainRefResponse.ok) {
+        throw new Error("Failed to get main branch reference");
+      }
+
+      const mainRef = await mainRefResponse.json();
+      const baseSha = mainRef.object.sha;
+
+      // Step 2: Create new branch
+      const createBranchResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/git/refs`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${tokenToUse}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            ref: `refs/heads/${branchName}`,
+            sha: baseSha,
+          }),
+        }
+      );
+
+      if (!createBranchResponse.ok) {
+        throw new Error("Failed to create branch");
+      }
+
+      // Step 3: Get current file SHA
+      const getFileResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/app/filmmaking/videos.json?ref=${config.branch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenToUse}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      );
+
+      if (!getFileResponse.ok) {
         throw new Error("Failed to get current file");
       }
 
-      const getData = await getResponse.json();
-      const sha = getData.sha;
+      const fileData = await getFileResponse.json();
+      const fileSha = fileData.sha;
       const contentBase64 = Buffer.from(JSON.stringify(videos, null, 2)).toString("base64");
 
-      // Update file
-      const putResponse = await fetch(
+      // Step 4: Update videos.json on the new branch
+      const updateFileResponse = await fetch(
         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/app/filmmaking/videos.json`,
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${githubToken}`,
+            Authorization: `Bearer ${tokenToUse}`,
             Accept: "application/vnd.github.v3+json",
           },
           body: JSON.stringify({
             message: "Update videos from admin panel",
             content: contentBase64,
-            sha: sha,
-            branch: config.branch,
+            sha: fileSha,
+            branch: branchName,
           }),
         }
       );
 
-      if (putResponse.ok) {
-        setSaveStatus({ type: "success", message: "Videos saved successfully! Site will rebuild shortly." });
-      } else {
-        const errorData = await putResponse.json();
-        throw new Error(errorData.message || "Failed to save");
+      if (!updateFileResponse.ok) {
+        throw new Error("Failed to update videos file");
       }
+
+      // Step 5: Create pull request with password in body
+      const createPRResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/pulls`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${tokenToUse}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            title: "Update videos from admin panel",
+            head: branchName,
+            base: config.branch,
+            body: `password: ${config.password}\n\nAutomated video update from admin panel.`,
+            labels: ["admin-update"],
+          }),
+        }
+      );
+
+      if (!createPRResponse.ok) {
+        throw new Error("Failed to create pull request");
+      }
+
+      const prData = await createPRResponse.json();
+
+      setSaveStatus({
+        type: "success",
+        message: `Pull request created! Auto-merging... View: ${prData.html_url}`
+      });
+
+      // Poll PR status to check if it was merged
+      const checkMergeStatus = setInterval(async () => {
+        try {
+          const prStatusResponse = await fetch(prData.url, {
+            headers: {
+              Authorization: `Bearer ${tokenToUse}`,
+              Accept: "application/vnd.github.v3+json",
+            },
+          });
+
+          if (prStatusResponse.ok) {
+            const prStatus = await prStatusResponse.json();
+
+            if (prStatus.merged) {
+              clearInterval(checkMergeStatus);
+              setSaveStatus({
+                type: "success",
+                message: "Videos saved and merged successfully! Site will rebuild shortly."
+              });
+            } else if (prStatus.closed_at) {
+              clearInterval(checkMergeStatus);
+              setSaveStatus({
+                type: "error",
+                message: "Pull request was closed without merging. Check the password in the GitHub Action."
+              });
+            }
+          }
+        } catch (error) {
+          // Ignore polling errors
+        }
+      }, 3000);
+
+      // Stop polling after 2 minutes
+      setTimeout(() => clearInterval(checkMergeStatus), 120000);
+
     } catch (error: any) {
       setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
     } finally {
       setSaving(false);
-      setTimeout(() => setSaveStatus({ type: null, message: "" }), 5000);
+      setTimeout(() => setSaveStatus({ type: null, message: "" }), 30000);
     }
   };
 
