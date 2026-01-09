@@ -2,53 +2,95 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, X, Loader2 } from "lucide-react";
 import { store, getProduct } from "../lib/store-data";
+
+// Replace this with your actual Cloudflare Worker URL after deployment
+const WORKER_URL = "https://usc-checkout.banddude.workers.dev";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
+  const [loading, setLoading] = useState(false);
 
   const getStripeLink = (productId: number, frameOption: string, frameColor: string | undefined) => {
     if (!store.stripeEnabled) return null;
-
     const product = getProduct(productId);
     if (!product) return null;
 
-    if (frameOption === "Frameless Photograph") {
-      return product.stripe.frameless || null;
-    } else if (frameColor === "Black") {
-      return product.stripe.framed_black || null;
-    } else if (frameColor === "White") {
-      return product.stripe.framed_white || null;
-    }
+    if (frameOption === "Frameless Photograph") return product.stripe.frameless;
+    if (frameColor === "Black") return product.stripe.framed_black;
+    if (frameColor === "White") return product.stripe.framed_white;
     return null;
   };
 
-  const handleCheckout = () => {
+  const getStripePriceId = (productId: number, frameOption: string, frameColor: string | undefined) => {
+    if (!store.stripeEnabled) return null;
+    const product = getProduct(productId);
+    if (!product) return null;
+
+    if (frameOption === "Frameless Photograph") return product.stripe.frameless_price_id;
+    if (frameColor === "Black") return product.stripe.framed_black_price_id;
+    if (frameColor === "White") return product.stripe.framed_white_price_id;
+    return null;
+  };
+
+  const handleCheckout = async () => {
     if (items.length === 0) return;
 
-    // Check if Stripe is configured
-    if (store.stripeEnabled) {
-      // For single item, redirect directly to that product's payment link
-      if (items.length === 1) {
-        const item = items[0];
-        const link = getStripeLink(item.productId, item.frameOption, item.frameColor || undefined);
-        if (link) {
-          window.location.href = link;
-          return;
-        }
-      }
-
-      // For multiple items, show individual checkout links
-      alert("Please check out each item individually using the checkout buttons below, or contact Unitedstudiocollective@gmail.com for bulk orders.");
+    if (!store.stripeEnabled) {
+      alert("Checkout is currently disabled.");
       return;
     }
 
-    // Stripe not configured yet
-    alert("Stripe checkout coming soon! Contact Unitedstudiocollective@gmail.com to place an order.");
+    // Single item fallback (if Worker isn't set up or fails, though we prefer Worker for all)
+    if (items.length === 1 && !WORKER_URL) {
+      const item = items[0];
+      const link = getStripeLink(item.productId, item.frameOption, item.frameColor || undefined);
+      if (link) {
+        window.location.href = link;
+        return;
+      }
+    }
+
+    // Multi-item checkout via Cloudflare Worker
+    setLoading(true);
+    try {
+      const checkoutItems = items.map(item => {
+        const priceId = getStripePriceId(item.productId, item.frameOption, item.frameColor || undefined);
+        if (!priceId) throw new Error(`Price ID missing for ${item.name}`);
+        return {
+          price: priceId,
+          quantity: item.quantity
+        };
+      });
+
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: checkoutItems }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to start checkout");
+      }
+
+      const { url } = await response.json();
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Checkout failed. Please try checking out items individually.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleItemCheckout = (item: typeof items[0]) => {
@@ -56,7 +98,7 @@ export default function CartPage() {
     if (link) {
       window.location.href = link;
     } else {
-      alert("Checkout link not available. Contact Unitedstudiocollective@gmail.com to place an order.");
+      alert("Checkout link not available.");
     }
   };
 
@@ -159,8 +201,8 @@ export default function CartPage() {
                         </p>
                       </div>
 
-                      {/* Individual checkout button when Stripe is enabled and multiple items */}
-                      {store.stripeEnabled && items.length > 1 && getStripeLink(item.productId, item.frameOption, item.frameColor || undefined) && (
+                      {/* Individual checkout fallback */}
+                      {!WORKER_URL && store.stripeEnabled && items.length > 1 && (
                         <button
                           onClick={() => handleItemCheckout(item)}
                           className="mt-3 text-sm text-blue-600 hover:text-blue-800 underline"
@@ -190,9 +232,17 @@ export default function CartPage() {
 
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors"
+                  disabled={loading}
+                  className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  Proceed to Checkout
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" size={18} />
+                      Processing...
+                    </>
+                  ) : (
+                    "Proceed to Checkout"
+                  )}
                 </button>
 
                 <Link

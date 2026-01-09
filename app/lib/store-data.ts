@@ -11,8 +11,11 @@ export interface Product {
   description?: string;
   stripe: {
     frameless: string;
+    frameless_price_id?: string;
     framed_black: string;
+    framed_black_price_id?: string;
     framed_white: string;
+    framed_white_price_id?: string;
   };
 }
 

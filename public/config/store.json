@@ -12,7 +12,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/aFa5kCb6Cd483DX9iK0000x",
         "framed_black": "https://buy.stripe.com/aFa14m7Uq6FK1vP52u0000y",
-        "framed_white": "https://buy.stripe.com/14AbJ0b6Ce8c0rL0Me0000z"
+        "framed_white": "https://buy.stripe.com/14AbJ0b6Ce8c0rL0Me0000z",
+        "frameless_price_id": "price_1SnmKlA4aSIVsJzyQbcHs8Rj",
+        "framed_black_price_id": "price_1Snn7NA4aSIVsJzywcabhZ1t",
+        "framed_white_price_id": "price_1Snn7OA4aSIVsJzyB1f5LX5i"
       }
     },
     {
@@ -23,7 +26,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/eVqbJ03Eae8cdexcuW0000A",
         "framed_black": "https://buy.stripe.com/8x228q1w25BGdex66y0000B",
-        "framed_white": "https://buy.stripe.com/fZu6oG3EaaW00rL3Yq0000C"
+        "framed_white": "https://buy.stripe.com/fZu6oG3EaaW00rL3Yq0000C",
+        "frameless_price_id": "price_1SnmKnA4aSIVsJzys0YEHkch",
+        "framed_black_price_id": "price_1Snn7QA4aSIVsJzygMdYGt2y",
+        "framed_white_price_id": "price_1Snn7RA4aSIVsJzyDL3iJ93T"
       }
     },
     {
@@ -34,7 +40,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/9B6dR8a2yfcgb6p3Yq0000D",
         "framed_black": "https://buy.stripe.com/eVqcN4deKaW04I1eD40000E",
-        "framed_white": "https://buy.stripe.com/fZu6oGcaG3ty0rL0Me0000F"
+        "framed_white": "https://buy.stripe.com/fZu6oGcaG3ty0rL0Me0000F",
+        "frameless_price_id": "price_1SnmKpA4aSIVsJzyfVkOe9Ql",
+        "framed_black_price_id": "price_1Snn7TA4aSIVsJzylnk9fFT2",
+        "framed_white_price_id": "price_1Snn7UA4aSIVsJzyO13dD6ww"
       }
     },
     {
@@ -45,7 +54,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/9B68wOcaGd483DX3Yq0000G",
         "framed_black": "https://buy.stripe.com/4gM3cu8YuaW02zTdz00000H",
-        "framed_white": "https://buy.stripe.com/5kQ7sK1w26FK2zT2Um0000I"
+        "framed_white": "https://buy.stripe.com/5kQ7sK1w26FK2zT2Um0000I",
+        "frameless_price_id": "price_1SnmKrA4aSIVsJzyWISnmtHV",
+        "framed_black_price_id": "price_1Snn7WA4aSIVsJzyIxEQH82p",
+        "framed_white_price_id": "price_1Snn7XA4aSIVsJzy0BjbkV0W"
       }
     },
     {
@@ -56,7 +68,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/7sY5kC3Eae8cb6pfH80000J",
         "framed_black": "https://buy.stripe.com/00wfZg7Uq2pu8Yh3Yq0000K",
-        "framed_white": "https://buy.stripe.com/aFadR81w2ggk5M5gLc0000L"
+        "framed_white": "https://buy.stripe.com/aFadR81w2ggk5M5gLc0000L",
+        "frameless_price_id": "price_1SnmKtA4aSIVsJzyHFtlxEEJ",
+        "framed_black_price_id": "price_1Snn7ZA4aSIVsJzyV7CA6Lgb",
+        "framed_white_price_id": "price_1Snn7aA4aSIVsJzyfUWFUmgg"
       }
     },
     {
@@ -67,7 +82,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/bJefZg8Yu3ty3DXcuW0000M",
         "framed_black": "https://buy.stripe.com/4gM3cueiOggka2l0Me0000N",
-        "framed_white": "https://buy.stripe.com/6oUaEWdeKd486Q9bqS0000O"
+        "framed_white": "https://buy.stripe.com/6oUaEWdeKd486Q9bqS0000O",
+        "frameless_price_id": "price_1SnmKwA4aSIVsJzyUuWZSWQQ",
+        "framed_black_price_id": "price_1Snn7cA4aSIVsJzyjZ38lnLD",
+        "framed_white_price_id": "price_1Snn7dA4aSIVsJzyRghY4BzN"
       }
     },
     {
@@ -78,7 +96,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/28EbJ00rY6FKa2l52u0000P",
         "framed_black": "https://buy.stripe.com/aFa6oGfmSc045M566y0000Q",
-        "framed_white": "https://buy.stripe.com/dRmbJ06Qm2pudex52u0000R"
+        "framed_white": "https://buy.stripe.com/dRmbJ06Qm2pudex52u0000R",
+        "frameless_price_id": "price_1SnmKyA4aSIVsJzyiAu7IXHg",
+        "framed_black_price_id": "price_1Snn7fA4aSIVsJzy0t1IPXSA",
+        "framed_white_price_id": "price_1Snn7gA4aSIVsJzyPS7Tav2j"
       }
     },
     {
@@ -89,7 +110,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/00waEWfmSd480rLamO0000S",
         "framed_black": "https://buy.stripe.com/cNieVc5Mid48a2l9iK0000T",
-        "framed_white": "https://buy.stripe.com/dRm7sKb6Cfcg8YhgLc0000U"
+        "framed_white": "https://buy.stripe.com/dRm7sKb6Cfcg8YhgLc0000U",
+        "frameless_price_id": "price_1SnmL0A4aSIVsJzy84nhyeaU",
+        "framed_black_price_id": "price_1Snn7hA4aSIVsJzyd4KNjpqK",
+        "framed_white_price_id": "price_1Snn7iA4aSIVsJzyiHyFvrJy"
       }
     },
     {
@@ -100,7 +124,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/7sY5kC6Qm0hmdex9iK0000V",
         "framed_black": "https://buy.stripe.com/9B628q5Mi6FKcat9iK0000W",
-        "framed_white": "https://buy.stripe.com/fZu8wOdeKe8c7UdcuW0000X"
+        "framed_white": "https://buy.stripe.com/fZu8wOdeKe8c7UdcuW0000X",
+        "frameless_price_id": "price_1SnmL2A4aSIVsJzyRJ6bNGTF",
+        "framed_black_price_id": "price_1Snn7kA4aSIVsJzyfxAB5Q7l",
+        "framed_white_price_id": "price_1Snn7lA4aSIVsJzyNysxBRjb"
       }
     },
     {
@@ -111,7 +138,10 @@
       "stripe": {
         "frameless": "https://buy.stripe.com/7sY6oGdeK5BG2zT2Um0000Y",
         "framed_black": "https://buy.stripe.com/6oUaEW3EaaW00rLdz00000Z",
-        "framed_white": "https://buy.stripe.com/6oU9AS6Qme8c0rLfH800010"
+        "framed_white": "https://buy.stripe.com/6oU9AS6Qme8c0rLfH800010",
+        "frameless_price_id": "price_1SnmL5A4aSIVsJzyNJtGGrL3",
+        "framed_black_price_id": "price_1Snn7mA4aSIVsJzyovSbtgph",
+        "framed_white_price_id": "price_1Snn7nA4aSIVsJzy1SbW6oaz"
       }
     }
   ]
