@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Crown,
   ChevronLeft,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
 

@@ -2,20 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-// Import local config if available (for development)
-let LOCAL_CONFIG: { githubToken?: string } | undefined;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  LOCAL_CONFIG = require('./config.local.ts')?.LOCAL_ADMIN_CONFIG;
-} catch {
-  // Local config doesn't exist
-}
-
 const DEFAULT_CONFIG = {
   owner: "banddude",
   repo: "united-studio-collective",
   branch: "main",
-  githubToken: LOCAL_CONFIG?.githubToken || "",
+  githubToken: "",
 };
 
 export function useAdminAuth() {
