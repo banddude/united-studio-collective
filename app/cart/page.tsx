@@ -10,7 +10,7 @@ import { Minus, Plus, X, Loader2 } from "lucide-react";
 import { store, getProduct } from "../lib/store-data";
 
 // Replace this with your actual Cloudflare Worker URL after deployment
-const WORKER_URL = "https://usc-checkout.banddude.workers.dev";
+const WORKER_URL = "https://usc-checkout.mikejshaffer.workers.dev";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
