@@ -23,6 +23,8 @@ jobs:
 
       - name: Fetch videos from YouTube
         run: |
+          # Add ./yt-dlp to PATH so the Node script can find it
+          export PATH="$PWD:$PATH"
           # Parse and create JSON (script fetches directly from YouTube)
           node scripts/parse-videos.js > app/filmmaking/videos.json
 
