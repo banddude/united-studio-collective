@@ -589,7 +589,7 @@ export default function AdminVideosPage() {
                       value={newVideoUrl}
                       onChange={(e) => setNewVideoUrl(e.target.value)}
                       placeholder="https://www.youtube.com/watch?v=..."
-                      className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
                     />
                     <button
                       onClick={addYouTubeVideo}
@@ -602,7 +602,7 @@ export default function AdminVideosPage() {
                         setShowAddForm(false);
                         setNewVideoUrl("");
                       }}
-                      className="px-4 py-2 rounded-lg hover:bg-gray-100"
+                      className="px-4 py-2 rounded-lg hover:bg-gray-100 text-black"
                     >
                       Cancel
                     </button>
@@ -662,7 +662,7 @@ export default function AdminVideosPage() {
                               onChange={(e) =>
                                 setEditForm({ ...editForm, title: e.target.value })
                               }
-                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
                             />
                           </div>
                           <div>
@@ -678,7 +678,7 @@ export default function AdminVideosPage() {
                                 })
                               }
                               rows={4}
-                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-3">
@@ -696,7 +696,7 @@ export default function AdminVideosPage() {
                                   })
                                 }
                                 placeholder="03:14"
-                                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
                               />
                             </div>
                             <div>
@@ -712,7 +712,7 @@ export default function AdminVideosPage() {
                                     creator: e.target.value,
                                   })
                                 }
-                                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
                               />
                             </div>
                           </div>
@@ -725,7 +725,7 @@ export default function AdminVideosPage() {
                             </button>
                             <button
                               onClick={cancelEdit}
-                              className="px-4 py-2 rounded-lg hover:bg-gray-100"
+                              className="px-4 py-2 rounded-lg hover:bg-gray-100 text-black"
                             >
                               Cancel
                             </button>
@@ -733,7 +733,7 @@ export default function AdminVideosPage() {
                         </div>
                       ) : (
                         <>
-                          <h3 className="font-semibold text-lg mb-1">
+                          <h3 className="font-semibold text-lg mb-1 text-black">
                             {video.title}
                           </h3>
                           <p className="text-sm text-gray-600 mb-2">
