@@ -44,14 +44,12 @@ const DEFAULT_CONFIG = {
   owner: "banddude",
   repo: "united-studio-collective",
   branch: "main",
-  password: "usc2024", // Default password
   // GitHub token from local config (if available)
   githubToken: LOCAL_CONFIG?.githubToken || "",
 };
 
 export default function AdminVideosPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
   const [githubToken, setGithubToken] = useState("");
   const [authError, setAuthError] = useState("");
   const [showConfig, setShowConfig] = useState(false);
@@ -127,32 +125,22 @@ export default function AdminVideosPage() {
     // Use hardcoded token or entered token
     const tokenToUse = githubToken || DEFAULT_CONFIG.githubToken;
 
-    if (!password) {
-      setAuthError("Please enter password");
-      return;
-    }
-
     if (!tokenToUse) {
       setAuthError("GitHub token required - add it to config.local.ts or enter below");
       return;
     }
 
-    if (password === config.password) {
-      setIsAuthenticated(true);
-      localStorage.setItem("usc_admin_auth", "true");
-      localStorage.setItem("usc_github_token", tokenToUse);
-      localStorage.setItem("usc_admin_config", JSON.stringify(config));
-      fetchVideos(tokenToUse, config);
-    } else {
-      setAuthError("Invalid password");
-    }
+    setIsAuthenticated(true);
+    localStorage.setItem("usc_admin_auth", "true");
+    localStorage.setItem("usc_github_token", tokenToUse);
+    localStorage.setItem("usc_admin_config", JSON.stringify(config));
+    fetchVideos(tokenToUse, config);
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("usc_admin_auth");
     localStorage.removeItem("usc_github_token");
-    setPassword("");
     setGithubToken("");
   };
 
@@ -263,7 +251,7 @@ export default function AdminVideosPage() {
             title: "Update videos from admin panel",
             head: branchName,
             base: config.branch,
-            body: `password: ${config.password}\n\nAutomated video update from admin panel.`,
+            body: `Automated video update from admin panel.`,
             labels: ["admin-update"],
           }),
         }
@@ -303,7 +291,7 @@ export default function AdminVideosPage() {
               clearInterval(checkMergeStatus);
               setSaveStatus({
                 type: "error",
-                message: "Pull request was closed without merging. Check the password in the GitHub Action."
+                message: "Pull request was closed without merging. Check the GitHub Action."
               });
             }
           }
@@ -481,18 +469,6 @@ export default function AdminVideosPage() {
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-1">
-                Admin Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
-              />
-            </div>
             {!hasHardcodedToken && (
               <div>
                 <label className="block text-sm font-medium text-gray-900 mb-1">
