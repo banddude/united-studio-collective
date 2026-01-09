@@ -11,25 +11,23 @@
     "hidden": false
   },
   {
-    "id": "kg1EDL-O5zI",
-    "title": "Through The Night",
-    "duration": "03:30",
-    "thumbnail": "https://img.youtube.com/vi/kg1EDL-O5zI/sddefault.jpg",
-    "videoId": "kg1EDL-O5zI",
-    "platform": "youtube",
-    "creator": "United Studio Collective",
-    "description": "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro."
+    "id": "light-dark",
+    "title": "Light / Dark",
+    "duration": "01:24",
+    "thumbnail": "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
+    "videoId": "light-dark.mp4",
+    "platform": "local",
+    "creator": "United Studio Collective"
   },
   {
-    "id": "Mwe9xCaLLBM",
-    "title": "The Seasons of Fall",
-    "duration": "03:30",
-    "thumbnail": "https://img.youtube.com/vi/Mwe9xCaLLBM/sddefault.jpg",
-    "videoId": "Mwe9xCaLLBM",
+    "id": "yPN2Bydj7Ec",
+    "title": "Delikate Rayne Desert Fashion Shoot",
+    "duration": "01:55",
+    "thumbnail": "https://img.youtube.com/vi/yPN2Bydj7Ec/sddefault.jpg",
+    "videoId": "yPN2Bydj7Ec",
     "platform": "youtube",
     "creator": "United Studio Collective",
-    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming...",
-    "backgroundSize": "135%"
+    "description": "A mystical journey through the desert, looking through the eyes of LA-based vegan fashion brand, Delikate Rayne."
   },
   {
     "id": "HBXVsbKGq4s",
@@ -43,14 +41,25 @@
     "backgroundSize": "135%"
   },
   {
-    "id": "yPN2Bydj7Ec",
-    "title": "Delikate Rayne Desert Fashion Shoot",
-    "duration": "01:55",
-    "thumbnail": "https://img.youtube.com/vi/yPN2Bydj7Ec/sddefault.jpg",
-    "videoId": "yPN2Bydj7Ec",
+    "id": "Mwe9xCaLLBM",
+    "title": "The Seasons of Fall",
+    "duration": "03:30",
+    "thumbnail": "https://img.youtube.com/vi/Mwe9xCaLLBM/sddefault.jpg",
+    "videoId": "Mwe9xCaLLBM",
     "platform": "youtube",
     "creator": "United Studio Collective",
-    "description": "A mystical journey through the desert, looking through the eyes of LA-based vegan fashion brand, Delikate Rayne."
+    "description": "A piece of trash on the corner of the street.\nOozing black goo floating in the Pacific.\nA recovery effort to save the animals.\nThe continual hatred growing towards your fellow man.\n\nThe looming...",
+    "backgroundSize": "135%"
+  },
+  {
+    "id": "kg1EDL-O5zI",
+    "title": "Through The Night",
+    "duration": "03:30",
+    "thumbnail": "https://img.youtube.com/vi/kg1EDL-O5zI/sddefault.jpg",
+    "videoId": "kg1EDL-O5zI",
+    "platform": "youtube",
+    "creator": "United Studio Collective",
+    "description": "Through The Night: A short film based on the feelings and emotions we all experience through life. Shown through the lens of a night drive through Los Angeles. Shot on, Blackmagic URSA Mini Pro."
   },
   {
     "id": "NO4KgrvH4Dg",
@@ -61,14 +70,5 @@
     "platform": "youtube",
     "creator": "United Studio Collective",
     "description": "United Studio Collective's Reel"
-  },
-  {
-    "id": "light-dark",
-    "title": "Light / Dark",
-    "duration": "01:24",
-    "thumbnail": "https://static.wixstatic.com/media/963954_fd3646aa5154494a9dc98c2757b08cf9~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/file.jpg",
-    "videoId": "light-dark.mp4",
-    "platform": "local",
-    "creator": "United Studio Collective"
   }
 ]
