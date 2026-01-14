@@ -5,3 +5,9 @@ account_id = "8e83fee9ba5b2bf423d5ffddaaee74c6"
 
 [placement]
 mode = "smart"
+
+# Environment variables (add these in Cloudflare dashboard for production)
+# Or use wrangler secret: wrangler secret put SHIPPO_API_KEY
+[vars]
+# SHIPPO_API_KEY = "shippo_test_..." (test key for development)
+# STRIPE_SECRET_KEY = "sk_live_..." (your Stripe secret key)

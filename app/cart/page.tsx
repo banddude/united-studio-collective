@@ -6,15 +6,28 @@ import { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
-import { Minus, Plus, X, Loader2 } from "lucide-react";
+import { Minus, Plus, X, Loader2, MapPin, Package, Check } from "lucide-react";
 import { store, getProduct } from "../lib/store-data";
 
 // Replace this with your actual Cloudflare Worker URL after deployment
 const WORKER_URL = "https://usc-checkout.mikejshaffer.workers.dev";
 
+interface ShippingRate {
+  provider: string;
+  servicelevel_name: string;
+  amount: number;
+  estimated_days: number;
+  object_id: string;
+}
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
   const [loading, setLoading] = useState(false);
+  const [zipCode, setZipCode] = useState("");
+  const [loadingRates, setLoadingRates] = useState(false);
+  const [shippingRates, setShippingRates] = useState<ShippingRate[] | null>(null);
+  const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
+  const [ratesError, setRatesError] = useState<string | null>(null);
 
   const getStripeLink = (productId: number, frameOption: string, frameColor: string | undefined) => {
     if (!store.stripeEnabled) return null;
@@ -101,6 +114,49 @@ export default function CartPage() {
       alert("Checkout link not available.");
     }
   };
+
+  const fetchShippingRates = async () => {
+    if (!zipCode || zipCode.length < 5) {
+      setRatesError("Please enter a valid zip code");
+      return;
+    }
+
+    setLoadingRates(true);
+    setRatesError(null);
+    setShippingRates(null);
+    setSelectedRate(null);
+
+    try {
+      const checkoutItems = items.map(item => {
+        const priceId = getStripePriceId(item.productId, item.frameOption, item.frameColor || undefined);
+        if (!priceId) throw new Error(`Price ID missing for ${item.name}`);
+        return { price: priceId, quantity: item.quantity };
+      });
+
+      const response = await fetch(`${WORKER_URL}/rates`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: checkoutItems,
+          zipCode: zipCode,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to fetch shipping rates");
+      }
+
+      const data = await response.json();
+      setShippingRates(data.rates);
+    } catch (error: any) {
+      setRatesError(error.message || "Failed to load shipping rates");
+    } finally {
+      setLoadingRates(false);
+    }
+  };
+
+  const finalTotal = totalPrice + (selectedRate?.amount || 0);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -217,23 +273,108 @@ export default function CartPage() {
 
               {/* Cart Summary */}
               <div className="border-t border-gray-200 pt-6">
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-lg font-medium text-black">
-                    Subtotal ({totalItems} {totalItems === 1 ? "item" : "items"})
-                  </span>
-                  <span className="text-lg font-medium text-black">
-                    ${totalPrice.toFixed(2)}
-                  </span>
+                {/* Zip Code Input */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-black mb-2">
+                    Enter your zip code to calculate shipping
+                  </label>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={5}
+                        value={zipCode}
+                        onChange={(e) => setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                        placeholder="90210"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
+                        onKeyPress={(e) => e.key === "Enter" && fetchShippingRates()}
+                      />
+                    </div>
+                    <button
+                      onClick={fetchShippingRates}
+                      disabled={loadingRates || zipCode.length < 5}
+                      className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm whitespace-nowrap"
+                    >
+                      {loadingRates ? (
+                        <span className="flex items-center gap-2">
+                          <Loader2 className="animate-spin w-4 h-4" />
+                          Loading...
+                        </span>
+                      ) : (
+                        "Get Rates"
+                      )}
+                    </button>
+                  </div>
+                  {ratesError && (
+                    <p className="mt-2 text-sm text-red-600">{ratesError}</p>
+                  )}
                 </div>
 
-                <p className="text-sm text-gray-600 mb-6">
-                  Shipping and taxes calculated at checkout.
-                </p>
+                {/* Shipping Rates */}
+                {shippingRates && shippingRates.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium text-black mb-3">Select shipping method</h3>
+                    <div className="space-y-2">
+                      {shippingRates.map((rate) => (
+                        <button
+                          key={rate.object_id}
+                          onClick={() => setSelectedRate(rate)}
+                          className={`w-full flex items-center justify-between p-4 border rounded-lg transition-colors ${
+                            selectedRate?.object_id === rate.object_id
+                              ? "border-black bg-gray-50"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              selectedRate?.object_id === rate.object_id ? "border-black bg-black" : "border-gray-300"
+                            }`}>
+                              {selectedRate?.object_id === rate.object_id && <Check className="w-3 h-3 text-white" />}
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-medium text-black">{rate.servicelevel_name}</p>
+                              <p className="text-xs text-gray-500">{rate.provider} • {rate.estimated_days ? `${rate.estimated_days} business days` : "5-7 business days"}</p>
+                            </div>
+                          </div>
+                          <p className="text-sm font-medium text-black">${rate.amount.toFixed(2)}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Order Summary */}
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-black">
+                      Subtotal ({totalItems} {totalItems === 1 ? "item" : "items"})
+                    </span>
+                    <span className="font-medium text-black">${totalPrice.toFixed(2)}</span>
+                  </div>
+                  {selectedRate && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-black">Shipping</span>
+                      <span className="font-medium text-black">${selectedRate.amount.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center pt-3 border-t border-gray-200">
+                    <span className="text-lg font-medium text-black">Total</span>
+                    <span className="text-lg font-medium text-black">${finalTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {!selectedRate && zipCode.length === 0 && (
+                  <p className="text-sm text-gray-500 mb-6">
+                    Enter your zip code above to see shipping rates
+                  </p>
+                )}
 
                 <button
                   onClick={handleCheckout}
-                  disabled={loading}
-                  className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  disabled={loading || !selectedRate}
+                  className="w-full bg-black text-white py-4 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>

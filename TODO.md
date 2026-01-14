@@ -1,19 +1,20 @@
 # United Studio Collective Site - TODO
 
+## Launch Target: January 19th
+
+Evan's flexible on the date if needed. Stripe tax form completed, waiting for approval.
+
+## Priority Order
+
+1. **The collective page** (backend + frontend)
+2. **Shipping** calculation/setup
+3. **Services page** (integrate package services info, separate from about)
+4. **Blog page** (backend + frontend)
+5. ~~Photo page (backend)~~ - DONE, has admin panel at `/admin/photography`
+
 ## Waiting on Evan
 
-### 1. Stripe Payment Links
-- Create Stripe account at https://dashboard.stripe.com
-- Go to Products > Payment Links
-- Create Payment Links for each product variant:
-  - Frameless ($85)
-  - Framed Black ($85)
-  - Framed White ($85)
-- Edit `public/config/store.json`:
-  - Set `"stripeEnabled": true`
-  - Add Payment Link URLs for each product
-
-### 2. Box Chocolate Video (Optional)
+### Box Chocolate Video (Optional)
 - Provide the video file to replace "Video coming soon" placeholder
 
 ## Completed
