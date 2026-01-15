@@ -31,11 +31,25 @@ export default {
           });
         }
 
-        // Calculate total quantity of prints
-        const totalQty = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        // Separate framed and frameless items
+        let framedQty = 0;
+        let framelessQty = 0;
+        items.forEach(item => {
+          const qty = item.quantity || 1;
+          if (item.isFramed) {
+            framedQty += qty;
+          } else {
+            framelessQty += qty;
+          }
+        });
 
-        // Calculate boxes needed (max 3 prints per box)
-        const parcels = calculateParcels(totalQty);
+        const totalQty = framedQty + framelessQty;
+
+        // Calculate parcels for each type
+        const parcels = [
+          ...calculateFramedParcels(framedQty),
+          ...calculateTubeParcels(framelessQty),
+        ];
 
         // Get rates for each box type and sum them
         // (Shippo multi-parcel doesn't work well with test accounts)
@@ -209,39 +223,63 @@ export default {
   },
 };
 
-// Calculate parcels based on quantity (max 3 prints per box)
-function calculateParcels(totalQty) {
+// Calculate parcels for framed prints (max 3 per box)
+function calculateFramedParcels(qty) {
+  if (qty === 0) return [];
   const parcels = [];
-  let remaining = totalQty;
+  let remaining = qty;
 
   while (remaining > 0) {
     const inThisBox = Math.min(remaining, 3);
-    parcels.push(getBoxDimensions(inThisBox));
+    parcels.push(getFramedBoxDimensions(inThisBox));
     remaining -= inThisBox;
   }
 
   return parcels;
 }
 
-// Get box dimensions and weight for N prints
-function getBoxDimensions(printCount) {
+// Calculate parcels for frameless prints in tubes (max 5 per tube)
+function calculateTubeParcels(qty) {
+  if (qty === 0) return [];
+  const parcels = [];
+  let remaining = qty;
+
+  while (remaining > 0) {
+    const inThisTube = Math.min(remaining, 5);
+    parcels.push(getTubeDimensions(inThisTube));
+    remaining -= inThisTube;
+  }
+
+  return parcels;
+}
+
+// Get box dimensions for framed prints
+function getFramedBoxDimensions(printCount) {
   // 16x20 framed print specs:
   // - Each print is roughly 20x24" framed
-  // - Thickness: ~2" per print (frame depth + packing)
+  // - Thickness: ~2.5" per print (frame depth + packing)
   // - Weight: ~7 lbs per framed print
-
-  const baseLength = 24; // inches
-  const baseWidth = 20;  // inches
-  const heightPerPrint = 2.5; // inches per print (frame + padding)
-  const baseHeight = 1; // box padding
-  const weightPerPrint = 7; // lbs per framed print
-
   return {
-    length: baseLength,
-    width: baseWidth,
-    height: baseHeight + (heightPerPrint * printCount),
+    length: 24,
+    width: 20,
+    height: 1 + (2.5 * printCount),
     distance_unit: "in",
-    weight: weightPerPrint * printCount,
+    weight: 7 * printCount,
+    mass_unit: "lb",
+  };
+}
+
+// Get tube dimensions for frameless prints
+function getTubeDimensions(printCount) {
+  // Frameless 16x20 prints rolled in a tube:
+  // - Tube: 24" long x 4" diameter
+  // - Weight: ~1.5 lbs base + 0.5 lb per additional print
+  return {
+    length: 24,
+    width: 4,
+    height: 4,
+    distance_unit: "in",
+    weight: 1 + (0.5 * printCount),
     mass_unit: "lb",
   };
 }

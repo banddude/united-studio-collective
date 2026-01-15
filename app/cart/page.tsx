@@ -131,7 +131,8 @@ export default function CartPage() {
       const checkoutItems = items.map(item => {
         const priceId = getStripePriceId(item.productId, item.frameOption, item.frameColor || undefined);
         if (!priceId) throw new Error(`Price ID missing for ${item.name}`);
-        return { price: priceId, quantity: item.quantity };
+        const isFramed = item.frameOption !== "Frameless Photograph";
+        return { price: priceId, quantity: item.quantity, isFramed };
       });
 
       const response = await fetch(`${WORKER_URL}/rates`, {
@@ -288,7 +289,7 @@ export default function CartPage() {
                         setShippingRates(null);
                         setSelectedRate(null);
                       }}
-                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none bg-white"
+                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none bg-white text-black"
                     >
                       <option value="US">United States</option>
                       <option value="CA">Canada</option>
@@ -305,7 +306,7 @@ export default function CartPage() {
                         value={zipCode}
                         onChange={(e) => setZipCode(e.target.value.slice(0, 10))}
                         placeholder={country === "US" ? "ZIP code" : "Postal code"}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none bg-white text-black"
                         onKeyPress={(e) => e.key === "Enter" && fetchShippingRates()}
                       />
                     </div>
