@@ -18,8 +18,6 @@ import {
   Pencil,
   Image as LucideImage,
   Upload,
-  ToggleLeft,
-  ToggleRight,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
 
@@ -28,19 +26,11 @@ interface PhotoImage {
   description: string;
 }
 
-interface HeroData {
-  enabled: boolean;
-  image: string;
-  title: string;
-  subtitle: string;
-}
-
 interface PhotographyData {
   page: string;
   title: string;
   layout: string;
   has_load_more: boolean;
-  hero?: HeroData;
   images: PhotoImage[];
 }
 
@@ -60,7 +50,6 @@ export default function AdminPhotographyPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [uploadTarget, setUploadTarget] = useState<"hero" | "gallery" | null>(null);
 
   useEffect(() => {
     if (isLoaded && isAuthenticated) {
@@ -188,9 +177,8 @@ export default function AdminPhotographyPage() {
     setShowAddForm(false);
   };
 
-  const uploadImageToGitHub = async (file: File, target: "hero" | "gallery") => {
+  const uploadImageToGitHub = async (file: File) => {
     setUploading(true);
-    setUploadTarget(target);
     setSaveStatus({ type: null, message: "" });
 
     try {
@@ -234,20 +222,12 @@ export default function AdminPhotographyPage() {
 
       const imageUrl = `/images/photography/${timestamp}_${safeName}`;
 
-      // Build updated data
-      let newData: PhotographyData;
-      if (target === "hero") {
-        newData = {
-          ...data!,
-          hero: { ...data!.hero!, image: imageUrl },
-        };
-      } else {
-        const newPhoto: PhotoImage = {
-          src: imageUrl,
-          description: "New photograph",
-        };
-        newData = { ...data!, images: [newPhoto, ...data!.images] };
-      }
+      // Add new photo to beginning of list (becomes hero)
+      const newPhoto: PhotoImage = {
+        src: imageUrl,
+        description: "New photograph",
+      };
+      const newData = { ...data!, images: [newPhoto, ...data!.images] };
 
       // Auto-save to GitHub immediately
       const getFileResponse = await fetch(
@@ -290,12 +270,11 @@ export default function AdminPhotographyPage() {
       setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
     } finally {
       setUploading(false);
-      setUploadTarget(null);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
     }
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>, target: "hero" | "gallery") => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = "";
@@ -305,7 +284,6 @@ export default function AdminPhotographyPage() {
 
     if (isHeic) {
       setUploading(true);
-      setUploadTarget(target);
       setSaveStatus({ type: null, message: "" });
 
       try {
@@ -319,23 +297,14 @@ export default function AdminPhotographyPage() {
         const jpegName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
         const convertedFile = new File([convertedBlob], jpegName, { type: "image/jpeg" });
 
-        await uploadImageToGitHub(convertedFile, target);
+        await uploadImageToGitHub(convertedFile);
       } catch (error: any) {
         setSaveStatus({ type: "error", message: `HEIC conversion failed: ${error.message}` });
         setUploading(false);
-        setUploadTarget(null);
       }
     } else {
-      uploadImageToGitHub(file, target);
+      uploadImageToGitHub(file);
     }
-  };
-
-  const updateHero = (field: keyof HeroData, value: string | boolean) => {
-    if (!data) return;
-    setData({
-      ...data,
-      hero: { ...data.hero!, [field]: value },
-    });
   };
 
   if (!isLoaded) return null;
@@ -384,7 +353,7 @@ export default function AdminPhotographyPage() {
         <div className="mb-6 flex gap-3">
           <label className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-800">
             <Upload className="w-4 h-4" />
-            {uploading && uploadTarget === "gallery" ? (
+            {uploading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Uploading...
@@ -396,7 +365,7 @@ export default function AdminPhotographyPage() {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(e) => handleFileSelect(e, "gallery")}
+              onChange={handleFileSelect}
               disabled={uploading}
             />
           </label>
