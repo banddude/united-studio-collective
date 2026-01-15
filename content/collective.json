@@ -1,12 +1,12 @@
 {
   "page": "collective",
   "title": "The Collective",
-  "description": "United Studio Collective is a group of passionate creatives dedicated to visual storytelling. Our team brings together diverse talents in photography, filmmaking, and digital media to create compelling content that resonates.",
+  "description": "The Collective is an avenue to experience the work of artists, collaborators, and masters of their craft. At United Studio Collective our mission is to bring artists together to create amazing visuals. Whether that is in the world of cinema, photography or anything somewhere in between! Modern culture tends to hyper-focus on the individual artist, USC aims to take a hold of that narrative and refocus it on all the amazing artists who are involved. This is the gateway to some of the phenomenal artists we have experienced in our journey of creating United Studio Collective. The list may seem small right now, it's only getting started!",
   "members": [
     {
       "name": "Jessica M. Maxwell",
-      "role": "Photographer",
-      "bio": "Jessica specializes in portrait and fashion photography, bringing a unique perspective to every shoot.",
+      "role": "Photographer/Filmmaker",
+      "bio": "Jessica is a documentary-driven filmmaker and visual storyteller whose work explores the confluence of art, healing, and human connection. With a background in design, visual communication, and mental-health–oriented studies, her creative practice centers on using imagery as a bridge between personal experience and collective understanding.\n\nHer photography and film work draw from years of travel, cross-cultural observation, and a lifelong fascination with the ways people express strength, tenderness, and meaning in their everyday lives. Inspired since childhood by documentary publications like National Geographic, she brings a warm, intuitive eye to the moments others often overlook — the quiet, the imperfect, the deeply human.",
       "image": "/images/collective/JessicaNMaxwell.jpg"
     }
   ]
