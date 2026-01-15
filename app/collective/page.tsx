@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Youtube, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { Instagram, Youtube, ExternalLink } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import collectiveData from "../../content/collective.json";
@@ -42,7 +41,6 @@ function parseTranscript(text: string): { speaker: string; text: string }[] {
 }
 
 export default function CollectivePage() {
-  const [showTranscript, setShowTranscript] = useState(false);
   const transcriptSegments = parseTranscript(transcriptText);
 
   return (
@@ -178,35 +176,20 @@ export default function CollectivePage() {
                     </div>
 
                     {/* Transcript Section */}
-                    <div className="bg-white border border-gray-200">
-                      <button
-                        onClick={() => setShowTranscript(!showTranscript)}
-                        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-                      >
-                        <span className="text-sm font-medium text-gray-700">Interview Transcript</span>
-                        {showTranscript ? (
-                          <ChevronUp size={20} className="text-gray-500" />
-                        ) : (
-                          <ChevronDown size={20} className="text-gray-500" />
-                        )}
-                      </button>
-
-                      {showTranscript && (
-                        <div className="px-6 pb-6 max-h-[500px] overflow-y-auto">
-                          <div className="space-y-4">
-                            {transcriptSegments.map((segment, i) => (
-                              <div key={i}>
-                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                                  {segment.speaker}
-                                </p>
-                                <p className="text-sm text-gray-700 leading-relaxed">
-                                  {segment.text}
-                                </p>
-                              </div>
-                            ))}
+                    <div className="mt-8">
+                      <h4 className="text-lg font-light text-black mb-6 pb-2 border-b border-gray-200">Transcript</h4>
+                      <div className="space-y-6">
+                        {transcriptSegments.map((segment, i) => (
+                          <div key={i}>
+                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                              {segment.speaker}
+                            </p>
+                            <p className="text-sm text-gray-700 leading-relaxed">
+                              {segment.text}
+                            </p>
                           </div>
-                        </div>
-                      )}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
