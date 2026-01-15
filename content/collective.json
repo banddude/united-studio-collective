@@ -1,0 +1,13 @@
+{
+  "page": "collective",
+  "title": "The Collective",
+  "description": "United Studio Collective is a group of passionate creatives dedicated to visual storytelling. Our team brings together diverse talents in photography, filmmaking, and digital media to create compelling content that resonates.",
+  "members": [
+    {
+      "name": "Jessica M. Maxwell",
+      "role": "Photographer",
+      "bio": "Jessica specializes in portrait and fashion photography, bringing a unique perspective to every shoot.",
+      "image": "https://static.wixstatic.com/media/963954_68c785f9dcc04d579553545aeba44046~mv2.jpg"
+    }
+  ]
+}

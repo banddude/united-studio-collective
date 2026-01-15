@@ -12,7 +12,8 @@ import {
   LayoutDashboard,
   CreditCard,
   Truck,
-  ExternalLink
+  ExternalLink,
+  Users
 } from "lucide-react";
 import { useAdminAuth } from "./useAdminAuth";
 
@@ -91,6 +92,13 @@ export default function AdminDashboard() {
       icon: Camera,
       href: "/admin/photography",
       color: "bg-purple-500",
+    },
+    {
+      title: "The Collective",
+      description: "Manage team members, bios, and photos.",
+      icon: Users,
+      href: "/admin/collective",
+      color: "bg-orange-500",
     },
     {
       title: "Store",
