@@ -74,20 +74,20 @@ export default function ServicesPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-black text-white py-20 md:py-32 px-4 md:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-5xl font-light mb-6">
+        <section className="bg-black text-white py-12 md:py-16 px-4 md:px-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-light mb-4">
               {servicesData.cta.title}
             </h2>
-            <p className="text-gray-400 text-lg mb-10">
+            <p className="text-gray-400 mb-6">
               {servicesData.cta.description}
             </p>
             <Link
               href={servicesData.cta.buttonLink}
-              className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-lg font-medium hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 font-medium hover:bg-gray-100 transition-colors"
             >
               {servicesData.cta.buttonText}
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
