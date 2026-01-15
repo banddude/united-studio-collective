@@ -8,6 +8,7 @@ const navLinks = [
   { href: "/filmmaking", label: "Filmmaking" },
   { href: "/photography", label: "Photography" },
   { href: "/store", label: "Store" },
+  { href: "/collective", label: "Collective" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
