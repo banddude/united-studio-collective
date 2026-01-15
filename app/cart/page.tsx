@@ -281,6 +281,7 @@ export default function CartPage() {
                   <label className="block text-sm font-medium text-black mb-2">
                     Calculate shipping
                   </label>
+                  {/* TODO: Could fetch country list from Shippo API instead of hardcoding */}
                   <div className="flex flex-col sm:flex-row gap-2">
                     <select
                       value={country}

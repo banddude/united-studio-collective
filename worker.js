@@ -178,6 +178,8 @@ export default {
 
         // Checkout configuration
         body.append("mode", "payment");
+        // TODO: Could fetch supported countries from Shippo API instead of hardcoding
+        // https://docs.goshippo.com/docs/addresses/international/
         const allowedCountries = [
           "US", "CA", "MX", "GB", "IE", "DE", "FR", "IT", "ES", "NL",
           "BE", "AT", "CH", "SE", "NO", "DK", "FI", "PL", "PT", "AU",
