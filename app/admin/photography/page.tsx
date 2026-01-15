@@ -210,6 +210,7 @@ export default function AdminPhotographyPage() {
       const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const filePath = `public/images/photography/${timestamp}_${safeName}`;
 
+      // Upload image file to GitHub
       const uploadResponse = await fetch(
         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
         {
@@ -231,28 +232,66 @@ export default function AdminPhotographyPage() {
         throw new Error(err.message || "Failed to upload image");
       }
 
-      const uploadResult = await uploadResponse.json();
       const imageUrl = `/images/photography/${timestamp}_${safeName}`;
 
+      // Build updated data
+      let newData: PhotographyData;
       if (target === "hero") {
-        setData({
+        newData = {
           ...data!,
           hero: { ...data!.hero!, image: imageUrl },
-        });
+        };
       } else {
         const newPhoto: PhotoImage = {
           src: imageUrl,
           description: "New photograph",
         };
-        setData({ ...data!, images: [newPhoto, ...data!.images] });
+        newData = { ...data!, images: [newPhoto, ...data!.images] };
       }
 
-      setSaveStatus({ type: "success", message: "Image uploaded! Click Publish to save changes." });
+      // Auto-save to GitHub immediately
+      const getFileResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/content/photography.json?ref=${config.branch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      );
+
+      if (!getFileResponse.ok) throw new Error("Failed to get current file");
+
+      const fileData = await getFileResponse.json();
+      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+
+      const updateResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/content/photography.json`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            message: `Add photo: ${safeName}`,
+            content: contentBase64,
+            sha: fileData.sha,
+            branch: config.branch,
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) throw new Error("Failed to update photography file");
+
+      setData(newData);
+      setSaveStatus({ type: "success", message: "Image uploaded and published! Site is rebuilding." });
     } catch (error: any) {
       setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
     } finally {
       setUploading(false);
       setUploadTarget(null);
+      setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
     }
   };
 
