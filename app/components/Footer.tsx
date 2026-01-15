@@ -29,7 +29,7 @@ export default function Footer() {
         </h2>
 
         {/* Navigation - stacked on mobile, row on desktop */}
-        <nav className="flex flex-row flex-wrap justify-center items-center gap-4 md:gap-8 lg:gap-16 mb-8 md:mb-10">
+        <nav className="flex flex-row flex-wrap justify-center items-center gap-3 md:gap-6 lg:gap-8 mb-8 md:mb-10">
           {navLinks.map((link) => (
             <Link
               key={link.href}
