@@ -23,18 +23,18 @@ export default function CollectivePage() {
           </p>
 
           {/* Team Members - Alternating 2-column layout */}
-          <div className="space-y-16 md:space-y-24">
+          <div className="space-y-12 md:space-y-16">
             {collectiveData.members.map((member, index) => {
               const isEven = index % 2 === 0;
               return (
                 <div
                   key={index}
-                  className={`flex flex-col md:flex-row gap-8 md:gap-12 items-center ${
+                  className={`flex flex-col md:flex-row gap-6 md:gap-10 items-center ${
                     isEven ? '' : 'md:flex-row-reverse'
                   }`}
                 >
                   {/* Photo */}
-                  <div className="w-full md:w-1/2">
+                  <div className="w-48 md:w-64 flex-shrink-0">
                     <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                       <Image
                         src={member.image}
@@ -47,14 +47,14 @@ export default function CollectivePage() {
                   </div>
 
                   {/* Info */}
-                  <div className="w-full md:w-1/2 text-center md:text-left">
-                    <h3 className="text-2xl md:text-3xl font-light text-black mb-2">
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-xl md:text-2xl font-light text-black mb-1">
                       {member.name}
                     </h3>
-                    <p className="text-sm uppercase tracking-wider text-gray-500 mb-6">
+                    <p className="text-sm uppercase tracking-wider text-gray-500 mb-4">
                       {member.role}
                     </p>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-gray-600 leading-relaxed text-sm">
                       {member.bio}
                     </p>
                   </div>
