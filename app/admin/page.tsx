@@ -14,7 +14,10 @@ import {
   Truck,
   ExternalLink,
   Users,
-  Clapperboard
+  Clapperboard,
+  Home,
+  Info,
+  Mail
 } from "lucide-react";
 import { useAdminAuth } from "./useAdminAuth";
 
@@ -114,6 +117,30 @@ export default function AdminDashboard() {
       icon: Clapperboard,
       href: "#",
       color: "bg-pink-500",
+      disabled: true
+    },
+    {
+      title: "Home",
+      description: "Manage homepage hero and gallery content.",
+      icon: Home,
+      href: "#",
+      color: "bg-cyan-500",
+      disabled: true
+    },
+    {
+      title: "About",
+      description: "Manage about page content and team info.",
+      icon: Info,
+      href: "#",
+      color: "bg-indigo-500",
+      disabled: true
+    },
+    {
+      title: "Contact",
+      description: "Manage contact page info and form settings.",
+      icon: Mail,
+      href: "#",
+      color: "bg-rose-500",
       disabled: true
     }
   ];
