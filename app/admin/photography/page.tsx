@@ -295,12 +295,39 @@ export default function AdminPhotographyPage() {
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, target: "hero" | "gallery") => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>, target: "hero" | "gallery") => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+    e.target.value = "";
+
+    // Check if HEIC and convert to JPEG
+    const isHeic = file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
+
+    if (isHeic) {
+      setUploading(true);
+      setUploadTarget(target);
+      setSaveStatus({ type: null, message: "" });
+
+      try {
+        const heic2any = (await import("heic2any")).default;
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+          quality: 0.9,
+        }) as Blob;
+
+        const jpegName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
+        const convertedFile = new File([convertedBlob], jpegName, { type: "image/jpeg" });
+
+        await uploadImageToGitHub(convertedFile, target);
+      } catch (error: any) {
+        setSaveStatus({ type: "error", message: `HEIC conversion failed: ${error.message}` });
+        setUploading(false);
+        setUploadTarget(null);
+      }
+    } else {
       uploadImageToGitHub(file, target);
     }
-    e.target.value = "";
   };
 
   const updateHero = (field: keyof HeroData, value: string | boolean) => {

@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/stripe": "^8.0.416",
     "googleapis": "^170.0.0",
+    "heic2any": "^0.0.4",
     "lucide-react": "^0.559.0",
     "next": "16.0.8",
     "react": "19.2.1",
