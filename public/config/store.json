@@ -143,6 +143,46 @@
         "framed_black_price_id": "price_1Snn7mA4aSIVsJzyovSbtgph",
         "framed_white_price_id": "price_1Snn7nA4aSIVsJzy1SbW6oaz"
       }
+    },
+    {
+      "id": 11,
+      "name": "The Last Supper",
+      "price": 85,
+      "artist": "Jessica M. Maxwell",
+      "image": "/images/store/The_Last_Supper.jpg",
+      "stripe": {}
+    },
+    {
+      "id": 12,
+      "name": "Tea Picking",
+      "price": 85,
+      "artist": "Jessica M. Maxwell",
+      "image": "/images/store/Tea_Picking.jpg",
+      "stripe": {}
+    },
+    {
+      "id": 13,
+      "name": "Swift",
+      "price": 85,
+      "artist": "Jessica M. Maxwell",
+      "image": "/images/store/Swift.jpg",
+      "stripe": {}
+    },
+    {
+      "id": 14,
+      "name": "Drifting",
+      "price": 85,
+      "artist": "Jessica M. Maxwell",
+      "image": "/images/store/Drifting.jpg",
+      "stripe": {}
+    },
+    {
+      "id": 15,
+      "name": "Gilbert",
+      "price": 85,
+      "artist": "Jessica M. Maxwell",
+      "image": "/images/store/Gilbert.jpg",
+      "stripe": {}
     }
   ]
 }
