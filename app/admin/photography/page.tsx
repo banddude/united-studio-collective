@@ -265,7 +265,7 @@ export default function AdminPhotographyPage() {
       if (!updateResponse.ok) throw new Error("Failed to update photography file");
 
       setData(newData);
-      setSaveStatus({ type: "success", message: "Image uploaded and published! Site is rebuilding." });
+      setSaveStatus({ type: "success", message: "Image uploaded! Will appear on site in ~1-2 min after rebuild." });
     } catch (error: any) {
       setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
     } finally {
