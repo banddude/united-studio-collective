@@ -8,10 +8,13 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
 
 const heroData = photographyData.hero;
-const allPhotos = photographyData.images.map(img => ({
-  src: img.src,
-  alt: img.description
-}));
+// Filter out hero image from gallery if it matches
+const allPhotos = photographyData.images
+  .filter(img => !heroData?.enabled || img.src !== heroData.image)
+  .map(img => ({
+    src: img.src,
+    alt: img.description
+  }));
 
 export default function PhotographyPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -71,29 +74,16 @@ export default function PhotographyPage() {
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
         {/* Hero Section */}
-        {heroData?.enabled && (
-          <div className="relative w-full h-[50vh] md:h-[70vh] mb-8">
+        {heroData?.enabled && heroData.image && (
+          <div className="relative w-full h-[50vh] md:h-[70vh] mb-2">
             <Image
               src={heroData.image}
-              alt={heroData.title || "Photography"}
+              alt="Photography"
               fill
               className="object-cover"
               priority
               unoptimized
             />
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-              {heroData.title && (
-                <h1 className="text-4xl md:text-6xl font-light tracking-wide mb-4">
-                  {heroData.title}
-                </h1>
-              )}
-              {heroData.subtitle && (
-                <p className="text-lg md:text-xl font-light opacity-90 max-w-2xl">
-                  {heroData.subtitle}
-                </p>
-              )}
-            </div>
           </div>
         )}
 

@@ -534,10 +534,22 @@ export default function AdminPhotographyPage() {
                         {photo.description || <span className="italic text-gray-400">No description</span>}
                       </p>
                       <div className="flex items-center justify-between border-t pt-3">
-                        <button 
-                          onClick={() => { setEditingIndex(index); setEditForm(photo); }}
-                          className="text-xs font-semibold hover:underline"
-                        >EDIT CAPTION</button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => { setEditingIndex(index); setEditForm(photo); }}
+                            className="text-xs font-semibold hover:underline"
+                          >EDIT</button>
+                          <button
+                            onClick={() => {
+                              if (data?.hero) {
+                                setData({ ...data, hero: { ...data.hero, image: photo.src } });
+                              }
+                            }}
+                            className={`text-xs font-semibold hover:underline ${data?.hero?.image === photo.src ? 'text-yellow-600' : 'text-gray-500'}`}
+                          >
+                            {data?.hero?.image === photo.src ? '★ HERO' : 'SET HERO'}
+                          </button>
+                        </div>
                         <button onClick={() => deletePhoto(index)} className="text-red-500 hover:text-red-700">
                           <Trash2 className="w-4 h-4" />
                         </button>
