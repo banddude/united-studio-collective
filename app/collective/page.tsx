@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Youtube, ExternalLink } from "lucide-react";
+import { Instagram, Youtube, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import collectiveData from "../../content/collective.json";
+import transcriptText from "../../content/jessica-maxwell-interview-transcript.txt";
 
 interface Member {
   name: string;
@@ -18,7 +20,31 @@ interface Member {
   storeSlug?: string;
 }
 
+// Parse transcript into speaker segments
+function parseTranscript(text: string): { speaker: string; text: string }[] {
+  const lines = text.split('\n').filter(line => line.trim());
+  const segments: { speaker: string; text: string }[] = [];
+  let currentSpeaker = '';
+
+  for (const line of lines) {
+    // Skip the title line
+    if (line.includes('11:41 AM')) continue;
+
+    // Check if this is a speaker line (ends with colon)
+    if (line.match(/^[A-Za-z\s]+:$/)) {
+      currentSpeaker = line.replace(':', '').trim();
+    } else if (currentSpeaker) {
+      segments.push({ speaker: currentSpeaker, text: line });
+    }
+  }
+
+  return segments;
+}
+
 export default function CollectivePage() {
+  const [showTranscript, setShowTranscript] = useState(false);
+  const transcriptSegments = parseTranscript(transcriptText);
+
   return (
     <div className="min-h-screen bg-white">
       <Header variant="light" currentPage="The Collective" />
@@ -134,6 +160,56 @@ export default function CollectivePage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Interview Video Section */}
+                {member.youtube && (
+                  <div className="mt-10 pt-10 border-t border-gray-200">
+                    <h3 className="text-xl font-light text-black mb-6">Interview with {member.name.split(' ')[0]}</h3>
+
+                    {/* Video Embed */}
+                    <div className="relative w-full aspect-video bg-black mb-6">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${member.youtube}`}
+                        title={`Interview with ${member.name}`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+
+                    {/* Transcript Section */}
+                    <div className="bg-white border border-gray-200">
+                      <button
+                        onClick={() => setShowTranscript(!showTranscript)}
+                        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="text-sm font-medium text-gray-700">Interview Transcript</span>
+                        {showTranscript ? (
+                          <ChevronUp size={20} className="text-gray-500" />
+                        ) : (
+                          <ChevronDown size={20} className="text-gray-500" />
+                        )}
+                      </button>
+
+                      {showTranscript && (
+                        <div className="px-6 pb-6 max-h-[500px] overflow-y-auto">
+                          <div className="space-y-4">
+                            {transcriptSegments.map((segment, i) => (
+                              <div key={i}>
+                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                                  {segment.speaker}
+                                </p>
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                  {segment.text}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
