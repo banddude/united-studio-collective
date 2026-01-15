@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, Youtube, ExternalLink } from "lucide-react";
+import { Instagram, ExternalLink } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import collectiveData from "../../content/collective.json";
@@ -92,43 +92,28 @@ export default function CollectivePage() {
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
-                      {/* Interview Button (placeholder for future) */}
+                      {/* Interview Button - scrolls to video section */}
                       {member.youtube && (
                         <a
-                          href={member.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          href={`#interview-${index}`}
                           className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2 text-sm hover:bg-gray-700 transition-colors"
                         >
-                          Interview
+                          Watch Interview
                         </a>
                       )}
 
                       {/* Social Icons */}
-                      <div className="flex items-center gap-3">
-                        {member.instagram && (
-                          <a
-                            href={member.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-600 hover:text-black transition-colors"
-                            aria-label={`${member.name} Instagram`}
-                          >
-                            <Instagram size={22} />
-                          </a>
-                        )}
-                        {member.youtube && (
-                          <a
-                            href={member.youtube}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-red-600 hover:text-red-700 transition-colors"
-                            aria-label={`${member.name} YouTube`}
-                          >
-                            <Youtube size={24} />
-                          </a>
-                        )}
-                      </div>
+                      {member.instagram && (
+                        <a
+                          href={member.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-600 hover:text-black transition-colors"
+                          aria-label={`${member.name} Instagram`}
+                        >
+                          <Instagram size={22} />
+                        </a>
+                      )}
                     </div>
 
                     {/* View Collection Link */}
@@ -161,7 +146,7 @@ export default function CollectivePage() {
 
                 {/* Interview Video Section */}
                 {member.youtube && (
-                  <div className="mt-10 pt-10 border-t border-gray-200">
+                  <div id={`interview-${index}`} className="mt-10 pt-10 border-t border-gray-200 scroll-mt-32">
                     <h3 className="text-xl font-light text-black mb-6">Interview with {member.name.split(' ')[0]}</h3>
 
                     {/* Video Embed */}
