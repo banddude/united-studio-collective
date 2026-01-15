@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getProducts, getArtists, artistToSlug, getProductsByArtist, getFeaturedArtist } from "../lib/store-data";
+import { getProducts, getDisplayArtists, artistToSlug, getProductsByArtist, getFeaturedArtist } from "../lib/store-data";
 
 export default function StorePage() {
   const products = getProducts();
-  const artists = getArtists();
+  const artists = getDisplayArtists();
   const featuredArtist = getFeaturedArtist();
   const featuredProducts = getProductsByArtist(featuredArtist.name).slice(0, 4);
 
@@ -97,6 +97,12 @@ export default function StorePage() {
                   className="block text-sm hover:text-gray-300 transition-colors text-white"
                 >
                   All Products
+                </Link>
+                <Link
+                  href="/store/winter-spring-26"
+                  className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
+                >
+                  Winter Spring '26
                 </Link>
               </nav>
 

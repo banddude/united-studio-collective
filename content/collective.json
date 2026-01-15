@@ -6,8 +6,12 @@
     {
       "name": "Jessica M. Maxwell",
       "role": "Photographer",
-      "bio": "Jessica specializes in portrait and fashion photography, bringing a unique perspective to every shoot.",
-      "image": "/images/collective/JessicaNMaxwell.jpg"
+      "bio": "This is a test for what the bio will actually look like. I basically would like the bio to be a short paragraph containing 3-5 sentences about the artist. They can also maybe include a fun fact about themselves, if they so please.",
+      "image": "/images/collective/JessicaNMaxwell.jpg",
+      "website": "https://jessicammaxwell.com",
+      "instagram": "https://instagram.com/jessicammaxwell",
+      "youtube": "",
+      "storeSlug": "jessica-m-maxwell"
     }
   ]
 }

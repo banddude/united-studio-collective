@@ -73,6 +73,17 @@ export function getArtists(): string[] {
   return Array.from(artists);
 }
 
+// Get artists excluding the default artist (Evan)
+export function getDisplayArtists(): string[] {
+  const artists = new Set<string>();
+  store.products.forEach((p) => {
+    if (p.artist && p.artist !== store.defaultArtist) {
+      artists.add(p.artist);
+    }
+  });
+  return Array.from(artists);
+}
+
 export function getProductsByArtist(artist: string): Product[] {
   return store.products.filter((p) => {
     const productArtist = p.artist || store.defaultArtist;
