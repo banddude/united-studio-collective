@@ -2,12 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getProducts, getArtists, artistToSlug, getDefaultArtist } from "../lib/store-data";
+import { getProducts, getArtists, artistToSlug, getProductsByArtist } from "../lib/store-data";
+
+const featuredArtist = {
+  name: "Jessica M. Maxwell",
+  tagline: "Featured Artist",
+  description: "Explore Jessica's stunning collection of fine art photography, featuring intimate portraits and evocative compositions.",
+  image: "/images/collective/JessicaNMaxwell.jpg"
+};
 
 export default function StorePage() {
   const products = getProducts();
   const artists = getArtists();
-  const defaultArtist = getDefaultArtist();
+  const featuredProducts = getProductsByArtist(featuredArtist.name).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-white">
@@ -16,6 +23,56 @@ export default function StorePage() {
 
       {/* Main Content */}
       <div className="pt-[120px] md:pt-[150px] pb-16">
+        {/* Featured Artist Section */}
+        <section className="px-4 md:px-6 mb-12">
+          <div className="bg-gray-50 p-6 md:p-8">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
+              {/* Artist Photo */}
+              <div className="w-32 md:w-40 flex-shrink-0">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src={featuredArtist.image}
+                    alt={featuredArtist.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              </div>
+
+              {/* Artist Info */}
+              <div className="flex-1 text-center md:text-left">
+                <p className="text-sm uppercase tracking-wider text-gray-500 mb-1">{featuredArtist.tagline}</p>
+                <h2 className="text-2xl md:text-3xl font-light text-black mb-3">{featuredArtist.name}</h2>
+                <p className="text-gray-600 mb-4 max-w-xl">{featuredArtist.description}</p>
+                <Link
+                  href={`/store/artist/${artistToSlug(featuredArtist.name)}`}
+                  className="inline-block bg-black text-white px-5 py-2 text-sm hover:bg-gray-800 transition-colors"
+                >
+                  View Collection
+                </Link>
+              </div>
+
+              {/* Preview Products */}
+              <div className="hidden lg:grid grid-cols-2 gap-3 w-64 flex-shrink-0">
+                {featuredProducts.map((product) => (
+                  <Link key={product.id} href={`/store/product/${product.id}`} className="group">
+                    <div className="aspect-square bg-gray-100 relative overflow-hidden">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                        unoptimized
+                      />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Breadcrumb */}
         <div className="px-6 mb-2">
           <nav className="flex items-center text-sm text-gray-600">
@@ -23,13 +80,13 @@ export default function StorePage() {
               Home
             </Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-gray-900">Winter Spring &apos;26 Catalog</span>
+            <span className="text-gray-900">All Products</span>
           </nav>
         </div>
 
         {/* Page Title */}
         <div className="px-4 md:px-6 mb-6">
-          <h1 className="text-xl md:text-2xl font-medium text-black">Winter Spring &apos;26 Catalog</h1>
+          <h1 className="text-xl md:text-2xl font-medium text-black">All Products</h1>
         </div>
 
         {/* Content Area */}
