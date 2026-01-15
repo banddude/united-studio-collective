@@ -108,7 +108,7 @@ export default function ContactPage() {
           {/* Background Image - Griffith Observatory */}
           <div className="absolute inset-0">
             <Image
-              src="https://static.wixstatic.com/media/963954_d814f2bf9d9b42778edad54cad7816ce~mv2.jpg/v1/fill/w_387,h_476,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Sunset%20Observatory.jpg"
+              src="/images/contact/observatory.jpg"
               alt="Griffith Observatory at sunset"
               fill
               className="object-cover"

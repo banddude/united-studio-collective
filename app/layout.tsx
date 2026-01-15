@@ -75,7 +75,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://static.wixstatic.com" />
         <link rel="preconnect" href="https://img.youtube.com" />
         <link rel="preconnect" href="https://i.vimeocdn.com" />
         {/* Organization Schema */}

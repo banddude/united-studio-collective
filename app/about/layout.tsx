@@ -10,7 +10,7 @@ const evanSchema = {
   name: "Evan Rene",
   jobTitle: "Filmmaker & Director",
   description: "Filmmaker and director at United Studio Collective. Creates compelling thought-provoking stories through filmmaking and photography.",
-  image: "https://static.wixstatic.com/media/963954_3739d7b048214741981aa5eae48a6f96~mv2.jpg",
+  image: "https://unitedstudiocollective.com/images/about/963954_3739d7b048214741981aa5eae48a6f96~mv2.jpg",
   worksFor: {
     "@type": "Organization",
     name: "United Studio Collective",

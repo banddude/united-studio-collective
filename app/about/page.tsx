@@ -29,7 +29,7 @@ export default function About() {
         <section className="mb-14 flex justify-center">
           <div className="relative w-80 h-80">
             <Image
-              src="https://static.wixstatic.com/media/963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg/v1/fill/w_509,h_501,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/20210420-000070410011.jpg"
+              src="/images/about/963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg"
               alt="United Studio Collective Team"
               fill
               className="object-cover"
@@ -55,7 +55,7 @@ export default function About() {
             <div className="flex justify-center md:justify-end">
               <div className="relative w-64 h-72">
                 <Image
-                  src="https://static.wixstatic.com/media/963954_3739d7b048214741981aa5eae48a6f96~mv2.jpg/v1/fill/w_334,h_219,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG-7156_JPG.jpg"
+                  src="/images/about/963954_3739d7b048214741981aa5eae48a6f96~mv2.jpg"
                   alt="Evan Rene"
                   fill
                   className="object-cover"
@@ -84,7 +84,7 @@ export default function About() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://static.wixstatic.com/media/2e5994_36156a83ac494955b732c2f50cc4eb1e~mv2.webp"
+                src="/images/brands/delikate-rayne.webp"
                 alt="DELIKATE RAYNE"
                 className="h-40 w-auto object-contain"
               />
@@ -99,7 +99,7 @@ export default function About() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://static.wixstatic.com/media/2e5994_9cb24cbadb4d4e8a9626ce6fea72ba64~mv2.jpg"
+                src="/images/brands/simon.jpg"
                 alt="SIMON"
                 className="h-40 w-auto object-contain"
               />
@@ -114,7 +114,7 @@ export default function About() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://static.wixstatic.com/media/2e5994_2a6403cb4e214bc396346c4dfe2dd315~mv2.webp"
+                src="/images/brands/hellstar.webp"
                 alt="Hellstar"
                 className="h-40 w-auto object-contain"
               />

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/about`,
     images: [
       {
-        url: "https://static.wixstatic.com/media/963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg",
+        url: `${baseUrl}/images/about/963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg`,
         width: 509,
         height: 501,
         alt: "United Studio Collective Team",

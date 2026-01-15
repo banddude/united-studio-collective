@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: `${baseUrl}/filmmaking`,
     images: [
       {
-        url: "https://static.wixstatic.com/media/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg",
+        url: `${baseUrl}/images/videos/2e5994_a7ef47d637bb48b29c7d90e283a85118~mv2.jpg`,
         width: 1920,
         height: 1080,
         alt: "United Studio Collective 2024 Reel",

@@ -8,11 +8,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "static.wixstatic.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
         hostname: "img.youtube.com",
         pathname: "/**",
       },
