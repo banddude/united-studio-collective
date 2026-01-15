@@ -293,11 +293,33 @@ export default function CartPage() {
                     >
                       <option value="US">United States</option>
                       <option value="CA">Canada</option>
+                      <option value="MX">Mexico</option>
                       <option value="GB">United Kingdom</option>
-                      <option value="AU">Australia</option>
+                      <option value="IE">Ireland</option>
                       <option value="DE">Germany</option>
                       <option value="FR">France</option>
+                      <option value="IT">Italy</option>
+                      <option value="ES">Spain</option>
+                      <option value="NL">Netherlands</option>
+                      <option value="BE">Belgium</option>
+                      <option value="AT">Austria</option>
+                      <option value="CH">Switzerland</option>
+                      <option value="SE">Sweden</option>
+                      <option value="NO">Norway</option>
+                      <option value="DK">Denmark</option>
+                      <option value="FI">Finland</option>
+                      <option value="PL">Poland</option>
+                      <option value="PT">Portugal</option>
+                      <option value="AU">Australia</option>
+                      <option value="NZ">New Zealand</option>
                       <option value="JP">Japan</option>
+                      <option value="KR">South Korea</option>
+                      <option value="SG">Singapore</option>
+                      <option value="HK">Hong Kong</option>
+                      <option value="IL">Israel</option>
+                      <option value="BR">Brazil</option>
+                      <option value="AR">Argentina</option>
+                      <option value="CL">Chile</option>
                     </select>
                     <div className="relative flex-1">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

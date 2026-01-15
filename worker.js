@@ -178,13 +178,14 @@ export default {
 
         // Checkout configuration
         body.append("mode", "payment");
-        body.append("shipping_address_collection[allowed_countries][0]", "US");
-        body.append("shipping_address_collection[allowed_countries][1]", "CA");
-        body.append("shipping_address_collection[allowed_countries][2]", "GB");
-        body.append("shipping_address_collection[allowed_countries][3]", "AU");
-        body.append("shipping_address_collection[allowed_countries][4]", "DE");
-        body.append("shipping_address_collection[allowed_countries][5]", "FR");
-        body.append("shipping_address_collection[allowed_countries][6]", "JP");
+        const allowedCountries = [
+          "US", "CA", "MX", "GB", "IE", "DE", "FR", "IT", "ES", "NL",
+          "BE", "AT", "CH", "SE", "NO", "DK", "FI", "PL", "PT", "AU",
+          "NZ", "JP", "KR", "SG", "HK", "IL", "BR", "AR", "CL"
+        ];
+        allowedCountries.forEach((code, i) => {
+          body.append(`shipping_address_collection[allowed_countries][${i}]`, code);
+        });
         body.append("success_url", "https://unitedstudiocollective.com/store?success=true");
         body.append("cancel_url", "https://unitedstudiocollective.com/cart?canceled=true");
 
