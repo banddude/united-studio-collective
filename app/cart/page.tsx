@@ -13,17 +13,19 @@ import { store, getProduct } from "../lib/store-data";
 const WORKER_URL = "https://usc-checkout.mikejshaffer.workers.dev";
 
 interface ShippingRate {
+  id: string;
   provider: string;
-  servicelevel_name: string;
-  amount: number;
-  estimated_days: number;
-  object_id: string;
+  service: string;
+  price: number;
+  days: number;
+  description: string;
 }
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
   const [loading, setLoading] = useState(false);
   const [zipCode, setZipCode] = useState("");
+  const [country, setCountry] = useState("US");
   const [loadingRates, setLoadingRates] = useState(false);
   const [shippingRates, setShippingRates] = useState<ShippingRate[] | null>(null);
   const [selectedRate, setSelectedRate] = useState<ShippingRate | null>(null);
@@ -59,36 +61,35 @@ export default function CartPage() {
       return;
     }
 
-    // Single item fallback (if Worker isn't set up or fails, though we prefer Worker for all)
-    if (items.length === 1 && !WORKER_URL) {
-      const item = items[0];
-      const link = getStripeLink(item.productId, item.frameOption, item.frameColor || undefined);
-      if (link) {
-        window.location.href = link;
-        return;
-      }
+    if (!selectedRate) {
+      alert("Please select a shipping method.");
+      return;
     }
 
-    // Multi-item checkout via Cloudflare Worker
     setLoading(true);
     try {
       const checkoutItems = items.map(item => {
         const priceId = getStripePriceId(item.productId, item.frameOption, item.frameColor || undefined);
         if (!priceId) throw new Error(`Price ID missing for ${item.name}`);
         return {
-          price: priceId,
+          priceId: priceId,
           quantity: item.quantity
         };
       });
 
-      const response = await fetch(WORKER_URL, {
+      const response = await fetch(`${WORKER_URL}/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: checkoutItems }),
+        body: JSON.stringify({
+          items: checkoutItems,
+          shippingCost: selectedRate.price,
+          shippingService: selectedRate.service,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to start checkout");
+        const error = await response.json();
+        throw new Error(error.error || "Failed to start checkout");
       }
 
       const { url } = await response.json();
@@ -98,9 +99,9 @@ export default function CartPage() {
         throw new Error("No checkout URL returned");
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Checkout failed. Please try checking out items individually.");
+      alert(error.message || "Checkout failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -116,8 +117,8 @@ export default function CartPage() {
   };
 
   const fetchShippingRates = async () => {
-    if (!zipCode || zipCode.length < 5) {
-      setRatesError("Please enter a valid zip code");
+    if (!zipCode || zipCode.length < 3) {
+      setRatesError("Please enter a valid postal code");
       return;
     }
 
@@ -139,6 +140,7 @@ export default function CartPage() {
         body: JSON.stringify({
           items: checkoutItems,
           zipCode: zipCode,
+          country: country,
         }),
       });
 
@@ -156,7 +158,7 @@ export default function CartPage() {
     }
   };
 
-  const finalTotal = totalPrice + (selectedRate?.amount || 0);
+  const finalTotal = totalPrice + (selectedRate?.price || 0);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -273,28 +275,43 @@ export default function CartPage() {
 
               {/* Cart Summary */}
               <div className="border-t border-gray-200 pt-6">
-                {/* Zip Code Input */}
+                {/* Shipping Calculator */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-black mb-2">
-                    Enter your zip code to calculate shipping
+                    Calculate shipping
                   </label>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <select
+                      value={country}
+                      onChange={(e) => {
+                        setCountry(e.target.value);
+                        setShippingRates(null);
+                        setSelectedRate(null);
+                      }}
+                      className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none bg-white"
+                    >
+                      <option value="US">United States</option>
+                      <option value="CA">Canada</option>
+                      <option value="GB">United Kingdom</option>
+                      <option value="AU">Australia</option>
+                      <option value="DE">Germany</option>
+                      <option value="FR">France</option>
+                      <option value="JP">Japan</option>
+                    </select>
                     <div className="relative flex-1">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="text"
-                        inputMode="numeric"
-                        maxLength={5}
                         value={zipCode}
-                        onChange={(e) => setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
-                        placeholder="90210"
+                        onChange={(e) => setZipCode(e.target.value.slice(0, 10))}
+                        placeholder={country === "US" ? "ZIP code" : "Postal code"}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none"
                         onKeyPress={(e) => e.key === "Enter" && fetchShippingRates()}
                       />
                     </div>
                     <button
                       onClick={fetchShippingRates}
-                      disabled={loadingRates || zipCode.length < 5}
+                      disabled={loadingRates || zipCode.length < 3}
                       className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm whitespace-nowrap"
                     >
                       {loadingRates ? (
@@ -319,26 +336,26 @@ export default function CartPage() {
                     <div className="space-y-2">
                       {shippingRates.map((rate) => (
                         <button
-                          key={rate.object_id}
+                          key={rate.id}
                           onClick={() => setSelectedRate(rate)}
                           className={`w-full flex items-center justify-between p-4 border rounded-lg transition-colors ${
-                            selectedRate?.object_id === rate.object_id
+                            selectedRate?.id === rate.id
                               ? "border-black bg-gray-50"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                              selectedRate?.object_id === rate.object_id ? "border-black bg-black" : "border-gray-300"
+                              selectedRate?.id === rate.id ? "border-black bg-black" : "border-gray-300"
                             }`}>
-                              {selectedRate?.object_id === rate.object_id && <Check className="w-3 h-3 text-white" />}
+                              {selectedRate?.id === rate.id && <Check className="w-3 h-3 text-white" />}
                             </div>
                             <div className="text-left">
-                              <p className="text-sm font-medium text-black">{rate.servicelevel_name}</p>
-                              <p className="text-xs text-gray-500">{rate.provider} • {rate.estimated_days ? `${rate.estimated_days} business days` : "5-7 business days"}</p>
+                              <p className="text-sm font-medium text-black">{rate.service}</p>
+                              <p className="text-xs text-gray-500">{rate.provider} • {rate.days ? `${rate.days} business days` : "5-7 business days"}</p>
                             </div>
                           </div>
-                          <p className="text-sm font-medium text-black">${rate.amount.toFixed(2)}</p>
+                          <p className="text-sm font-medium text-black">${rate.price.toFixed(2)}</p>
                         </button>
                       ))}
                     </div>
@@ -356,7 +373,7 @@ export default function CartPage() {
                   {selectedRate && (
                     <div className="flex justify-between items-center">
                       <span className="text-black">Shipping</span>
-                      <span className="font-medium text-black">${selectedRate.amount.toFixed(2)}</span>
+                      <span className="font-medium text-black">${selectedRate.price.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between items-center pt-3 border-t border-gray-200">
@@ -365,9 +382,9 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {!selectedRate && zipCode.length === 0 && (
+                {!selectedRate && !shippingRates && (
                   <p className="text-sm text-gray-500 mb-6">
-                    Enter your zip code above to see shipping rates
+                    Enter your postal code above to see shipping rates
                   </p>
                 )}
 
