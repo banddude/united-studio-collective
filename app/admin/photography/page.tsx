@@ -372,79 +372,13 @@ export default function AdminPhotographyPage() {
       )}
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Hero Section Editor */}
-        {data?.hero && (
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">Hero Section</h2>
-              <button
-                onClick={() => updateHero("enabled", !data.hero!.enabled)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
-                  data.hero.enabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
-                }`}
-              >
-                {data.hero.enabled ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
-                {data.hero.enabled ? "Enabled" : "Disabled"}
-              </button>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3">
-                  {data.hero.image && (
-                    <Image src={data.hero.image} alt="Hero preview" fill className="object-cover" unoptimized />
-                  )}
-                  {uploading && uploadTarget === "hero" && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <Loader2 className="w-8 h-8 text-white animate-spin" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg cursor-pointer hover:bg-gray-800">
-                    <Upload className="w-4 h-4" />
-                    Upload Image
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => handleFileSelect(e, "hero")}
-                      disabled={uploading}
-                    />
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  value={data.hero.image}
-                  onChange={(e) => updateHero("image", e.target.value)}
-                  placeholder="Or paste image URL..."
-                  className="w-full mt-2 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-black outline-none"
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Title</label>
-                  <input
-                    type="text"
-                    value={data.hero.title}
-                    onChange={(e) => updateHero("title", e.target.value)}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Subtitle</label>
-                  <textarea
-                    value={data.hero.subtitle}
-                    onChange={(e) => updateHero("subtitle", e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Info Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p className="text-sm text-blue-800">
+            <Crown className="w-4 h-4 inline mr-1" />
+            <strong>First photo = Hero.</strong> Drag photos to reorder. The first one displays as the full-width hero image.
+          </p>
+        </div>
 
         {/* Add Photo Section */}
         <div className="mb-6 flex gap-3">
@@ -505,6 +439,11 @@ export default function AdminPhotographyPage() {
                   <div className="absolute top-2 left-2 p-1 bg-white/80 backdrop-blur rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
                     <GripVertical className="w-4 h-4 text-gray-600" />
                   </div>
+                  {index === 0 && (
+                    <div className="absolute top-2 right-2 p-1.5 bg-yellow-400 rounded-md">
+                      <Crown className="w-4 h-4 text-yellow-900" />
+                    </div>
+                  )}
                 </div>
                 <div className="p-4">
                   {editingIndex === index ? (
@@ -534,22 +473,10 @@ export default function AdminPhotographyPage() {
                         {photo.description || <span className="italic text-gray-400">No description</span>}
                       </p>
                       <div className="flex items-center justify-between border-t pt-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => { setEditingIndex(index); setEditForm(photo); }}
-                            className="text-xs font-semibold hover:underline"
-                          >EDIT</button>
-                          <button
-                            onClick={() => {
-                              if (data?.hero) {
-                                setData({ ...data, hero: { ...data.hero, image: photo.src } });
-                              }
-                            }}
-                            className={`text-xs font-semibold hover:underline ${data?.hero?.image === photo.src ? 'text-yellow-600' : 'text-gray-500'}`}
-                          >
-                            {data?.hero?.image === photo.src ? '★ HERO' : 'SET HERO'}
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => { setEditingIndex(index); setEditForm(photo); }}
+                          className="text-xs font-semibold hover:underline"
+                        >EDIT CAPTION</button>
                         <button onClick={() => deletePhoto(index)} className="text-red-500 hover:text-red-700">
                           <Trash2 className="w-4 h-4" />
                         </button>

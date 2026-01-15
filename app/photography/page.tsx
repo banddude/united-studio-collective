@@ -7,14 +7,12 @@ import Footer from "../components/Footer";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
 
-const heroData = photographyData.hero;
-// Filter out hero image from gallery if it matches
-const allPhotos = photographyData.images
-  .filter(img => !heroData?.enabled || img.src !== heroData.image)
-  .map(img => ({
-    src: img.src,
-    alt: img.description
-  }));
+// First image is always the hero
+const heroImage = photographyData.images[0];
+const galleryPhotos = photographyData.images.slice(1).map(img => ({
+  src: img.src,
+  alt: img.description
+}));
 
 export default function PhotographyPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -42,14 +40,14 @@ export default function PhotographyPage() {
   const goToPrevious = useCallback(() => {
     if (selectedImageIndex === null) return;
     setSelectedImageIndex((prev) =>
-      prev === 0 ? allPhotos.length - 1 : (prev as number) - 1
+      prev === 0 ? galleryPhotos.length - 1 : (prev as number) - 1
     );
   }, [selectedImageIndex]);
 
   const goToNext = useCallback(() => {
     if (selectedImageIndex === null) return;
     setSelectedImageIndex((prev) =>
-      prev === allPhotos.length - 1 ? 0 : (prev as number) + 1
+      prev === galleryPhotos.length - 1 ? 0 : (prev as number) + 1
     );
   }, [selectedImageIndex]);
 
@@ -73,12 +71,12 @@ export default function PhotographyPage() {
 
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
-        {/* Hero Section */}
-        {heroData?.enabled && heroData.image && (
+        {/* Hero Section - First image */}
+        {heroImage && (
           <div className="relative w-full h-[50vh] md:h-[70vh] mb-2">
             <Image
-              src={heroData.image}
-              alt="Photography"
+              src={heroImage.src}
+              alt={heroImage.description || "Photography"}
               fill
               className="object-cover"
               priority
@@ -89,7 +87,7 @@ export default function PhotographyPage() {
 
         {/* Photo Gallery - 2 columns on mobile, 3 on desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[2px] sm:gap-[5px] bg-white">
-          {allPhotos.map((photo, index) => (
+          {galleryPhotos.map((photo, index) => (
             <div
               key={index}
               className="relative aspect-square overflow-hidden cursor-pointer group"
@@ -143,8 +141,8 @@ export default function PhotographyPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={allPhotos[selectedImageIndex].src}
-              alt={allPhotos[selectedImageIndex].alt}
+              src={galleryPhotos[selectedImageIndex].src}
+              alt={galleryPhotos[selectedImageIndex].alt}
               fill
               className="object-contain"
               sizes="90vw"
@@ -166,7 +164,7 @@ export default function PhotographyPage() {
 
           {/* Image Counter */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-sm">
-            {selectedImageIndex + 1} / {allPhotos.length}
+            {selectedImageIndex + 1} / {galleryPhotos.length}
           </div>
         </div>
       )}
