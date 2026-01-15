@@ -167,10 +167,10 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {adminModules.map((module) => (
-            <Link 
+            <Link
               key={module.title}
-              href={module.disabled ? "#" : module.href}
-              className={`group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md hover:border-gray-200 flex items-start gap-5 ${module.disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
+              href={module.href}
+              className="group bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md hover:border-gray-200 flex items-start gap-5"
             >
               <div className={`${module.color} p-4 rounded-xl text-white shadow-lg shadow-${module.color.split('-')[1]}-100`}>
                 <module.icon className="w-6 h-6" />
@@ -178,16 +178,11 @@ export default function AdminDashboard() {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="text-xl font-bold text-gray-900">{module.title}</h3>
-                  {!module.disabled && <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all" />}
+                  <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all" />
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed">
                   {module.description}
                 </p>
-                {module.disabled && (
-                  <span className="inline-block mt-3 text-[10px] font-bold tracking-wider uppercase bg-gray-100 text-gray-500 px-2 py-1 rounded">
-                    Coming Soon
-                  </span>
-                )}
               </div>
             </Link>
           ))}
