@@ -22,31 +22,45 @@ export default function CollectivePage() {
             {collectiveData.description}
           </p>
 
-          {/* Team Members Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collectiveData.members.map((member, index) => (
-              <div key={index} className="group">
-                {/* Photo */}
-                <div className="relative aspect-[3/4] mb-4 overflow-hidden bg-gray-100">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    unoptimized
-                  />
-                </div>
+          {/* Team Members - Alternating 2-column layout */}
+          <div className="space-y-16 md:space-y-24">
+            {collectiveData.members.map((member, index) => {
+              const isEven = index % 2 === 0;
+              return (
+                <div
+                  key={index}
+                  className={`flex flex-col md:flex-row gap-8 md:gap-12 items-center ${
+                    isEven ? '' : 'md:flex-row-reverse'
+                  }`}
+                >
+                  {/* Photo */}
+                  <div className="w-full md:w-1/2">
+                    <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+                  </div>
 
-                {/* Info */}
-                <h3 className="text-lg font-medium text-black mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-sm text-gray-500 mb-2">{member.role}</p>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {member.bio}
-                </p>
-              </div>
-            ))}
+                  {/* Info */}
+                  <div className="w-full md:w-1/2 text-center md:text-left">
+                    <h3 className="text-2xl md:text-3xl font-light text-black mb-2">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm uppercase tracking-wider text-gray-500 mb-6">
+                      {member.role}
+                    </p>
+                    <p className="text-gray-600 leading-relaxed">
+                      {member.bio}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </main>
