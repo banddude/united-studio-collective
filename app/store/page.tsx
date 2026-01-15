@@ -2,18 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getProducts, getArtists, artistToSlug, getProductsByArtist } from "../lib/store-data";
-
-const featuredArtist = {
-  name: "Jessica M. Maxwell",
-  tagline: "Featured Artist",
-  description: "Explore Jessica's stunning collection of fine art photography, featuring intimate portraits and evocative compositions.",
-  image: "/images/collective/JessicaNMaxwell.jpg"
-};
+import { getProducts, getArtists, artistToSlug, getProductsByArtist, getFeaturedArtist } from "../lib/store-data";
 
 export default function StorePage() {
   const products = getProducts();
   const artists = getArtists();
+  const featuredArtist = getFeaturedArtist();
   const featuredProducts = getProductsByArtist(featuredArtist.name).slice(0, 4);
 
   return (

@@ -19,11 +19,19 @@ export interface Product {
   };
 }
 
+export interface FeaturedArtist {
+  name: string;
+  tagline: string;
+  description: string;
+  image: string;
+}
+
 export interface StoreConfig {
   stripeEnabled: boolean;
   defaultArtist: string;
   defaultSize: string;
   defaultDescription: string;
+  featuredArtist: FeaturedArtist;
   products: Product[];
 }
 
@@ -51,6 +59,10 @@ export function getDefaultSize(): string {
 
 export function getDefaultDescription(): string {
   return store.defaultDescription;
+}
+
+export function getFeaturedArtist(): FeaturedArtist {
+  return store.featuredArtist;
 }
 
 export function getArtists(): string[] {

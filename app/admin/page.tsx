@@ -13,7 +13,8 @@ import {
   CreditCard,
   Truck,
   ExternalLink,
-  Users
+  Users,
+  Clapperboard
 } from "lucide-react";
 import { useAdminAuth } from "./useAdminAuth";
 
@@ -102,10 +103,17 @@ export default function AdminDashboard() {
     },
     {
       title: "Store",
-      description: "Manage products, prices, and Stripe payment links.",
+      description: "Manage featured artist and store settings.",
       icon: ShoppingBag,
-      href: "/store", // Placeholder for now
+      href: "/admin/store",
       color: "bg-green-500",
+    },
+    {
+      title: "Services",
+      description: "Manage production services page content.",
+      icon: Clapperboard,
+      href: "#",
+      color: "bg-pink-500",
       disabled: true
     }
   ];

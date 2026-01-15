@@ -3,6 +3,12 @@
   "defaultArtist": "Evan Rene",
   "defaultSize": "16x20",
   "defaultDescription": "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
+  "featuredArtist": {
+    "name": "Jessica M. Maxwell",
+    "tagline": "Featured Artist",
+    "description": "Explore Jessica's stunning collection of fine art photography, featuring intimate portraits and evocative compositions.",
+    "image": "/images/collective/JessicaNMaxwell.jpg"
+  },
   "products": [
     {
       "id": 1,
