@@ -3,6 +3,12 @@
   "title": "Photography",
   "layout": "grid",
   "has_load_more": true,
+  "hero": {
+    "enabled": true,
+    "image": "https://static.wixstatic.com/media/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",
+    "title": "Photography",
+    "subtitle": "Capturing moments that tell stories"
+  },
   "images": [
     {
       "src": "https://static.wixstatic.com/media/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",

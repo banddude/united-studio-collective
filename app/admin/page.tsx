@@ -2,14 +2,17 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { 
-  Video, 
-  Camera, 
-  ShoppingBag, 
-  Settings, 
-  LogOut, 
+import {
+  Video,
+  Camera,
+  ShoppingBag,
+  Settings,
+  LogOut,
   ChevronRight,
-  LayoutDashboard
+  LayoutDashboard,
+  CreditCard,
+  Truck,
+  ExternalLink
 } from "lucide-react";
 import { useAdminAuth } from "./useAdminAuth";
 
@@ -151,7 +154,48 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* External Services */}
         <div className="mt-12 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <ExternalLink className="w-5 h-5 text-gray-400" />
+            <h3 className="font-bold text-gray-900">External Services</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a
+              href="https://dashboard.stripe.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group"
+            >
+              <div className="bg-purple-500 p-3 rounded-lg text-white">
+                <CreditCard className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">Stripe Dashboard</p>
+                <p className="text-sm text-gray-500">Payments, orders, refunds</p>
+              </div>
+              <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-gray-600" />
+            </a>
+            <a
+              href="https://apps.goshippo.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group"
+            >
+              <div className="bg-blue-500 p-3 rounded-lg text-white">
+                <Truck className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">Shippo Dashboard</p>
+                <p className="text-sm text-gray-500">Shipping rates, labels</p>
+              </div>
+              <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-gray-600" />
+            </a>
+          </div>
+        </div>
+
+        {/* System Status */}
+        <div className="mt-6 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Settings className="w-5 h-5 text-gray-400" />
             <h3 className="font-bold text-gray-900">System Status</h3>

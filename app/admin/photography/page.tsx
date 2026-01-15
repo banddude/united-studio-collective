@@ -17,6 +17,9 @@ import {
   ChevronLeft,
   Pencil,
   Image as LucideImage,
+  Upload,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
 
@@ -25,11 +28,19 @@ interface PhotoImage {
   description: string;
 }
 
+interface HeroData {
+  enabled: boolean;
+  image: string;
+  title: string;
+  subtitle: string;
+}
+
 interface PhotographyData {
   page: string;
   title: string;
   layout: string;
   has_load_more: boolean;
+  hero?: HeroData;
   images: PhotoImage[];
 }
 
@@ -48,6 +59,8 @@ export default function AdminPhotographyPage() {
   const [editForm, setEditForm] = useState<Partial<PhotoImage>>({});
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadTarget, setUploadTarget] = useState<"hero" | "gallery" | null>(null);
 
   useEffect(() => {
     if (isLoaded && isAuthenticated) {
@@ -175,6 +188,90 @@ export default function AdminPhotographyPage() {
     setShowAddForm(false);
   };
 
+  const uploadImageToGitHub = async (file: File, target: "hero" | "gallery") => {
+    setUploading(true);
+    setUploadTarget(target);
+    setSaveStatus({ type: null, message: "" });
+
+    try {
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const result = reader.result as string;
+          const base64 = result.split(",")[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+      });
+      reader.readAsDataURL(file);
+      const base64Content = await base64Promise;
+
+      const timestamp = Date.now();
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+      const filePath = `public/images/photography/${timestamp}_${safeName}`;
+
+      const uploadResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            message: `Upload photo: ${safeName}`,
+            content: base64Content,
+            branch: config.branch,
+          }),
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        const err = await uploadResponse.json();
+        throw new Error(err.message || "Failed to upload image");
+      }
+
+      const uploadResult = await uploadResponse.json();
+      const imageUrl = `/images/photography/${timestamp}_${safeName}`;
+
+      if (target === "hero") {
+        setData({
+          ...data!,
+          hero: { ...data!.hero!, image: imageUrl },
+        });
+      } else {
+        const newPhoto: PhotoImage = {
+          src: imageUrl,
+          description: "New photograph",
+        };
+        setData({ ...data!, images: [newPhoto, ...data!.images] });
+      }
+
+      setSaveStatus({ type: "success", message: "Image uploaded! Click Publish to save changes." });
+    } catch (error: any) {
+      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } finally {
+      setUploading(false);
+      setUploadTarget(null);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, target: "hero" | "gallery") => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadImageToGitHub(file, target);
+    }
+    e.target.value = "";
+  };
+
+  const updateHero = (field: keyof HeroData, value: string | boolean) => {
+    if (!data) return;
+    setData({
+      ...data,
+      hero: { ...data.hero!, [field]: value },
+    });
+  };
+
   if (!isLoaded) return null;
   if (!isAuthenticated) return null; // Handled by dash redirection usually
 
@@ -209,26 +306,117 @@ export default function AdminPhotographyPage() {
       )}
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-6">
+        {/* Hero Section Editor */}
+        {data?.hero && (
+          <div className="bg-white rounded-lg shadow p-6 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">Hero Section</h2>
+              <button
+                onClick={() => updateHero("enabled", !data.hero!.enabled)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
+                  data.hero.enabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {data.hero.enabled ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                {data.hero.enabled ? "Enabled" : "Disabled"}
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3">
+                  {data.hero.image && (
+                    <Image src={data.hero.image} alt="Hero preview" fill className="object-cover" unoptimized />
+                  )}
+                  {uploading && uploadTarget === "hero" && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <Loader2 className="w-8 h-8 text-white animate-spin" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <label className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-black text-white rounded-lg cursor-pointer hover:bg-gray-800">
+                    <Upload className="w-4 h-4" />
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleFileSelect(e, "hero")}
+                      disabled={uploading}
+                    />
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  value={data.hero.image}
+                  onChange={(e) => updateHero("image", e.target.value)}
+                  placeholder="Or paste image URL..."
+                  className="w-full mt-2 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-black outline-none"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={data.hero.title}
+                    onChange={(e) => updateHero("title", e.target.value)}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Subtitle</label>
+                  <textarea
+                    value={data.hero.subtitle}
+                    onChange={(e) => updateHero("subtitle", e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Add Photo Section */}
+        <div className="mb-6 flex gap-3">
+          <label className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-800">
+            <Upload className="w-4 h-4" />
+            {uploading && uploadTarget === "gallery" ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              "Upload Photo"
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleFileSelect(e, "gallery")}
+              disabled={uploading}
+            />
+          </label>
+
           {!showAddForm ? (
             <button onClick={() => setShowAddForm(true)} className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg border hover:bg-gray-50">
               <Plus className="w-4 h-4" />
-              Add Photo
+              Add by URL
             </button>
           ) : (
-            <div className="bg-white rounded-lg shadow p-4">
-              <h3 className="font-semibold mb-3">Add New Photograph URL</h3>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newPhotoUrl}
-                  onChange={(e) => setNewPhotoUrl(e.target.value)}
-                  placeholder="https://static.wixstatic.com/media/..."
-                  className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
-                />
-                <button onClick={addPhoto} className="bg-black text-white px-4 py-2 rounded-lg">Add</button>
-                <button onClick={() => setShowAddForm(false)} className="px-4 py-2 rounded-lg hover:bg-gray-100">Cancel</button>
-              </div>
+            <div className="flex-1 flex gap-2">
+              <input
+                type="text"
+                value={newPhotoUrl}
+                onChange={(e) => setNewPhotoUrl(e.target.value)}
+                placeholder="https://..."
+                className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
+              />
+              <button onClick={addPhoto} className="bg-black text-white px-4 py-2 rounded-lg">Add</button>
+              <button onClick={() => setShowAddForm(false)} className="px-4 py-2 rounded-lg hover:bg-gray-100">Cancel</button>
             </div>
           )}
         </div>

@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
 
+const heroData = photographyData.hero;
 const allPhotos = photographyData.images.map(img => ({
   src: img.src,
   alt: img.description
@@ -69,6 +70,33 @@ export default function PhotographyPage() {
 
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
+        {/* Hero Section */}
+        {heroData?.enabled && (
+          <div className="relative w-full h-[50vh] md:h-[70vh] mb-8">
+            <Image
+              src={heroData.image}
+              alt={heroData.title || "Photography"}
+              fill
+              className="object-cover"
+              priority
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
+              {heroData.title && (
+                <h1 className="text-4xl md:text-6xl font-light tracking-wide mb-4">
+                  {heroData.title}
+                </h1>
+              )}
+              {heroData.subtitle && (
+                <p className="text-lg md:text-xl font-light opacity-90 max-w-2xl">
+                  {heroData.subtitle}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Photo Gallery - 2 columns on mobile, 3 on desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[2px] sm:gap-[5px] bg-white">
           {allPhotos.map((photo, index) => (
