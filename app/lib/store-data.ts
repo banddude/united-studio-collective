@@ -52,3 +52,27 @@ export function getDefaultSize(): string {
 export function getDefaultDescription(): string {
   return store.defaultDescription;
 }
+
+export function getArtists(): string[] {
+  const artists = new Set<string>();
+  store.products.forEach((p) => {
+    artists.add(p.artist || store.defaultArtist);
+  });
+  return Array.from(artists);
+}
+
+export function getProductsByArtist(artist: string): Product[] {
+  return store.products.filter((p) => {
+    const productArtist = p.artist || store.defaultArtist;
+    return productArtist === artist;
+  });
+}
+
+export function artistToSlug(artist: string): string {
+  return artist.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+export function slugToArtist(slug: string): string | undefined {
+  const artists = getArtists();
+  return artists.find(a => artistToSlug(a) === slug);
+}

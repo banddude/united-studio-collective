@@ -1,11 +1,36 @@
 import Link from "next/link";
 import Image from "next/image";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import { getProducts, getArtists, artistToSlug, getDefaultArtist } from "../lib/store-data";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
+import {
+  getProductsByArtist,
+  getArtists,
+  artistToSlug,
+  slugToArtist,
+  getDefaultArtist
+} from "../../../lib/store-data";
+import { notFound } from "next/navigation";
 
-export default function StorePage() {
-  const products = getProducts();
+export function generateStaticParams() {
+  const artists = getArtists();
+  return artists.map((artist) => ({
+    slug: artistToSlug(artist),
+  }));
+}
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function ArtistStorePage({ params }: PageProps) {
+  const { slug } = await params;
+  const artist = slugToArtist(slug);
+
+  if (!artist) {
+    notFound();
+  }
+
+  const products = getProductsByArtist(artist);
   const artists = getArtists();
   const defaultArtist = getDefaultArtist();
 
@@ -23,13 +48,17 @@ export default function StorePage() {
               Home
             </Link>
             <span className="mx-2">&gt;</span>
-            <span className="text-gray-900">Winter Spring &apos;26 Catalog</span>
+            <Link href="/store" className="hover:text-gray-900">
+              Store
+            </Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-gray-900">{artist}</span>
           </nav>
         </div>
 
         {/* Page Title */}
         <div className="px-4 md:px-6 mb-6">
-          <h1 className="text-xl md:text-2xl font-medium text-black">Winter Spring &apos;26 Catalog</h1>
+          <h1 className="text-xl md:text-2xl font-medium text-black">{artist}</h1>
         </div>
 
         {/* Content Area */}
@@ -43,7 +72,7 @@ export default function StorePage() {
               <nav className="space-y-3">
                 <Link
                   href="/store"
-                  className="block text-sm hover:text-gray-300 transition-colors text-white"
+                  className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
                 >
                   All Products
                 </Link>
@@ -53,13 +82,15 @@ export default function StorePage() {
                 Artists
               </h2>
               <nav className="space-y-3">
-                {artists.map((artist) => (
+                {artists.map((a) => (
                   <Link
-                    key={artist}
-                    href={`/store/artist/${artistToSlug(artist)}`}
-                    className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
+                    key={a}
+                    href={`/store/artist/${artistToSlug(a)}`}
+                    className={`block text-sm hover:text-gray-300 transition-colors ${
+                      a === artist ? "text-white" : "text-gray-300"
+                    }`}
                   >
-                    {artist}
+                    {a}
                   </Link>
                 ))}
               </nav>

@@ -1,0 +1,48 @@
+{
+  "page": "services",
+  "title": "Production Services",
+  "subtitle": "From concept to completion, we bring your vision to life",
+  "services": [
+    {
+      "id": "fashion-films",
+      "title": "Fashion Films",
+      "description": "Cinematic storytelling that elevates your brand. We create visually stunning fashion films that capture the essence of your collection, blending artistry with commercial appeal.",
+      "features": ["Concept Development", "Art Direction", "Full Production", "Color Grading"],
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+    },
+    {
+      "id": "music-videos",
+      "title": "Music Videos",
+      "description": "Visual narratives that amplify your sound. Our team crafts compelling music videos that resonate with audiences and bring your artistic vision to the screen.",
+      "features": ["Creative Treatment", "Location Scouting", "Performance Capture", "Visual Effects"],
+      "image": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80"
+    },
+    {
+      "id": "brand-content",
+      "title": "Brand Content",
+      "description": "Content that connects and converts. From social media campaigns to brand documentaries, we produce engaging content that tells your story authentically.",
+      "features": ["Brand Strategy", "Social Content", "Product Videos", "Behind the Scenes"],
+      "image": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80"
+    },
+    {
+      "id": "photography",
+      "title": "Photography",
+      "description": "Striking imagery for every platform. Our photographers specialize in editorial, portrait, and product photography that captures attention and drives engagement.",
+      "features": ["Editorial Shoots", "Lookbooks", "Product Photography", "Event Coverage"],
+      "image": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&q=80"
+    },
+    {
+      "id": "post-production",
+      "title": "Post Production",
+      "description": "Where the magic comes together. Our post-production team delivers polished final products with expert editing, color grading, and sound design.",
+      "features": ["Video Editing", "Color Correction", "Sound Design", "Motion Graphics"],
+      "image": "https://images.unsplash.com/photo-1535016120720-40c646be5580?w=800&q=80"
+    }
+  ],
+  "cta": {
+    "title": "Ready to Create Something Amazing?",
+    "description": "Let's discuss your next project and bring your vision to life.",
+    "buttonText": "Get in Touch",
+    "buttonLink": "/contact"
+  }
+}

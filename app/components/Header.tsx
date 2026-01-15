@@ -34,6 +34,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
     { name: "Home", path: "/" },
     { name: "Filmmaking", path: "/filmmaking" },
     { name: "Photography", path: "/photography" },
+    { name: "Services", path: "/services" },
     { name: "Store", path: "/store" },
     { name: "Collective", path: "/collective" },
     { name: "About", path: "/about" },
