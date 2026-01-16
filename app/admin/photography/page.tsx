@@ -60,6 +60,7 @@ export default function AdminPhotographyPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadTargetProject, setUploadTargetProject] = useState<string | null>(null);
 
   // Project management
   const [showAddProject, setShowAddProject] = useState(false);
@@ -271,10 +272,11 @@ export default function AdminPhotographyPage() {
 
       const imageUrl = `/images/photography/${timestamp}_${safeName}`;
 
-      // Add new photo to beginning of list (becomes hero)
+      // Add new photo - either to a project or standalone
       const newPhoto: PhotoImage = {
         src: imageUrl,
         description: "New photograph",
+        ...(uploadTargetProject ? { project: uploadTargetProject } : {})
       };
       const newData = { ...data!, images: [newPhoto, ...data!.images] };
 
@@ -461,30 +463,83 @@ export default function AdminPhotographyPage() {
 
           {/* Projects List */}
           {data?.projects && data.projects.length > 0 ? (
-            <div className="space-y-3">
-              {data.projects.map((project, index) => (
-                <div key={project.slug} className="flex items-center gap-4 p-3 border rounded-lg">
-                  <div className="w-20 h-14 relative bg-gray-100 rounded overflow-hidden flex-shrink-0">
-                    <Image src={project.hero} alt={project.name} fill className="object-cover" unoptimized />
+            <div className="space-y-6">
+              {data.projects.map((project, index) => {
+                const projectPhotos = data.images.filter(img => img.project === project.slug);
+                return (
+                  <div key={project.slug} className="border rounded-lg overflow-hidden">
+                    {/* Project Header */}
+                    <div className="flex items-center gap-4 p-3 bg-gray-50">
+                      <div className="w-20 h-14 relative bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                        <Image src={project.hero} alt={project.name} fill className="object-cover" unoptimized />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-sm">{project.name}</h3>
+                        <p className="text-xs text-gray-500 truncate">{project.description || "No description"}</p>
+                        <p className="text-xs text-gray-400">{projectPhotos.length} photos in gallery</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => { setEditingProjectIndex(index); setProjectForm(project); }}
+                          className="text-xs font-semibold hover:underline"
+                        >
+                          EDIT
+                        </button>
+                        <button onClick={() => deleteProject(index)} className="text-red-500 hover:text-red-700">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Project Photos */}
+                    <div className="p-3 border-t">
+                      <div className="flex items-center gap-2 mb-3">
+                        <label className="flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-xs cursor-pointer hover:bg-gray-800">
+                          <Upload className="w-3 h-3" />
+                          {uploading && uploadTargetProject === project.slug ? "Uploading..." : "Upload to Gallery"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              setUploadTargetProject(project.slug);
+                              handleFileSelect(e);
+                            }}
+                            disabled={uploading}
+                          />
+                        </label>
+                      </div>
+
+                      {projectPhotos.length > 0 ? (
+                        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                          {projectPhotos.map((photo, photoIndex) => {
+                            const globalIndex = data.images.findIndex(img => img.src === photo.src);
+                            return (
+                              <div key={photo.src} className="relative aspect-square bg-gray-100 rounded overflow-hidden group">
+                                <Image src={photo.src} alt="" fill className="object-cover" unoptimized />
+                                <button
+                                  onClick={() => {
+                                    // Remove from project
+                                    const newImages = [...data.images];
+                                    delete newImages[globalIndex].project;
+                                    setData({ ...data, images: newImages });
+                                  }}
+                                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                                  title="Remove from gallery"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No photos in this gallery yet. Upload some above.</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm">{project.name}</h3>
-                    <p className="text-xs text-gray-500 truncate">{project.description || "No description"}</p>
-                    <p className="text-xs text-gray-400 font-mono">/photography/project/{project.slug}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => { setEditingProjectIndex(index); setProjectForm(project); }}
-                      className="text-xs font-semibold hover:underline"
-                    >
-                      EDIT
-                    </button>
-                    <button onClick={() => deleteProject(index)} className="text-red-500 hover:text-red-700">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <p className="text-sm text-gray-500 italic">No project galleries yet. Add one to create a clickable hero section.</p>
@@ -503,19 +558,22 @@ export default function AdminPhotographyPage() {
         <div className="mb-6 flex gap-3">
           <label className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-800">
             <Upload className="w-4 h-4" />
-            {uploading ? (
+            {uploading && !uploadTargetProject ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Uploading...
               </>
             ) : (
-              "Upload Photo"
+              "Upload Standalone Photo"
             )}
             <input
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={handleFileSelect}
+              onChange={(e) => {
+                setUploadTargetProject(null);
+                handleFileSelect(e);
+              }}
               disabled={uploading}
             />
           </label>
@@ -571,13 +629,26 @@ export default function AdminPhotographyPage() {
                         value={editForm.description || ""}
                         onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                         className="w-full px-3 py-2 border rounded-lg text-sm"
-                        rows={3}
+                        rows={2}
+                        placeholder="Description"
                       />
+                      <select
+                        value={editForm.project || ""}
+                        onChange={(e) => setEditForm({ ...editForm, project: e.target.value || undefined })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      >
+                        <option value="">Standalone (no project)</option>
+                        {data?.projects?.map(p => (
+                          <option key={p.slug} value={p.slug}>{p.name}</option>
+                        ))}
+                      </select>
                       <div className="flex gap-2">
-                        <button 
+                        <button
                           onClick={() => {
                             const newImages = [...data!.images];
-                            newImages[index] = { ...photo, ...editForm };
+                            const updatedPhoto = { ...photo, ...editForm };
+                            if (!updatedPhoto.project) delete updatedPhoto.project;
+                            newImages[index] = updatedPhoto;
                             setData({ ...data!, images: newImages });
                             setEditingIndex(null);
                           }}
@@ -588,14 +659,19 @@ export default function AdminPhotographyPage() {
                     </div>
                   ) : (
                     <>
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-4 h-10">
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-2 h-10">
                         {photo.description || <span className="italic text-gray-400">No description</span>}
                       </p>
+                      {photo.project && (
+                        <p className="text-xs text-blue-600 mb-2">
+                          In: {data?.projects?.find(p => p.slug === photo.project)?.name || photo.project}
+                        </p>
+                      )}
                       <div className="flex items-center justify-between border-t pt-3">
                         <button
                           onClick={() => { setEditingIndex(index); setEditForm(photo); }}
                           className="text-xs font-semibold hover:underline"
-                        >EDIT CAPTION</button>
+                        >EDIT</button>
                         <button onClick={() => deletePhoto(index)} className="text-red-500 hover:text-red-700">
                           <Trash2 className="w-4 h-4" />
                         </button>
