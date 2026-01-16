@@ -21,7 +21,7 @@ interface StoreConfig {
 }
 
 export default function AdminStorePage() {
-  const { isAuthenticated, githubToken } = useAdminAuth();
+  const { isAuthenticated, githubToken, config, isLoaded } = useAdminAuth();
   const [storeConfig, setStoreConfig] = useState<StoreConfig | null>(null);
   const [artists, setArtists] = useState<string[]>([]);
   const [selectedArtist, setSelectedArtist] = useState("");
@@ -33,15 +33,31 @@ export default function AdminStorePage() {
   const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isLoaded && isAuthenticated && githubToken) {
       fetchStoreConfig();
     }
-  }, [isAuthenticated]);
+  }, [isLoaded, isAuthenticated, githubToken]);
 
   const fetchStoreConfig = async () => {
     try {
-      const res = await fetch("/config/store.json");
-      const data: StoreConfig = await res.json();
+      // Fetch from GitHub API to always get latest data (not cached static file)
+      const res = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/public/config/store.json?ref=${config.branch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch store config");
+
+      const result = await res.json();
+      const content = new TextDecoder().decode(
+        Uint8Array.from(atob(result.content.replace(/\s/g, "")), (c) => c.charCodeAt(0))
+      );
+      const data: StoreConfig = JSON.parse(content);
       setStoreConfig(data);
 
       // Extract unique artists
@@ -89,7 +105,7 @@ export default function AdminStorePage() {
     try {
       // Get current file SHA
       const fileRes = await fetch(
-        "https://api.github.com/repos/banddude/united-studio-collective/contents/public/config/store.json",
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/public/config/store.json?ref=${config.branch}`,
         {
           headers: {
             Authorization: `Bearer ${githubToken}`,
@@ -101,7 +117,7 @@ export default function AdminStorePage() {
 
       // Update file
       const updateRes = await fetch(
-        "https://api.github.com/repos/banddude/united-studio-collective/contents/public/config/store.json",
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/public/config/store.json`,
         {
           method: "PUT",
           headers: {
@@ -113,6 +129,7 @@ export default function AdminStorePage() {
             message: `Update featured artist to ${selectedArtist}`,
             content: btoa(unescape(encodeURIComponent(JSON.stringify(updatedConfig, null, 2)))),
             sha: fileData.sha,
+            branch: config.branch,
           }),
         }
       );
