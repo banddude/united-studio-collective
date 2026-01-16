@@ -250,7 +250,7 @@ export default function ProductClient({
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   unoptimized
                   priority
                 />

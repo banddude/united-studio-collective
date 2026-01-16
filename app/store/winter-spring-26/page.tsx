@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { getDisplayArtists, artistToSlug } from "../../lib/store-data";
 
 const products = [
   {
@@ -69,6 +70,8 @@ const products = [
 ];
 
 export default function WinterSpringCatalogPage() {
+  const artists = getDisplayArtists();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -114,8 +117,23 @@ export default function WinterSpringCatalogPage() {
                   href="/store/winter-spring-26"
                   className="block text-sm hover:text-gray-300 transition-colors text-white"
                 >
-                  Winter Spring &apos;26 Catalog
+                  Winter Spring &apos;26
                 </Link>
+              </nav>
+
+              <h2 className="text-sm font-medium mt-6 mb-4 border-b border-gray-600 pb-2">
+                Artists
+              </h2>
+              <nav className="space-y-3">
+                {artists.map((artist) => (
+                  <Link
+                    key={artist}
+                    href={`/store/artist/${artistToSlug(artist)}`}
+                    className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
+                  >
+                    {artist}
+                  </Link>
+                ))}
               </nav>
             </div>
           </aside>
