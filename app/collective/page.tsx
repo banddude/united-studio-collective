@@ -52,30 +52,18 @@ export default function CollectivePage() {
                       {member.name}
                     </h2>
 
-                    {/* Artist Website Button */}
-                    {member.website && (
-                      <a
-                        href={member.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-black text-white px-6 py-2 text-sm hover:bg-gray-800 transition-colors mb-6"
-                      >
-                        Artist Website
-                      </a>
-                    )}
-
                     {/* Bio */}
                     <p className="text-gray-600 leading-relaxed mb-6 max-w-lg">
                       {member.bio}
                     </p>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
+                    <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
                       {/* Interview Button - links to interview page */}
                       {member.youtube && (
                         <Link
                           href={`/collective/interview/${artistToSlug(member.name)}`}
-                          className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2 text-sm hover:bg-gray-700 transition-colors"
+                          className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 text-sm hover:bg-gray-700 transition-colors"
                         >
                           Watch Interview
                         </Link>
@@ -87,23 +75,36 @@ export default function CollectivePage() {
                           href={member.audioUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-gray-700 text-white px-5 py-2 text-sm hover:bg-gray-600 transition-colors"
+                          className="inline-flex items-center gap-2 bg-gray-700 text-white px-5 py-2.5 text-sm hover:bg-gray-600 transition-colors"
                         >
                           <Headphones size={16} />
-                          Listen to Interview
+                          Listen
                         </a>
                       )}
 
-                      {/* Social Icons */}
+                      {/* Instagram Button */}
                       {member.instagram && (
                         <a
                           href={member.instagram}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-600 hover:text-black transition-colors"
-                          aria-label={`${member.name} Instagram`}
+                          className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-2.5 text-sm hover:from-purple-600 hover:to-pink-600 transition-colors"
                         >
-                          <Instagram size={22} />
+                          <Instagram size={16} />
+                          Instagram
+                        </a>
+                      )}
+
+                      {/* Website Button */}
+                      {member.website && (
+                        <a
+                          href={member.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 border border-gray-300 text-gray-700 px-5 py-2.5 text-sm hover:bg-gray-100 transition-colors"
+                        >
+                          <ExternalLink size={16} />
+                          Website
                         </a>
                       )}
                     </div>
