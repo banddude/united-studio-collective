@@ -58,7 +58,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
         <div className="w-full relative">
           {/* Mobile menu button - left side */}
           <button
-            className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
+            className="min-[900px]:hidden absolute left-0 top-1/2 -translate-y-1/2 text-[#2d2d2d] hover:opacity-70 transition-opacity"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -83,7 +83,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
           </div>
 
           {/* Desktop Navigation - matches title width */}
-          <div className="hidden md:flex justify-center">
+          <div className="hidden min-[900px]:flex justify-center">
             <nav
               className="flex justify-between items-center flex-nowrap"
               style={{ width: titleWidth ? `${titleWidth}px` : "auto" }}
@@ -122,7 +122,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
       {/* Mobile Navigation Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-[95] bg-black/95 md:hidden"
+          className="fixed inset-0 z-[95] bg-black/95 min-[900px]:hidden"
           onClick={closeMobileMenu}
         >
           <nav className="flex flex-col items-center justify-center h-full gap-6">
