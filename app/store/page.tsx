@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getProducts, getDisplayArtists, artistToSlug, getProductsByArtist, getFeaturedArtist } from "../lib/store-data";
+import { getProducts, getDisplayArtists, artistToSlug, getProductsByArtist, getFeaturedArtist, getThumbPath } from "../lib/store-data";
 
 export default function StorePage() {
   const products = getProducts();
@@ -53,7 +53,7 @@ export default function StorePage() {
                   <Link key={product.id} href={`/store/product/${product.id}`} className="group">
                     <div className="aspect-square bg-gray-100 relative overflow-hidden">
                       <Image
-                        src={product.image}
+                        src={getThumbPath(product.image)}
                         alt={product.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform"
@@ -169,7 +169,7 @@ export default function StorePage() {
                 >
                   <div className="aspect-square mb-3 overflow-hidden bg-gray-100 relative">
                     <Image
-                      src={product.image}
+                      src={getThumbPath(product.image)}
                       alt={product.name}
                       fill
                       className="object-cover transition-transform duration-200 group-hover:scale-105"

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { toThumbPath } from "../../../lib/store-data";
 
 interface ProjectGalleryProps {
   images: { src: string; alt: string }[];
@@ -75,7 +76,7 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
             onClick={() => openLightbox(index)}
           >
             <Image
-              src={photo.src}
+              src={toThumbPath(photo.src)}
               alt={photo.alt}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"

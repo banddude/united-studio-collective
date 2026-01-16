@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { getDisplayArtists, artistToSlug } from "../../lib/store-data";
+import { getDisplayArtists, artistToSlug, getThumbPath } from "../../lib/store-data";
 
 const products = [
   {
@@ -184,7 +184,7 @@ export default function WinterSpringCatalogPage() {
                 >
                   <div className="aspect-square mb-3 overflow-hidden bg-gray-100 relative">
                     <Image
-                      src={product.image}
+                      src={getThumbPath(product.image)}
                       alt={product.name}
                       fill
                       className="object-cover transition-transform duration-200 group-hover:scale-105"

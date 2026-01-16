@@ -8,6 +8,7 @@ import {
   getDisplayArtists,
   artistToSlug,
   slugToArtist,
+  getThumbPath,
 } from "../../../lib/store-data";
 import { notFound } from "next/navigation";
 
@@ -142,7 +143,7 @@ export default async function ArtistStorePage({ params }: PageProps) {
                 >
                   <div className="aspect-square mb-3 overflow-hidden bg-gray-100 relative">
                     <Image
-                      src={product.image}
+                      src={getThumbPath(product.image)}
                       alt={product.name}
                       fill
                       className="object-cover transition-transform duration-200 group-hover:scale-105"

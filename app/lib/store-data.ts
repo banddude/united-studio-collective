@@ -99,3 +99,18 @@ export function slugToArtist(slug: string): string | undefined {
   const artists = getArtists();
   return artists.find(a => artistToSlug(a) === slug);
 }
+
+// Convert image path to thumbnail path
+export function getThumbPath(imagePath: string): string {
+  // /images/store/image.jpg -> /images/store/thumbs/image.jpg
+  const parts = imagePath.split('/');
+  const filename = parts.pop();
+  return [...parts, 'thumbs', filename].join('/');
+}
+
+// Convert any image path to thumbnail path (generic version)
+export function toThumbPath(imagePath: string): string {
+  const parts = imagePath.split('/');
+  const filename = parts.pop();
+  return [...parts, 'thumbs', filename].join('/');
+}
