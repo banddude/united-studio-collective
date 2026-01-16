@@ -400,6 +400,10 @@ export default function CartPage() {
                       <span className="font-medium text-black">${selectedRate.price.toFixed(2)}</span>
                     </div>
                   )}
+                  <div className="flex justify-between items-center">
+                    <span className="text-black">Tax</span>
+                    <span className="text-sm text-gray-500">Calculated at checkout</span>
+                  </div>
                   <div className="flex justify-between items-center pt-3 border-t border-gray-200">
                     <span className="text-lg font-medium text-black">Total</span>
                     <span className="text-lg font-medium text-black">${finalTotal.toFixed(2)}</span>

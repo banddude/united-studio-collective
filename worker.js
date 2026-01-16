@@ -178,6 +178,9 @@ export default {
 
         // Checkout configuration
         body.append("mode", "payment");
+
+        // Enable automatic tax calculation (requires Stripe Tax to be enabled in dashboard)
+        body.append("automatic_tax[enabled]", "true");
         // TODO: Could fetch supported countries from Shippo API instead of hardcoding
         // https://docs.goshippo.com/docs/addresses/international/
         const allowedCountries = [
