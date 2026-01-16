@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, ExternalLink } from "lucide-react";
+import { Instagram, ExternalLink, Headphones } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import collectiveData from "../../content/collective.json";
@@ -13,6 +13,7 @@ interface Member {
   website?: string;
   instagram?: string;
   youtube?: string;
+  audioUrl?: string;
   storeSlug?: string;
 }
 
@@ -78,6 +79,19 @@ export default function CollectivePage() {
                         >
                           Watch Interview
                         </Link>
+                      )}
+
+                      {/* Audio Interview Button */}
+                      {member.audioUrl && (
+                        <a
+                          href={member.audioUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 bg-gray-700 text-white px-5 py-2 text-sm hover:bg-gray-600 transition-colors"
+                        >
+                          <Headphones size={16} />
+                          Listen to Interview
+                        </a>
                       )}
 
                       {/* Social Icons */}

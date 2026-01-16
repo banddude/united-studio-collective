@@ -22,6 +22,11 @@ interface Member {
   role: string;
   bio: string;
   image: string;
+  website?: string;
+  instagram?: string;
+  youtube?: string;
+  audioUrl?: string;
+  storeSlug?: string;
 }
 
 interface CollectiveData {
@@ -50,6 +55,11 @@ export default function AdminCollectivePage() {
     role: "",
     bio: "",
     image: "",
+    website: "",
+    instagram: "",
+    youtube: "",
+    audioUrl: "",
+    storeSlug: "",
   });
   const [uploading, setUploading] = useState(false);
   const [uploadingFor, setUploadingFor] = useState<number | "new" | null>(null);
@@ -172,7 +182,7 @@ export default function AdminCollectivePage() {
   const addMember = () => {
     if (!data || !newMember.name) return;
     setData({ ...data, members: [...data.members, newMember] });
-    setNewMember({ name: "", role: "", bio: "", image: "" });
+    setNewMember({ name: "", role: "", bio: "", image: "", website: "", instagram: "", youtube: "", audioUrl: "", storeSlug: "" });
     setShowAddForm(false);
   };
 
@@ -378,6 +388,59 @@ export default function AdminCollectivePage() {
                       className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
                     />
                   </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Website URL</label>
+                      <input
+                        type="url"
+                        value={newMember.website}
+                        onChange={(e) => setNewMember({ ...newMember, website: e.target.value })}
+                        placeholder="https://..."
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Instagram URL</label>
+                      <input
+                        type="url"
+                        value={newMember.instagram}
+                        onChange={(e) => setNewMember({ ...newMember, instagram: e.target.value })}
+                        placeholder="https://instagram.com/..."
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">YouTube Video ID</label>
+                      <input
+                        type="text"
+                        value={newMember.youtube}
+                        onChange={(e) => setNewMember({ ...newMember, youtube: e.target.value })}
+                        placeholder="dQw4w9WgXcQ"
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Audio Interview URL</label>
+                      <input
+                        type="url"
+                        value={newMember.audioUrl}
+                        onChange={(e) => setNewMember({ ...newMember, audioUrl: e.target.value })}
+                        placeholder="https://..."
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Store Slug</label>
+                    <input
+                      type="text"
+                      value={newMember.storeSlug}
+                      onChange={(e) => setNewMember({ ...newMember, storeSlug: e.target.value })}
+                      placeholder="jessica-m-maxwell"
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none text-sm"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Used for store collection link</p>
+                  </div>
                   <div className="flex gap-2">
                     <button
                       onClick={addMember}
@@ -389,7 +452,7 @@ export default function AdminCollectivePage() {
                     <button
                       onClick={() => {
                         setShowAddForm(false);
-                        setNewMember({ name: "", role: "", bio: "", image: "" });
+                        setNewMember({ name: "", role: "", bio: "", image: "", website: "", instagram: "", youtube: "", audioUrl: "", storeSlug: "" });
                       }}
                       className="px-4 py-2 bg-gray-100 rounded-lg"
                     >
@@ -453,6 +516,43 @@ export default function AdminCollectivePage() {
                         placeholder="Bio"
                         className="w-full px-3 py-2 border rounded-lg text-sm"
                         rows={2}
+                      />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="url"
+                          value={editForm.website || ""}
+                          onChange={(e) => setEditForm({ ...editForm, website: e.target.value })}
+                          placeholder="Website URL"
+                          className="w-full px-3 py-2 border rounded-lg text-sm"
+                        />
+                        <input
+                          type="url"
+                          value={editForm.instagram || ""}
+                          onChange={(e) => setEditForm({ ...editForm, instagram: e.target.value })}
+                          placeholder="Instagram URL"
+                          className="w-full px-3 py-2 border rounded-lg text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={editForm.youtube || ""}
+                          onChange={(e) => setEditForm({ ...editForm, youtube: e.target.value })}
+                          placeholder="YouTube Video ID"
+                          className="w-full px-3 py-2 border rounded-lg text-sm"
+                        />
+                        <input
+                          type="url"
+                          value={editForm.audioUrl || ""}
+                          onChange={(e) => setEditForm({ ...editForm, audioUrl: e.target.value })}
+                          placeholder="Audio Interview URL"
+                          className="w-full px-3 py-2 border rounded-lg text-sm"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        value={editForm.storeSlug || ""}
+                        onChange={(e) => setEditForm({ ...editForm, storeSlug: e.target.value })}
+                        placeholder="Store Slug (e.g. jessica-m-maxwell)"
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
                       />
                       <label className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 text-sm">
                         <Upload className="w-4 h-4" />

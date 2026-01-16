@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Instagram, ExternalLink, ArrowLeft } from "lucide-react";
+import { Instagram, ExternalLink, ArrowLeft, Headphones } from "lucide-react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import collectiveData from "../../../../content/collective.json";
@@ -15,6 +15,7 @@ interface Member {
   website?: string;
   instagram?: string;
   youtube?: string;
+  audioUrl?: string;
   storeSlug?: string;
 }
 
@@ -119,6 +120,17 @@ export default async function InterviewPage({ params }: PageProps) {
                       aria-label={`${member.name} Instagram`}
                     >
                       <Instagram size={22} />
+                    </a>
+                  )}
+                  {member.audioUrl && (
+                    <a
+                      href={member.audioUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-black"
+                    >
+                      <Headphones size={16} />
+                      Listen to Interview
                     </a>
                   )}
                   {member.storeSlug && (
