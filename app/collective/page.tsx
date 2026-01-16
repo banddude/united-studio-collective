@@ -120,6 +120,22 @@ export default function CollectivePage() {
                         </Link>
                       </div>
                     )}
+
+                    {/* Transcript Snippet */}
+                    {member.youtube && (
+                      <div className="mt-8 pt-6 border-t border-gray-200">
+                        <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">From the Interview</p>
+                        <p className="text-sm text-gray-600 italic leading-relaxed line-clamp-4">
+                          &ldquo;When I was about 12 years old, I was standing in my room, and I just remember feeling the weight of the world... I remember having a National Geographic magazine cover in my hands, and it was Steve McCurry&apos;s Afghan Girl. I just remember feeling like when I get through this thing, I want to create safe spaces in the world where people get to tell their story.&rdquo;
+                        </p>
+                        <Link
+                          href={`/collective/interview/${artistToSlug(member.name)}`}
+                          className="inline-block mt-3 text-xs text-gray-500 hover:text-black transition-colors underline underline-offset-2"
+                        >
+                          Read full transcript
+                        </Link>
+                      </div>
+                    )}
                   </div>
 
                   {/* Right Side - Photo */}
