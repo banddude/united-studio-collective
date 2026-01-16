@@ -60,6 +60,36 @@ export default async function ArtistStorePage({ params }: PageProps) {
           <h1 className="text-xl md:text-2xl font-medium text-black">{artist}</h1>
         </div>
 
+        {/* Mobile Browse Menu */}
+        <div className="md:hidden px-4 mb-6">
+          <details className="bg-black text-white rounded-lg overflow-hidden">
+            <summary className="px-4 py-3 text-sm font-medium cursor-pointer flex items-center justify-between">
+              <span>Browse</span>
+              <svg className="w-4 h-4 transition-transform details-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div className="px-4 pb-4 border-t border-gray-700">
+              <nav className="pt-3 space-y-2">
+                <Link href="/store" className="block text-sm text-gray-300 py-1">All Products</Link>
+                <Link href="/store/winter-spring-26" className="block text-sm text-gray-300 py-1">Winter Spring '26</Link>
+              </nav>
+              <h3 className="text-xs uppercase tracking-wider text-gray-400 mt-4 mb-2">Artists</h3>
+              <nav className="space-y-2">
+                {artists.map((a) => (
+                  <Link
+                    key={a}
+                    href={`/store/artist/${artistToSlug(a)}`}
+                    className={`block text-sm py-1 ${a === artist ? "text-white" : "text-gray-300"}`}
+                  >
+                    {a}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </details>
+        </div>
+
         {/* Content Area */}
         <div className="flex flex-col md:flex-row px-4 md:px-6">
           {/* Left Sidebar - Hidden on mobile */}
