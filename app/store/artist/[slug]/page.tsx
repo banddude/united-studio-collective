@@ -5,9 +5,9 @@ import Footer from "../../../components/Footer";
 import {
   getProductsByArtist,
   getArtists,
+  getDisplayArtists,
   artistToSlug,
   slugToArtist,
-  getDefaultArtist
 } from "../../../lib/store-data";
 import { notFound } from "next/navigation";
 
@@ -31,8 +31,7 @@ export default async function ArtistStorePage({ params }: PageProps) {
   }
 
   const products = getProductsByArtist(artist);
-  const artists = getArtists();
-  const defaultArtist = getDefaultArtist();
+  const artists = getDisplayArtists();
 
   return (
     <div className="min-h-screen bg-white">
