@@ -94,7 +94,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
                   <Link
                     key={item.path}
                     href={item.path}
-                    className={`text-[14px] sm:text-[15px] md:text-[17px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 whitespace-nowrap ${
+                    className={`text-[12px] sm:text-[13px] md:text-[15px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 whitespace-nowrap ${
                       isActive
                         ? (isDark ? "text-white" : "text-[#8b9bb4] underline underline-offset-4")
                         : "text-[#2d2d2d]"
@@ -108,7 +108,7 @@ export default function Header({ variant = "dark", currentPage, scrollable = fal
               {/* Cart in nav */}
               <Link
                 href="/cart"
-                className="text-[14px] sm:text-[15px] md:text-[17px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-1 whitespace-nowrap"
+                className="text-[12px] sm:text-[13px] md:text-[15px] lg:text-[18px] font-normal tracking-wide hover:opacity-60 transition-opacity py-2 text-[#2d2d2d] flex items-center gap-1 whitespace-nowrap"
                 style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
               >
                 <ShoppingCart className="w-4 h-4 lg:w-[18px] lg:h-[18px]" strokeWidth={1.5} />
