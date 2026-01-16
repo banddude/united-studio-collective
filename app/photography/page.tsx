@@ -2,17 +2,30 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
 
-// First image is always the hero
-const heroImage = photographyData.images[0];
-const galleryPhotos = photographyData.images.slice(1).map(img => ({
-  src: img.src,
-  alt: img.description
-}));
+interface Project {
+  slug: string;
+  name: string;
+  description?: string;
+  hero: string;
+  images: string[];
+}
+
+// Get projects for hero section
+const projects = (photographyData.projects as Project[]) || [];
+
+// Get standalone images (not linked to a project) for the gallery
+const galleryPhotos = photographyData.images
+  .filter(img => !img.project)
+  .map(img => ({
+    src: img.src,
+    alt: img.description
+  }));
 
 export default function PhotographyPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -71,17 +84,36 @@ export default function PhotographyPage() {
 
       {/* Main Content */}
       <main className="pt-[120px] md:pt-[150px]">
-        {/* Hero Section - First image */}
-        {heroImage && (
-          <div className="relative w-full h-[50vh] md:h-[70vh] mb-2">
-            <Image
-              src={heroImage.src}
-              alt={heroImage.description || "Photography"}
-              fill
-              className="object-cover"
-              priority
-              unoptimized
-            />
+        {/* Project Heroes - Clickable links to project galleries */}
+        {projects.length > 0 && (
+          <div className="space-y-2 mb-2">
+            {projects.map((project, index) => (
+              <Link
+                key={project.slug}
+                href={`/photography/project/${project.slug}`}
+                className="block relative w-full h-[50vh] md:h-[70vh] group overflow-hidden"
+              >
+                <Image
+                  src={project.hero}
+                  alt={project.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={index === 0}
+                  unoptimized
+                />
+                {/* Overlay with project name */}
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                  <div className="text-center">
+                    <h2 className="text-white text-3xl md:text-5xl font-light tracking-wide drop-shadow-lg">
+                      {project.name}
+                    </h2>
+                    <p className="text-white/80 text-sm md:text-base mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      View Gallery
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
 

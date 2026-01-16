@@ -9,10 +9,20 @@
     "title": "Photography",
     "subtitle": "Capturing moments that tell stories"
   },
+  "projects": [
+    {
+      "slug": "remain-on-hold",
+      "name": "Remain On Hold",
+      "description": "A photographic exploration of moments suspended in time",
+      "hero": "/images/photography/1768517246635_img036-2.jpg",
+      "images": []
+    }
+  ],
   "images": [
     {
       "src": "/images/photography/1768517246635_img036-2.jpg",
-      "description": "Remain On Hold Gallery"
+      "description": "Remain On Hold Gallery",
+      "project": "remain-on-hold"
     },
     {
       "src": "/images/photography/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",

@@ -24,6 +24,15 @@ import { useAdminAuth } from "../useAdminAuth";
 interface PhotoImage {
   src: string;
   description: string;
+  project?: string;
+}
+
+interface Project {
+  slug: string;
+  name: string;
+  description?: string;
+  hero: string;
+  images: string[];
 }
 
 interface PhotographyData {
@@ -31,6 +40,7 @@ interface PhotographyData {
   title: string;
   layout: string;
   has_load_more: boolean;
+  projects?: Project[];
   images: PhotoImage[];
 }
 
@@ -50,6 +60,11 @@ export default function AdminPhotographyPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  // Project management
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [editingProjectIndex, setEditingProjectIndex] = useState<number | null>(null);
+  const [projectForm, setProjectForm] = useState<Partial<Project>>({});
 
   useEffect(() => {
     if (isLoaded && isAuthenticated) {
@@ -175,6 +190,40 @@ export default function AdminPhotographyPage() {
     setData({ ...data, images: [newPhoto, ...data.images] });
     setNewPhotoUrl("");
     setShowAddForm(false);
+  };
+
+  // Project management functions
+  const addProject = () => {
+    if (!data || !projectForm.name || !projectForm.hero) return;
+    const slug = projectForm.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const newProject: Project = {
+      slug,
+      name: projectForm.name,
+      description: projectForm.description || "",
+      hero: projectForm.hero,
+      images: []
+    };
+    const projects = data.projects || [];
+    setData({ ...data, projects: [...projects, newProject] });
+    setProjectForm({});
+    setShowAddProject(false);
+  };
+
+  const updateProject = (index: number) => {
+    if (!data || !data.projects) return;
+    const projects = [...data.projects];
+    projects[index] = { ...projects[index], ...projectForm } as Project;
+    setData({ ...data, projects });
+    setEditingProjectIndex(null);
+    setProjectForm({});
+  };
+
+  const deleteProject = (index: number) => {
+    if (!data || !data.projects) return;
+    if (confirm("Delete this project gallery? Photos won't be deleted.")) {
+      const projects = data.projects.filter((_, i) => i !== index);
+      setData({ ...data, projects });
+    }
   };
 
   const uploadImageToGitHub = async (file: File) => {
@@ -341,11 +390,112 @@ export default function AdminPhotographyPage() {
       )}
 
       <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Projects Section */}
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold">Project Galleries</h2>
+            <button
+              onClick={() => { setShowAddProject(true); setProjectForm({}); }}
+              className="flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-800"
+            >
+              <Plus className="w-4 h-4" />
+              Add Project
+            </button>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            Projects appear as clickable hero banners on the Photography page. Each links to its own gallery.
+          </p>
+
+          {/* Add/Edit Project Form */}
+          {(showAddProject || editingProjectIndex !== null) && (
+            <div className="border rounded-lg p-4 mb-4 bg-gray-50">
+              <h3 className="font-medium mb-3">{editingProjectIndex !== null ? "Edit Project" : "New Project"}</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Project Name *</label>
+                  <input
+                    type="text"
+                    value={projectForm.name || ""}
+                    onChange={(e) => setProjectForm({ ...projectForm, name: e.target.value })}
+                    placeholder="e.g., Remain On Hold"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Hero Image URL *</label>
+                  <input
+                    type="text"
+                    value={projectForm.hero || ""}
+                    onChange={(e) => setProjectForm({ ...projectForm, hero: e.target.value })}
+                    placeholder="/images/photography/..."
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none font-mono text-sm"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <input
+                    type="text"
+                    value={projectForm.description || ""}
+                    onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
+                    placeholder="Brief description of the project"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2 mt-4">
+                {editingProjectIndex !== null ? (
+                  <button onClick={() => updateProject(editingProjectIndex)} className="bg-black text-white px-4 py-2 rounded-lg text-sm">
+                    Save Changes
+                  </button>
+                ) : (
+                  <button onClick={addProject} disabled={!projectForm.name || !projectForm.hero} className="bg-black text-white px-4 py-2 rounded-lg text-sm disabled:opacity-50">
+                    Add Project
+                  </button>
+                )}
+                <button onClick={() => { setShowAddProject(false); setEditingProjectIndex(null); setProjectForm({}); }} className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Projects List */}
+          {data?.projects && data.projects.length > 0 ? (
+            <div className="space-y-3">
+              {data.projects.map((project, index) => (
+                <div key={project.slug} className="flex items-center gap-4 p-3 border rounded-lg">
+                  <div className="w-20 h-14 relative bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                    <Image src={project.hero} alt={project.name} fill className="object-cover" unoptimized />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-sm">{project.name}</h3>
+                    <p className="text-xs text-gray-500 truncate">{project.description || "No description"}</p>
+                    <p className="text-xs text-gray-400 font-mono">/photography/project/{project.slug}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => { setEditingProjectIndex(index); setProjectForm(project); }}
+                      className="text-xs font-semibold hover:underline"
+                    >
+                      EDIT
+                    </button>
+                    <button onClick={() => deleteProject(index)} className="text-red-500 hover:text-red-700">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 italic">No project galleries yet. Add one to create a clickable hero section.</p>
+          )}
+        </div>
+
         {/* Info Banner */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <p className="text-sm text-blue-800">
             <Crown className="w-4 h-4 inline mr-1" />
-            <strong>First photo = Hero.</strong> Drag photos to reorder. The first one displays as the full-width hero image.
+            <strong>Standalone photos</strong> appear in the grid below project heroes. Drag to reorder.
           </p>
         </div>
 
