@@ -87,24 +87,7 @@ export default function ProductClient({
   const handleBuyNow = () => {
     if (!validateSelection()) return;
 
-    // Check if Stripe is enabled and we have a payment link
-    if (stripeEnabled) {
-      let stripeLink = "";
-      if (isFrameless) {
-        stripeLink = product.stripe.frameless;
-      } else if (frameColor === "Black") {
-        stripeLink = product.stripe.framed_black;
-      } else if (frameColor === "White") {
-        stripeLink = product.stripe.framed_white;
-      }
-
-      if (stripeLink) {
-        window.location.href = stripeLink;
-        return;
-      }
-    }
-
-    // Fallback to cart
+    // Always go through cart flow to ensure shipping address is collected
     addItem({
       productId: product.id,
       name: product.name,
