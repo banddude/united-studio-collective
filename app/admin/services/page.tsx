@@ -65,6 +65,8 @@ export default function AdminServicesPage() {
   const [newFeatureInput, setNewFeatureInput] = useState("");
   const [editingCTA, setEditingCTA] = useState(false);
   const [editingPageSettings, setEditingPageSettings] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadingServiceIndex, setUploadingServiceIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (isLoaded && isAuthenticated) {
@@ -221,6 +223,153 @@ export default function AdminServicesPage() {
         ...editServiceForm,
         features: editServiceForm.features.filter((_, i) => i !== index),
       });
+    }
+  };
+
+  // Image upload functions
+  const resizeImage = async (file: File, maxWidth: number, quality: number = 0.85): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        ctx?.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Failed to create blob'));
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const blobToBase64 = async (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, serviceIndex: number) => {
+    const file = e.target.files?.[0];
+    if (!file || !data) return;
+    e.target.value = "";
+
+    setUploading(true);
+    setUploadingServiceIndex(serviceIndex);
+    setSaveStatus({ type: null, message: "" });
+
+    try {
+      // Resize to 2000px for service images
+      const resizedBlob = await resizeImage(file, 2000, 0.85);
+      const base64Content = await blobToBase64(resizedBlob);
+
+      const timestamp = Date.now();
+      const baseName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").replace(/\.[^.]+$/, '');
+      const filePath = `public/images/services/${timestamp}_${baseName}.jpg`;
+
+      // Upload to GitHub
+      const uploadResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            message: `Upload service image: ${baseName}`,
+            content: base64Content,
+            branch: config.branch,
+          }),
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        const err = await uploadResponse.json();
+        throw new Error(err.message || "Failed to upload image");
+      }
+
+      const imageUrl = `/images/services/${timestamp}_${baseName}.jpg`;
+
+      // Update service with new image URL
+      const newServices = [...data.services];
+      newServices[serviceIndex] = { ...newServices[serviceIndex], image: imageUrl };
+      setData({ ...data, services: newServices });
+
+      setSaveStatus({ type: "success", message: "Image uploaded! Click Publish to save changes." });
+    } catch (error: any) {
+      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } finally {
+      setUploading(false);
+      setUploadingServiceIndex(null);
+      setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
+    }
+  };
+
+  const handleNewServiceImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = "";
+
+    setUploading(true);
+    setSaveStatus({ type: null, message: "" });
+
+    try {
+      const resizedBlob = await resizeImage(file, 2000, 0.85);
+      const base64Content = await blobToBase64(resizedBlob);
+
+      const timestamp = Date.now();
+      const baseName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").replace(/\.[^.]+$/, '');
+      const filePath = `public/images/services/${timestamp}_${baseName}.jpg`;
+
+      const uploadResponse = await fetch(
+        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          body: JSON.stringify({
+            message: `Upload service image: ${baseName}`,
+            content: base64Content,
+            branch: config.branch,
+          }),
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        const err = await uploadResponse.json();
+        throw new Error(err.message || "Failed to upload image");
+      }
+
+      const imageUrl = `/images/services/${timestamp}_${baseName}.jpg`;
+      setNewService({ ...newService, image: imageUrl });
+      setSaveStatus({ type: "success", message: "Image uploaded!" });
+    } catch (error: any) {
+      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } finally {
+      setUploading(false);
+      setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
     }
   };
 
@@ -427,14 +576,40 @@ export default function AdminServicesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Image URL</label>
-                  <input
-                    type="text"
-                    value={newService.image}
-                    onChange={(e) => setNewService({ ...newService, image: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
-                  />
+                  <label className="block text-sm font-medium mb-1">Image</label>
+                  <div className="flex gap-2 items-center">
+                    <label className="bg-black text-white text-sm font-semibold flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-800">
+                      {uploading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4" />
+                          Upload Image
+                        </>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleNewServiceImageUpload}
+                        disabled={uploading}
+                      />
+                    </label>
+                    {newService.image && (
+                      <span className="text-sm text-green-600 flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4" />
+                        Image uploaded
+                      </span>
+                    )}
+                  </div>
+                  {newService.image && (
+                    <div className="mt-2 relative w-32 h-32 bg-gray-100 rounded overflow-hidden">
+                      <Image src={newService.image} alt="Preview" fill className="object-cover" unoptimized />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Features</label>
@@ -612,7 +787,32 @@ export default function AdminServicesPage() {
                         {service.image && (
                           <Image src={service.image} alt={service.title} fill className="object-cover" unoptimized />
                         )}
+                        {!service.image && (
+                          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                            <Upload className="w-8 h-8" />
+                          </div>
+                        )}
                       </div>
+                      <label className="w-full bg-black text-white text-sm font-semibold flex items-center justify-center gap-2 py-2 rounded-lg cursor-pointer hover:bg-gray-800 mb-2">
+                        {uploading && uploadingServiceIndex === index ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            Upload Image
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleImageUpload(e, index)}
+                          disabled={uploading}
+                        />
+                      </label>
                       <button
                         onClick={() => deleteService(index)}
                         className="w-full text-red-500 hover:text-red-700 text-sm font-semibold flex items-center justify-center gap-2"
