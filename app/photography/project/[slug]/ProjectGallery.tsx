@@ -5,7 +5,12 @@ import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ProjectGalleryProps {
-  images: { src: string; alt: string }[];
+  images: {
+    src: string;
+    thumb?: string;
+    full?: string;
+    alt: string;
+  }[];
 }
 
 export default function ProjectGallery({ images }: ProjectGalleryProps) {
@@ -66,7 +71,7 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
 
   return (
     <>
-      {/* Gallery Grid */}
+      {/* Gallery Grid - Uses thumbnails for fast loading */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[2px] sm:gap-[5px] bg-white">
         {images.map((photo, index) => (
           <div
@@ -75,11 +80,11 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
             onClick={() => openLightbox(index)}
           >
             <Image
-              src={photo.src}
+              src={photo.thumb || photo.src}
               alt={photo.alt}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="33vw"
+              sizes="(max-width: 640px) 50vw, 33vw"
               unoptimized
               loading={index < 6 ? "eager" : "lazy"}
             />
@@ -110,12 +115,13 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
             <ChevronLeft size={48} strokeWidth={1.5} />
           </button>
 
+          {/* Full resolution image for lightbox */}
           <div
             className="relative max-w-[90vw] max-h-[90vh] w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={images[selectedImageIndex].src}
+              src={images[selectedImageIndex].full || images[selectedImageIndex].src}
               alt={images[selectedImageIndex].alt}
               fill
               className="object-contain"

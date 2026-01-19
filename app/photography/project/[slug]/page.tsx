@@ -17,6 +17,9 @@ interface Project {
 
 interface ImageData {
   src: string;
+  thumb?: string;
+  medium?: string;
+  full?: string;
   description: string;
   project?: string;
 }
@@ -42,12 +45,17 @@ export default async function ProjectGalleryPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get all images for this project
+  // Get all images for this project with thumb/full support
   const projectImages = project?.images?.length
     ? project.images.map(src => ({ src, alt: project.name }))
     : (photographyData.images as ImageData[])
         .filter(img => img.project === slug)
-        .map(img => ({ src: img.src, alt: img.description }));
+        .map(img => ({
+          src: img.src,
+          thumb: img.thumb || img.src,
+          full: img.full || img.src,
+          alt: img.description
+        }));
 
   return (
     <div className="min-h-screen bg-white">

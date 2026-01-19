@@ -16,14 +16,26 @@ interface Project {
   images: string[];
 }
 
+interface PhotoImage {
+  src: string;
+  thumb?: string;
+  medium?: string;
+  full?: string;
+  description: string;
+  project?: string;
+}
+
 // Get projects for hero section
 const projects = (photographyData.projects as Project[]) || [];
 
 // Get standalone images (not linked to a project) for the gallery
-const galleryPhotos = photographyData.images
+const galleryPhotos = (photographyData.images as PhotoImage[])
   .filter(img => !img.project)
   .map(img => ({
-    src: img.src,
+    // Use thumb for grid, fallback to src if no thumb exists
+    thumb: img.thumb || img.src,
+    // Use full for lightbox, fallback to src if no full exists
+    full: img.full || img.src,
     alt: img.description
   }));
 
@@ -126,11 +138,11 @@ export default function PhotographyPage() {
               onClick={() => openLightbox(index)}
             >
               <Image
-                src={photo.src}
+                src={photo.thumb}
                 alt={photo.alt}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="33vw"
+                sizes="(max-width: 640px) 50vw, 33vw"
                 unoptimized
                 loading={index < 6 ? "eager" : "lazy"}
               />
@@ -167,13 +179,13 @@ export default function PhotographyPage() {
             <ChevronLeft size={48} strokeWidth={1.5} />
           </button>
 
-          {/* Image Container */}
+          {/* Image Container - Uses full resolution for lightbox */}
           <div
             className="relative max-w-[90vw] max-h-[90vh] w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={galleryPhotos[selectedImageIndex].src}
+              src={galleryPhotos[selectedImageIndex].full}
               alt={galleryPhotos[selectedImageIndex].alt}
               fill
               className="object-contain"

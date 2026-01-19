@@ -23,6 +23,9 @@ import { useAdminAuth } from "../useAdminAuth";
 
 interface PhotoImage {
   src: string;
+  thumb?: string;    // ~400px thumbnail for grids
+  medium?: string;   // ~2000px for general display
+  full?: string;     // Original resolution for lightbox
   description: string;
   project?: string;
 }
@@ -228,25 +231,56 @@ export default function AdminPhotographyPage() {
     }
   };
 
-  // Upload a single image to GitHub and return its URL (does NOT update JSON)
-  const uploadSingleImage = async (file: File): Promise<string> => {
-    const reader = new FileReader();
-    const base64Promise = new Promise<string>((resolve, reject) => {
+  // Resize an image using canvas
+  const resizeImage = async (file: File, maxWidth: number, quality: number = 0.85): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      img.onload = () => {
+        let { width, height } = img;
+
+        // Only resize if larger than maxWidth
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Failed to create blob'));
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  // Convert blob to base64
+  const blobToBase64 = async (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        const base64 = result.split(",")[1];
-        resolve(base64);
+        resolve(result.split(',')[1]);
       };
       reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
-    reader.readAsDataURL(file);
-    const base64Content = await base64Promise;
+  };
 
-    const timestamp = Date.now();
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filePath = `public/images/photography/${timestamp}_${safeName}`;
-
-    // Upload image file to GitHub
+  // Upload a single file to GitHub
+  const uploadToGitHub = async (base64Content: string, filePath: string, message: string): Promise<void> => {
     const uploadResponse = await fetch(
       `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
       {
@@ -256,7 +290,7 @@ export default function AdminPhotographyPage() {
           Accept: "application/vnd.github.v3+json",
         },
         body: JSON.stringify({
-          message: `Upload photo: ${safeName}`,
+          message,
           content: base64Content,
           branch: config.branch,
         }),
@@ -265,19 +299,53 @@ export default function AdminPhotographyPage() {
 
     if (!uploadResponse.ok) {
       const err = await uploadResponse.json();
-      throw new Error(err.message || "Failed to upload image");
+      throw new Error(err.message || "Failed to upload");
     }
-
-    return `/images/photography/${timestamp}_${safeName}`;
   };
 
-  // Upload multiple images, then update JSON once at the end
+  // Upload a single image with all 3 sizes and return the paths
+  const uploadImageWithSizes = async (file: File): Promise<{ thumb: string; medium: string; full: string; src: string }> => {
+    const timestamp = Date.now();
+    const baseName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").replace(/\.[^.]+$/, '');
+
+    // Create resized versions
+    const [thumbBlob, mediumBlob] = await Promise.all([
+      resizeImage(file, 400, 0.8),   // Thumbnail: 400px, 80% quality
+      resizeImage(file, 2000, 0.85), // Medium: 2000px, 85% quality
+    ]);
+
+    // Convert to base64
+    const [thumbBase64, mediumBase64, fullBase64] = await Promise.all([
+      blobToBase64(thumbBlob),
+      blobToBase64(mediumBlob),
+      blobToBase64(file),
+    ]);
+
+    // Define paths
+    const thumbPath = `public/images/photography/thumb_${timestamp}_${baseName}.jpg`;
+    const mediumPath = `public/images/photography/medium_${timestamp}_${baseName}.jpg`;
+    const fullPath = `public/images/photography/full_${timestamp}_${baseName}.jpg`;
+
+    // Upload all 3 versions sequentially to avoid rate limits
+    await uploadToGitHub(thumbBase64, thumbPath, `Upload thumb: ${baseName}`);
+    await uploadToGitHub(mediumBase64, mediumPath, `Upload medium: ${baseName}`);
+    await uploadToGitHub(fullBase64, fullPath, `Upload full: ${baseName}`);
+
+    return {
+      thumb: `/images/photography/thumb_${timestamp}_${baseName}.jpg`,
+      medium: `/images/photography/medium_${timestamp}_${baseName}.jpg`,
+      full: `/images/photography/full_${timestamp}_${baseName}.jpg`,
+      src: `/images/photography/medium_${timestamp}_${baseName}.jpg`, // Default src is medium
+    };
+  };
+
+  // Upload multiple images with all sizes, then update JSON once at the end
   const uploadMultipleImages = async (files: File[], targetProject: string | null) => {
     setUploading(true);
     setUploadProgress({ current: 0, total: files.length });
     setSaveStatus({ type: null, message: "" });
 
-    const uploadedUrls: string[] = [];
+    const uploadedPhotos: PhotoImage[] = [];
     const failedFiles: string[] = [];
 
     try {
@@ -285,26 +353,26 @@ export default function AdminPhotographyPage() {
       for (let i = 0; i < files.length; i++) {
         setUploadProgress({ current: i + 1, total: files.length });
         try {
-          const url = await uploadSingleImage(files[i]);
-          uploadedUrls.push(url);
+          const paths = await uploadImageWithSizes(files[i]);
+          uploadedPhotos.push({
+            src: paths.src,
+            thumb: paths.thumb,
+            medium: paths.medium,
+            full: paths.full,
+            description: "New photograph",
+            ...(targetProject ? { project: targetProject } : {})
+          });
         } catch (error: any) {
           failedFiles.push(files[i].name);
           console.error(`Failed to upload ${files[i].name}:`, error);
         }
       }
 
-      if (uploadedUrls.length === 0) {
+      if (uploadedPhotos.length === 0) {
         throw new Error("All uploads failed");
       }
 
-      // Create new photo entries for all successfully uploaded images
-      const newPhotos: PhotoImage[] = uploadedUrls.map(url => ({
-        src: url,
-        description: "New photograph",
-        ...(targetProject ? { project: targetProject } : {})
-      }));
-
-      const newData = { ...data!, images: [...newPhotos, ...data!.images] };
+      const newData = { ...data!, images: [...uploadedPhotos, ...data!.images] };
 
       // Now update JSON once with all new images
       const getFileResponse = await fetch(
@@ -331,7 +399,7 @@ export default function AdminPhotographyPage() {
             Accept: "application/vnd.github.v3+json",
           },
           body: JSON.stringify({
-            message: `Add ${uploadedUrls.length} photo(s)`,
+            message: `Add ${uploadedPhotos.length} photo(s) with optimized sizes`,
             content: contentBase64,
             sha: fileData.sha,
             branch: config.branch,
@@ -346,12 +414,12 @@ export default function AdminPhotographyPage() {
       if (failedFiles.length > 0) {
         setSaveStatus({
           type: "success",
-          message: `Uploaded ${uploadedUrls.length} of ${files.length} images. Failed: ${failedFiles.join(", ")}`
+          message: `Uploaded ${uploadedPhotos.length} of ${files.length} images (3 sizes each). Failed: ${failedFiles.join(", ")}`
         });
       } else {
         setSaveStatus({
           type: "success",
-          message: `${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded! Will appear on site in ~1-2 min.`
+          message: `${uploadedPhotos.length} image${uploadedPhotos.length > 1 ? 's' : ''} uploaded with optimized sizes! Will appear in ~1-2 min.`
         });
       }
     } catch (error: any) {
