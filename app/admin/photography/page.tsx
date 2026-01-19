@@ -60,6 +60,7 @@ export default function AdminPhotographyPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
   const [uploadTargetProject, setUploadTargetProject] = useState<string | null>(null);
 
   // Project management
@@ -227,60 +228,85 @@ export default function AdminPhotographyPage() {
     }
   };
 
-  const uploadImageToGitHub = async (file: File) => {
+  // Upload a single image to GitHub and return its URL (does NOT update JSON)
+  const uploadSingleImage = async (file: File): Promise<string> => {
+    const reader = new FileReader();
+    const base64Promise = new Promise<string>((resolve, reject) => {
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(",")[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+    });
+    reader.readAsDataURL(file);
+    const base64Content = await base64Promise;
+
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const filePath = `public/images/photography/${timestamp}_${safeName}`;
+
+    // Upload image file to GitHub
+    const uploadResponse = await fetch(
+      `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${githubToken}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        body: JSON.stringify({
+          message: `Upload photo: ${safeName}`,
+          content: base64Content,
+          branch: config.branch,
+        }),
+      }
+    );
+
+    if (!uploadResponse.ok) {
+      const err = await uploadResponse.json();
+      throw new Error(err.message || "Failed to upload image");
+    }
+
+    return `/images/photography/${timestamp}_${safeName}`;
+  };
+
+  // Upload multiple images, then update JSON once at the end
+  const uploadMultipleImages = async (files: File[], targetProject: string | null) => {
     setUploading(true);
+    setUploadProgress({ current: 0, total: files.length });
     setSaveStatus({ type: null, message: "" });
 
+    const uploadedUrls: string[] = [];
+    const failedFiles: string[] = [];
+
     try {
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve, reject) => {
-        reader.onload = () => {
-          const result = reader.result as string;
-          const base64 = result.split(",")[1];
-          resolve(base64);
-        };
-        reader.onerror = reject;
-      });
-      reader.readAsDataURL(file);
-      const base64Content = await base64Promise;
-
-      const timestamp = Date.now();
-      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-      const filePath = `public/images/photography/${timestamp}_${safeName}`;
-
-      // Upload image file to GitHub
-      const uploadResponse = await fetch(
-        `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${filePath}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${githubToken}`,
-            Accept: "application/vnd.github.v3+json",
-          },
-          body: JSON.stringify({
-            message: `Upload photo: ${safeName}`,
-            content: base64Content,
-            branch: config.branch,
-          }),
+      // Upload all images one by one (sequentially to avoid rate limits)
+      for (let i = 0; i < files.length; i++) {
+        setUploadProgress({ current: i + 1, total: files.length });
+        try {
+          const url = await uploadSingleImage(files[i]);
+          uploadedUrls.push(url);
+        } catch (error: any) {
+          failedFiles.push(files[i].name);
+          console.error(`Failed to upload ${files[i].name}:`, error);
         }
-      );
-
-      if (!uploadResponse.ok) {
-        const err = await uploadResponse.json();
-        throw new Error(err.message || "Failed to upload image");
       }
 
-      const imageUrl = `/images/photography/${timestamp}_${safeName}`;
+      if (uploadedUrls.length === 0) {
+        throw new Error("All uploads failed");
+      }
 
-      // Add new photo - either to a project or standalone
-      const newPhoto: PhotoImage = {
-        src: imageUrl,
+      // Create new photo entries for all successfully uploaded images
+      const newPhotos: PhotoImage[] = uploadedUrls.map(url => ({
+        src: url,
         description: "New photograph",
-        ...(uploadTargetProject ? { project: uploadTargetProject } : {})
-      };
-      const newData = { ...data!, images: [newPhoto, ...data!.images] };
+        ...(targetProject ? { project: targetProject } : {})
+      }));
 
-      // Auto-save to GitHub immediately
+      const newData = { ...data!, images: [...newPhotos, ...data!.images] };
+
+      // Now update JSON once with all new images
       const getFileResponse = await fetch(
         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/content/photography.json?ref=${config.branch}`,
         {
@@ -305,7 +331,7 @@ export default function AdminPhotographyPage() {
             Accept: "application/vnd.github.v3+json",
           },
           body: JSON.stringify({
-            message: `Add photo: ${safeName}`,
+            message: `Add ${uploadedUrls.length} photo(s)`,
             content: contentBase64,
             sha: fileData.sha,
             branch: config.branch,
@@ -316,45 +342,73 @@ export default function AdminPhotographyPage() {
       if (!updateResponse.ok) throw new Error("Failed to update photography file");
 
       setData(newData);
-      setSaveStatus({ type: "success", message: "Image uploaded! Will appear on site in ~1-2 min after rebuild." });
+
+      if (failedFiles.length > 0) {
+        setSaveStatus({
+          type: "success",
+          message: `Uploaded ${uploadedUrls.length} of ${files.length} images. Failed: ${failedFiles.join(", ")}`
+        });
+      } else {
+        setSaveStatus({
+          type: "success",
+          message: `${uploadedUrls.length} image${uploadedUrls.length > 1 ? 's' : ''} uploaded! Will appear on site in ~1-2 min.`
+        });
+      }
     } catch (error: any) {
       setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
     } finally {
       setUploading(false);
+      setUploadProgress(null);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
     }
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>, targetProject: string | null) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
     e.target.value = "";
 
-    // Check if HEIC and convert to JPEG
-    const isHeic = file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
+    const filesToUpload: File[] = [];
 
-    if (isHeic) {
-      setUploading(true);
-      setSaveStatus({ type: null, message: "" });
+    // Process all files, converting HEIC if needed
+    setUploading(true);
+    setSaveStatus({ type: null, message: "Processing files..." });
 
-      try {
-        const heic2any = (await import("heic2any")).default;
-        const convertedBlob = await heic2any({
-          blob: file,
-          toType: "image/jpeg",
-          quality: 0.9,
-        }) as Blob;
+    try {
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        const isHeic = file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
 
-        const jpegName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
-        const convertedFile = new File([convertedBlob], jpegName, { type: "image/jpeg" });
+        if (isHeic) {
+          try {
+            const heic2any = (await import("heic2any")).default;
+            const convertedBlob = await heic2any({
+              blob: file,
+              toType: "image/jpeg",
+              quality: 0.9,
+            }) as Blob;
 
-        await uploadImageToGitHub(convertedFile);
-      } catch (error: any) {
-        setSaveStatus({ type: "error", message: `HEIC conversion failed: ${error.message}` });
-        setUploading(false);
+            const jpegName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
+            const convertedFile = new File([convertedBlob], jpegName, { type: "image/jpeg" });
+            filesToUpload.push(convertedFile);
+          } catch (error: any) {
+            console.error(`Failed to convert ${file.name}:`, error);
+            // Skip this file but continue with others
+          }
+        } else {
+          filesToUpload.push(file);
+        }
       }
-    } else {
-      uploadImageToGitHub(file);
+
+      if (filesToUpload.length === 0) {
+        throw new Error("No valid files to upload");
+      }
+
+      // Now upload all processed files
+      await uploadMultipleImages(filesToUpload, targetProject);
+    } catch (error: any) {
+      setSaveStatus({ type: "error", message: `Processing failed: ${error.message}` });
+      setUploading(false);
     }
   };
 
@@ -496,18 +550,22 @@ export default function AdminPhotographyPage() {
                       <div className="flex items-center gap-2 mb-3">
                         <label className="flex items-center gap-2 bg-black text-white px-3 py-1.5 rounded text-xs cursor-pointer hover:bg-gray-800">
                           <Upload className="w-3 h-3" />
-                          {uploading && uploadTargetProject === project.slug ? "Uploading..." : "Upload to Gallery"}
+                          {uploading && uploadTargetProject === project.slug
+                            ? (uploadProgress ? `Uploading ${uploadProgress.current}/${uploadProgress.total}...` : "Uploading...")
+                            : "Upload to Gallery"}
                           <input
                             type="file"
                             accept="image/*"
+                            multiple
                             className="hidden"
                             onChange={(e) => {
                               setUploadTargetProject(project.slug);
-                              handleFileSelect(e);
+                              handleFileSelect(e, project.slug);
                             }}
                             disabled={uploading}
                           />
                         </label>
+                        <span className="text-xs text-gray-500">Select multiple files at once</span>
                       </div>
 
                       {projectPhotos.length > 0 ? (
@@ -555,28 +613,30 @@ export default function AdminPhotographyPage() {
         </div>
 
         {/* Add Photo Section */}
-        <div className="mb-6 flex gap-3">
+        <div className="mb-6 flex flex-wrap gap-3 items-center">
           <label className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-800">
             <Upload className="w-4 h-4" />
             {uploading && !uploadTargetProject ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Uploading...
+                {uploadProgress ? `Uploading ${uploadProgress.current}/${uploadProgress.total}...` : "Uploading..."}
               </>
             ) : (
-              "Upload Standalone Photo"
+              "Upload Standalone Photos"
             )}
             <input
               type="file"
               accept="image/*"
+              multiple
               className="hidden"
               onChange={(e) => {
                 setUploadTargetProject(null);
-                handleFileSelect(e);
+                handleFileSelect(e, null);
               }}
               disabled={uploading}
             />
           </label>
+          <span className="text-sm text-gray-500">Select multiple files at once</span>
 
           {!showAddForm ? (
             <button onClick={() => setShowAddForm(true)} className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg border hover:bg-gray-50">

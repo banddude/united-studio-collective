@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
-import { toThumbPath } from "../lib/store-data";
 
 interface Project {
   slug: string;
@@ -127,7 +126,7 @@ export default function PhotographyPage() {
               onClick={() => openLightbox(index)}
             >
               <Image
-                src={toThumbPath(photo.src)}
+                src={photo.src}
                 alt={photo.alt}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"

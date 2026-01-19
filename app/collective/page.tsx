@@ -4,7 +4,6 @@ import { Instagram, ExternalLink, Headphones } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import collectiveData from "../../content/collective.json";
-import { toThumbPath } from "../lib/store-data";
 
 interface Member {
   name: string;
@@ -144,7 +143,7 @@ export default function CollectivePage() {
                   <div className="w-56 md:w-72 flex-shrink-0 order-1 md:order-2">
                     <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                       <Image
-                        src={toThumbPath(member.image)}
+                        src={member.image}
                         alt={member.name}
                         fill
                         className="object-cover"
