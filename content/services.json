@@ -20,18 +20,6 @@
       "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
     },
     {
-      "id": "music-videos",
-      "title": "Music Videos",
-      "description": "Visual narratives that amplify your sound. Our team crafts compelling music videos that resonate with audiences and bring your artistic vision to the screen.",
-      "features": [
-        "Creative Treatment",
-        "Location Scouting",
-        "Performance Capture",
-        "Visual Effects"
-      ],
-      "image": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80"
-    },
-    {
       "id": "photography",
       "title": "Photography",
       "description": "Compelling images that tell detailed stories! Our exceptional photographers specialize in editorial, portrait, product and BTS photography utilizing both analog and digital formats.",
