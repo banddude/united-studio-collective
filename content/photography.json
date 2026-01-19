@@ -20,14 +20,17 @@
   ],
   "images": [
     {
+      "src": "/images/photography/1768811287575_Selects_Evan_1_.JPG",
+      "description": "New photograph"
+    },
+    {
       "src": "/images/photography/1768517246635_img036-2.jpg",
       "description": "Remain On Hold Gallery",
       "project": "remain-on-hold"
     },
     {
       "src": "/images/photography/1768811144945_Selects_Evan_24_.JPG",
-      "description": "New photograph",
-      "project": "remain-on-hold"
+      "description": "New photograph"
     },
     {
       "src": "/images/photography/963954_3b1ade74535044fcba87f864819ad9bf~mv2.jpg",
