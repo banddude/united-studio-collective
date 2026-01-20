@@ -44,6 +44,19 @@ function artistToSlug(artist: string): string {
   return artist.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+function extractYouTubeId(url: string): string {
+  // Handle youtu.be/VIDEO_ID format
+  const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (shortMatch) return shortMatch[1];
+
+  // Handle youtube.com/watch?v=VIDEO_ID format
+  const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+  if (longMatch) return longMatch[1];
+
+  // Already just an ID
+  return url;
+}
+
 export function generateStaticParams() {
   return (collectiveData.members as Member[])
     .filter(m => m.youtube)
@@ -163,7 +176,7 @@ export default async function InterviewPage({ params }: PageProps) {
           <div className="mb-10">
             <div className="relative w-full aspect-video bg-black">
               <iframe
-                src={`https://www.youtube.com/embed/${member.youtube}`}
+                src={`https://www.youtube.com/embed/${extractYouTubeId(member.youtube)}`}
                 title={`Interview with ${member.name}`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
