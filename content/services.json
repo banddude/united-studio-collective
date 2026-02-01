@@ -17,7 +17,7 @@
         "Editoral Photographs",
         "Post Production Services (Editing, Sound Mixing & Master, Color Grading, Skin Retouching)"
       ],
-      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+      "image": "/images/services/1769985480991_USC_JessieLayingDown1.jpg"
     },
     {
       "id": "photography",
@@ -29,7 +29,7 @@
         "BTS Photography",
         "Lifestyle Photograhy"
       ],
-      "image": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&q=80"
+      "image": "/images/services/1769985575551_img20200801_16593918.jpg"
     },
     {
       "id": "post-production",
@@ -41,7 +41,7 @@
         "Sound Design",
         "Film Scoring"
       ],
-      "image": "https://images.unsplash.com/photo-1535016120720-40c646be5580?w=800&q=80"
+      "image": "/images/services/1769985645699_img023.jpg"
     }
   ],
   "cta": {
