@@ -45,7 +45,7 @@ export default async function ProjectGalleryPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get all images for this project with thumb/full support
+  // Get all images for this project with thumb/medium/full support
   const projectImages = project?.images?.length
     ? project.images.map(src => ({ src, alt: project.name }))
     : (photographyData.images as ImageData[])
@@ -53,6 +53,7 @@ export default async function ProjectGalleryPage({ params }: PageProps) {
         .map(img => ({
           src: img.src,
           thumb: img.thumb || img.src,
+          medium: img.medium || img.src,
           full: img.full || img.src,
           alt: img.description
         }));

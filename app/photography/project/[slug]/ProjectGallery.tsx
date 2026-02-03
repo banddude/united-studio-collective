@@ -8,6 +8,7 @@ interface ProjectGalleryProps {
   images: {
     src: string;
     thumb?: string;
+    medium?: string;
     full?: string;
     alt: string;
   }[];
@@ -80,7 +81,7 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
             onClick={() => openLightbox(index)}
           >
             <Image
-              src={photo.thumb || photo.src}
+              src={photo.medium || photo.src}
               alt={photo.alt}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
