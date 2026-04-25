@@ -2,7 +2,18 @@
   "page": "collective",
   "title": "The Collective",
   "description": "The Collective is an avenue to experience the work of artists, collaborators, and masters of their craft. At United Studio Collective, our mission is to bring artists together to create amazing visuals. Whether that is in the world of cinema, photography or anything somewhere in between! Modern culture tends to hyper-focus on the individual artist, USC aims to take a hold of that narrative and refocus it on all the amazing artists who are involved. This is the gateway to some of the phenomenal artists we have experienced in our journey of creating United Studio Collective. The list may seem small right now, it's only getting started!",
-  "members": [
+  "headliner": {
+    "name": "Justus Martin",
+    "role": "Photographer",
+    "bio": "Native to Miami, Florida, Justus Martin was fascinated by his father's camera and gear, but only started dabbling in photography in early high school. Initial interest momentarily wavered between photography and aspiring to be a videographer for skateboard videos, but photography dominated the competition. Years elapsed without serious shooting but eventually fueled by adolescent angst of a breakup, he started shooting again while in college. Finding some success in creating interesting images, he decided to regularly practice. Justus now views his craft as storytelling typically in a realistic and yet aesthetic manner. Outside of photography, he loves the outdoors, freediving, and learning about ways to be healthy.",
+    "image": "/images/collective/JustusMartin.jpg",
+    "website": "",
+    "instagram": "",
+    "youtube": "",
+    "audioUrl": "",
+    "storeSlug": "justus-martin"
+  },
+  "pastArtists": [
     {
       "name": "Jessica N. Maxwell",
       "role": "Photographer",

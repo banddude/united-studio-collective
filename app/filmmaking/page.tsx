@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ServicesBanner from "../components/ServicesBanner";
 import { Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const basePath = "";
@@ -346,6 +347,9 @@ export default function FilmmakingPage() {
           )}
         </div>
       </main>
+
+      <ServicesBanner />
+
 
       {/* Footer */}
       <Footer />

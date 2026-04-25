@@ -57,8 +57,21 @@ function extractYouTubeId(url: string): string {
   return url;
 }
 
+function getAllMembers(): Member[] {
+  const data = collectiveData as unknown as {
+    headliner?: Member;
+    pastArtists?: Member[];
+    members?: Member[]; // legacy fallback
+  };
+  const members: Member[] = [];
+  if (data.headliner) members.push(data.headliner);
+  if (Array.isArray(data.pastArtists)) members.push(...data.pastArtists);
+  if (Array.isArray(data.members)) members.push(...data.members);
+  return members;
+}
+
 export function generateStaticParams() {
-  return (collectiveData.members as Member[])
+  return getAllMembers()
     .filter(m => m.youtube)
     .map(m => ({
       slug: artistToSlug(m.name),
@@ -72,7 +85,7 @@ interface PageProps {
 export default async function InterviewPage({ params }: PageProps) {
   const { slug } = await params;
 
-  const member = (collectiveData.members as Member[]).find(
+  const member = getAllMembers().find(
     m => artistToSlug(m.name) === slug
   );
 

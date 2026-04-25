@@ -4,10 +4,10 @@
   "defaultSize": "16x20",
   "defaultDescription": "This photograph is printed by Digital Photo Printing & Studio, located in Glendale, CA. Whether you have a wall already full of art, or you are looking to start your collection, this photograph is the perfect addition to any home. It is also an amazing gift. All photographs come signed by the artist!",
   "featuredArtist": {
-    "name": "Jessica N. Maxwell",
+    "name": "Justus Martin",
     "tagline": "Featured Artist",
-    "description": "Browse Jessica's collection of work that draws from years of travel, cross-cultural observation, and a lifelong fascination with the ways people express strength, tenderness, and meaning in their everyday lives.",
-    "image": "/images/collective/JessicaNMaxwell.jpg"
+    "description": "Native to Miami, Justus Martin's photography is patient, observant, and quietly cinematic. The Collective is excited to welcome him as our next featured artist.",
+    "image": "/images/collective/JustusMartin.jpg"
   },
   "products": [
     {
@@ -163,7 +163,8 @@
         "frameless_price_id": "price_1SqJ3DA4aSIVsJzy0vTYhbLt",
         "framed_black_price_id": "price_1SqO0oA4aSIVsJzyjCwyepVC",
         "framed_white_price_id": "price_1SqO0oA4aSIVsJzyVLWNrSRM"
-      }
+      },
+      "archived": true
     },
     {
       "id": 12,
@@ -178,7 +179,8 @@
         "frameless_price_id": "price_1SqJ3NA4aSIVsJzy4LSoAb4p",
         "framed_black_price_id": "price_1SqO10A4aSIVsJzyczUBIfeB",
         "framed_white_price_id": "price_1SqO10A4aSIVsJzyTE1AEaq9"
-      }
+      },
+      "archived": true
     },
     {
       "id": 13,
@@ -193,7 +195,8 @@
         "frameless_price_id": "price_1SqJ3PA4aSIVsJzyIy6CoUI1",
         "framed_black_price_id": "price_1SqO10A4aSIVsJzy1vRJBZz2",
         "framed_white_price_id": "price_1SqO11A4aSIVsJzyomstgLpT"
-      }
+      },
+      "archived": true
     },
     {
       "id": 14,
@@ -208,7 +211,8 @@
         "frameless_price_id": "price_1SqJ3QA4aSIVsJzyB3KwuQHK",
         "framed_black_price_id": "price_1SqO11A4aSIVsJzyEGRjc0FC",
         "framed_white_price_id": "price_1SqO11A4aSIVsJzyahywWQ0K"
-      }
+      },
+      "archived": true
     },
     {
       "id": 15,
@@ -223,7 +227,105 @@
         "frameless_price_id": "price_1SqJ3RA4aSIVsJzyGUFKxtiX",
         "framed_black_price_id": "price_1SqO12A4aSIVsJzyVYmeCZfN",
         "framed_white_price_id": "price_1SqO12A4aSIVsJzyuYFAwO11"
-      }
+      },
+      "archived": true
+    },
+    {
+      "id": 16,
+      "name": "Justus Martin \u2014 Selection 01",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin1.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
+    },
+    {
+      "id": 17,
+      "name": "Justus Martin \u2014 Selection 02",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin2.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
+    },
+    {
+      "id": 18,
+      "name": "Justus Martin \u2014 Selection 03",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin3.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
+    },
+    {
+      "id": 19,
+      "name": "Justus Martin \u2014 Selection 04",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin4.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
+    },
+    {
+      "id": 20,
+      "name": "Justus Martin \u2014 Selection 05",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin5.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
+    },
+    {
+      "id": 21,
+      "name": "Justus Martin \u2014 Selection 06",
+      "price": 85,
+      "artist": "Justus Martin",
+      "image": "/images/store/justus/JustusMartin6.jpg",
+      "stripe": {
+        "frameless": "",
+        "framed_black": "",
+        "framed_white": "",
+        "frameless_price_id": "",
+        "framed_black_price_id": "",
+        "framed_white_price_id": ""
+      },
+      "pendingTitle": true
     }
-  ]
+  ],
+  "archivedNotice": "Photo no longer available for sale, please contact United Studio Collective directly for purchase."
 }

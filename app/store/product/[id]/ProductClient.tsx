@@ -23,6 +23,7 @@ interface ProductClientProps {
   size: string;
   description: string;
   stripeEnabled: boolean;
+  archivedNotice: string;
 }
 
 export default function ProductClient({
@@ -33,7 +34,11 @@ export default function ProductClient({
   size,
   description,
   stripeEnabled,
+  archivedNotice,
 }: ProductClientProps) {
+
+  const isArchived = !!product.archived;
+
   const router = useRouter();
   const { addItem } = useCart();
 
@@ -249,7 +254,22 @@ export default function ProductClient({
             {/* Right: Product Details */}
             <div>
               <h1 className="text-3xl font-medium text-black mb-4">{product.name}</h1>
-              <p className="text-2xl text-black mb-6">${currentPrice.toFixed(2)}</p>
+              {!isArchived && (
+                <p className="text-2xl text-black mb-6">${currentPrice.toFixed(2)}</p>
+              )}
+
+              {isArchived && (
+                <div className="mb-6 border border-gray-300 bg-gray-50 p-5">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">Archived</p>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-4">{archivedNotice}</p>
+                  <Link
+                    href="/contact"
+                    className="inline-block bg-black text-white px-5 py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    Contact USC
+                  </Link>
+                </div>
+              )}
 
               {/* Error Message */}
               {error && (
@@ -258,6 +278,8 @@ export default function ProductClient({
                 </div>
               )}
 
+              {!isArchived && (
+                <>
               {/* Frame Option */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-black mb-2">
@@ -357,6 +379,8 @@ export default function ProductClient({
               >
                 Buy Now
               </button>
+                </>
+              )}
             </div>
           </div>
         </div>

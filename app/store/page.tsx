@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ServicesBanner from "../components/ServicesBanner";
 import { getProducts, getDisplayArtists, artistToSlug, getProductsByArtist, getFeaturedArtist, getThumbPath } from "../lib/store-data";
 
 export default function StorePage() {
@@ -96,6 +97,7 @@ export default function StorePage() {
               <nav className="pt-3 space-y-2">
                 <Link href="/store" className="block text-sm text-white py-1">All Products</Link>
                 <Link href="/store/winter-spring-26" className="block text-sm text-gray-300 py-1">Winter Spring '26</Link>
+                <Link href="/store/archive" className="block text-sm text-gray-400 py-1">Archive</Link>
               </nav>
               <h3 className="text-xs uppercase tracking-wider text-gray-400 mt-4 mb-2">Artists</h3>
               <nav className="space-y-2">
@@ -133,6 +135,12 @@ export default function StorePage() {
                   className="block text-sm hover:text-gray-300 transition-colors text-gray-300"
                 >
                   Winter Spring '26
+                </Link>
+                <Link
+                  href="/store/archive"
+                  className="block text-sm hover:text-gray-300 transition-colors text-gray-400"
+                >
+                  Archive
                 </Link>
               </nav>
 
@@ -188,6 +196,9 @@ export default function StorePage() {
           </main>
         </div>
       </div>
+
+      <ServicesBanner />
+
 
       {/* Footer */}
       <Footer />

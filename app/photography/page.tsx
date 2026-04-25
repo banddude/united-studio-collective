@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ServicesBanner from "../components/ServicesBanner";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import photographyData from "../../content/photography.json";
 
@@ -150,6 +151,9 @@ export default function PhotographyPage() {
           ))}
         </div>
       </main>
+
+      <ServicesBanner />
+
 
       {/* Footer */}
       <Footer />

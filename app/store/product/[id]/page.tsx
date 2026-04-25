@@ -3,18 +3,21 @@ import type { Metadata } from "next";
 import ProductClient from "./ProductClient";
 import {
   getProducts,
+  getAllProducts,
   getProduct,
   getDefaultArtist,
   getDefaultSize,
   getDefaultDescription,
   isStripeEnabled,
+  getArchivedNotice,
 } from "../../../lib/store-data";
 
 const baseUrl = "https://unitedstudiocollective.com";
 
 // Generate static params for all product IDs from the JSON
 export function generateStaticParams() {
-  const products = getProducts();
+  // Include archived products so old URLs still resolve to the archived view.
+  const products = getAllProducts();
   return products.map((product) => ({
     id: String(product.id),
   }));
@@ -95,6 +98,7 @@ export default async function ProductPage({ params }: PageProps) {
       size={size}
       description={description}
       stripeEnabled={isStripeEnabled()}
+      archivedNotice={getArchivedNotice()}
     />
   );
 }

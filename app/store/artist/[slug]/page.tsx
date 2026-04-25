@@ -4,16 +4,19 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import {
   getProductsByArtist,
-  getArtists,
+  getArchivedProductsByArtist,
+  getAllArtists,
   getDisplayArtists,
   artistToSlug,
   slugToArtist,
   getThumbPath,
+  getArchivedNotice,
 } from "../../../lib/store-data";
+import ServicesBanner from "../../../components/ServicesBanner";
 import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
-  const artists = getArtists();
+  const artists = getAllArtists();
   return artists.map((artist) => ({
     slug: artistToSlug(artist),
   }));
@@ -31,8 +34,12 @@ export default async function ArtistStorePage({ params }: PageProps) {
     notFound();
   }
 
-  const products = getProductsByArtist(artist);
+  const activeProducts = getProductsByArtist(artist);
+  const archivedProducts = getArchivedProductsByArtist(artist);
+  const products = activeProducts;
+  const isArchiveOnly = activeProducts.length === 0 && archivedProducts.length > 0;
   const artists = getDisplayArtists();
+  const notice = getArchivedNotice();
 
   return (
     <div className="min-h-screen bg-white">
@@ -129,13 +136,30 @@ export default async function ArtistStorePage({ params }: PageProps) {
 
           {/* Main Content Area */}
           <main className="flex-1">
+            {isArchiveOnly && (
+              <div className="mb-6 border border-gray-300 bg-gray-50 p-5 max-w-3xl">
+                <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">Past Artist</p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">{notice}</p>
+                <Link
+                  href="/contact"
+                  className="inline-block text-sm underline underline-offset-4 text-black hover:text-gray-700"
+                >
+                  Contact USC
+                </Link>
+              </div>
+            )}
+
             <div className="mb-4">
-              <p className="text-sm text-gray-600">{products.length} products</p>
+              <p className="text-sm text-gray-600">
+                {isArchiveOnly
+                  ? `${archivedProducts.length} archived ${archivedProducts.length === 1 ? "print" : "prints"}`
+                  : `${products.length} products`}
+              </p>
             </div>
 
             {/* Product Grid - Responsive columns */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-              {products.map((product) => (
+              {(isArchiveOnly ? archivedProducts : products).map((product) => (
                 <Link
                   key={product.id}
                   href={`/store/product/${product.id}`}
@@ -146,22 +170,30 @@ export default async function ArtistStorePage({ params }: PageProps) {
                       src={getThumbPath(product.image)}
                       alt={product.name}
                       fill
-                      className="object-cover transition-transform duration-200 group-hover:scale-105"
+                      className={`object-cover transition-transform duration-200 group-hover:scale-105 ${
+                        isArchiveOnly ? "grayscale-[15%] group-hover:grayscale-0" : ""
+                      }`}
                       unoptimized
                     />
                   </div>
                   <h3 className="text-sm font-medium text-black mb-1">
                     {product.name}
                   </h3>
-                  <div className="text-sm text-gray-600">
-                    ${product.price.toFixed(2)}
-                  </div>
+                  {isArchiveOnly ? (
+                    <div className="text-xs text-gray-500 italic">Archived</div>
+                  ) : (
+                    <div className="text-sm text-gray-600">
+                      ${product.price.toFixed(2)}
+                    </div>
+                  )}
                 </Link>
               ))}
             </div>
           </main>
         </div>
       </div>
+
+      <ServicesBanner />
 
       {/* Footer */}
       <Footer />

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ServicesBanner from "../components/ServicesBanner";
 
 export default function About() {
   return (
@@ -123,6 +124,9 @@ export default function About() {
           <div className="text-center text-xs text-gray-400 mt-4">1/1</div>
         </section>
       </main>
+
+      <ServicesBanner />
+
 
       {/* Footer */}
       <Footer />
