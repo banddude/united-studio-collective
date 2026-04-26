@@ -108,7 +108,7 @@ export default function ContactPage() {
           {/* Background Image - Griffith Observatory */}
           <div className="absolute inset-0">
             <Image
-              src="/images/contact/observatory.jpg"
+              src="/images/contact/medium_observatory.jpg"
               alt="Griffith Observatory at sunset"
               fill
               className="object-cover"

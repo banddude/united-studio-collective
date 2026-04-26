@@ -172,6 +172,16 @@ export function getThumbPath(imagePath: string): string {
   return [...parts, 'thumbs', filename].join('/');
 }
 
+// Convert image path to medium-resolution path. Falls back to the original
+// path; the caller's <Image> tag should still render even if the medium file
+// doesn't exist on disk yet.
+export function getMediumPath(imagePath: string): string {
+  // /images/store/image.jpg -> /images/store/medium/image.jpg
+  const parts = imagePath.split('/');
+  const filename = parts.pop();
+  return [...parts, 'medium', filename].join('/');
+}
+
 // Convert any image path to thumbnail path (generic version)
 export function toThumbPath(imagePath: string): string {
   const parts = imagePath.split('/');

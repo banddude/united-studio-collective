@@ -1,49 +1,7 @@
 {
   "page": "services",
-  "title": "Full Production Services",
-  "subtitle": "United Studio Collective brings the full suite of white-glove production services to your door! From concept development to final delivery and everything in between, USC believes that our passion, and drive to push the industry forward can provide world class fashion films, quickly delivered - stories that brands are proud to own.\n\nWe specialize in creating world renowned fashion and experimental films",
-  "services": [
-    {
-      "id": "fashion-films",
-      "title": "Fashion Films",
-      "description": "Merging the art of fashion with the beauty of our world, we aim to create timeless films that tell visually compelling stories",
-      "features": [
-        "Film Concept Development",
-        "Filming & Directing",
-        "Casting",
-        "Professional Crew",
-        "Production/Art Design",
-        "Location Management",
-        "Editorial Photographs",
-        "Post Production Services (Editing, Sound Mixing & Master, Color Grading, Skin Retouching)"
-      ],
-      "image": "/images/services/1769985480991_USC_JessieLayingDown1.jpg"
-    },
-    {
-      "id": "photography",
-      "title": "Photography",
-      "description": "Compelling images that tell detailed stories! Our exceptional photographers specialize in editorial, portrait, product and BTS photography utilizing both analog and digital formats.",
-      "features": [
-        "Editorial Shoots",
-        "Product Photography",
-        "BTS Photography",
-        "Lifestyle Photography"
-      ],
-      "image": "/images/services/desert_dunes.jpg"
-    },
-    {
-      "id": "post-production",
-      "title": "Post Production",
-      "description": "The final leg of the journey! Our films aim to provide a quick and reasonable turnaround time. Providing masterclass editing, color grading, sound design, and compositions.",
-      "features": [
-        "Video Editing",
-        "Color Correction",
-        "Sound Design",
-        "Film Scoring"
-      ],
-      "image": "/images/services/1769985645699_img023.jpg"
-    }
-  ],
+  "title": "Full Production",
+  "subtitle": "United Studio Collective specializes in fashion films, with the same full production rigor brought to music videos, experimental shorts, and brand work. Concept to delivery, every piece is treated as a complete project: photography, stills, editing, color, and sound all live inside the production, not alongside it.",
   "breakdown": {
     "title": "Service Breakdown",
     "subtitle": "An itemized look at everything United Studio Collective brings to a project. This breakdown does not include actual pricing.",
@@ -51,7 +9,9 @@
       {
         "title": "Pre-Production",
         "items": [
-          { "label": "Story Vision Creation" },
+          {
+            "label": "Story Vision Creation"
+          },
           {
             "label": "Storyboard",
             "subitems": [
@@ -59,10 +19,18 @@
               "Mood Board Creation"
             ]
           },
-          { "label": "Location Scouting" },
-          { "label": "Shoot Scheduling" },
-          { "label": "Gear Sheet Creation & Management" },
-          { "label": "Talent Scouting" }
+          {
+            "label": "Location Scouting"
+          },
+          {
+            "label": "Shoot Scheduling"
+          },
+          {
+            "label": "Gear Sheet Creation & Management"
+          },
+          {
+            "label": "Talent Scouting"
+          }
         ]
       },
       {
@@ -74,8 +42,12 @@
               "Includes meal coverage during the shoot and crafty services"
             ]
           },
-          { "label": "Location Rental" },
-          { "label": "Lodging" },
+          {
+            "label": "Location Rental"
+          },
+          {
+            "label": "Lodging"
+          },
           {
             "label": "Gear List",
             "subitems": [
@@ -87,24 +59,50 @@
               "1 Ton Grip Truck Package"
             ]
           },
-          { "label": "Actors / Models" },
-          { "label": "Hair & Makeup" },
-          { "label": "Director of Photography" },
-          { "label": "1st AC" },
-          { "label": "Production Assistant" },
-          { "label": "Wardrobe / Stylist" },
-          { "label": "Gaffer" },
-          { "label": "Photography Stills" },
-          { "label": "BTS Stills" }
+          {
+            "label": "Actors / Models"
+          },
+          {
+            "label": "Hair & Makeup"
+          },
+          {
+            "label": "Director of Photography"
+          },
+          {
+            "label": "1st AC"
+          },
+          {
+            "label": "Production Assistant"
+          },
+          {
+            "label": "Wardrobe / Stylist"
+          },
+          {
+            "label": "Gaffer"
+          },
+          {
+            "label": "Photography Stills"
+          },
+          {
+            "label": "BTS Stills"
+          }
         ]
       },
       {
         "title": "Post-Production Services",
         "items": [
-          { "label": "Editing" },
-          { "label": "Color Grading" },
-          { "label": "Photography Still Editing" },
-          { "label": "BTS Photo Editing" }
+          {
+            "label": "Editing"
+          },
+          {
+            "label": "Color Grading"
+          },
+          {
+            "label": "Photography Still Editing"
+          },
+          {
+            "label": "BTS Photo Editing"
+          }
         ]
       }
     ]
@@ -120,5 +118,25 @@
     "description": "Let's discuss your next project and bring your vision to life.",
     "buttonText": "Get in Touch",
     "buttonLink": "/contact"
-  }
+  },
+  "galleryHeading": "Recent Work",
+  "gallerySubtitle": "Fashion films are our specialty; we also create music videos, brand films, and experimental content.",
+  "gallery": [
+    {
+      "image": "/images/services/1769985480991_USC_JessieLayingDown1.jpg",
+      "caption": "Fashion Film"
+    },
+    {
+      "image": "/images/services/desert_dunes.jpg",
+      "caption": "Editorial"
+    },
+    {
+      "image": "/images/services/1769985645699_img023.jpg",
+      "caption": "Post"
+    },
+    {
+      "image": "/images/services/1772859812679_img20210707_03244689.jpg",
+      "caption": "Experimental"
+    }
+  ]
 }

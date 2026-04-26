@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import servicesData from "../../content/services.json";
-import { ArrowRight, Check, Play } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 
 interface BreakdownItem {
   label: string;
@@ -17,6 +17,11 @@ interface BreakdownSection {
   items: BreakdownItem[];
 }
 
+interface GalleryItem {
+  image: string;
+  caption?: string;
+}
+
 export default function ServicesPage() {
   const breakdown = servicesData.breakdown as
     | { title: string; subtitle: string; sections: BreakdownSection[] }
@@ -24,70 +29,78 @@ export default function ServicesPage() {
   const reelCta = servicesData.reelCta as
     | { title: string; description: string; buttonText: string; buttonLink: string }
     | undefined;
+  const gallery = (servicesData as { gallery?: GalleryItem[] }).gallery || [];
+  const galleryHeading = (servicesData as { galleryHeading?: string }).galleryHeading;
+  const gallerySubtitle = (servicesData as { gallerySubtitle?: string }).gallerySubtitle;
 
   return (
     <div className="min-h-screen bg-white">
       <Header variant="light" currentPage="Services" />
 
       <main className="pt-[120px] md:pt-[150px]">
-        {/* Hero Section */}
-        <section className="px-4 md:px-8 pb-16 md:pb-24">
-          <div className="max-w-4xl mx-auto text-center">
+        {/* Hero */}
+        <section className="px-4 md:px-8 pb-12 md:pb-20">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-4">
+              {servicesData.page === "services" ? "Services" : "Services"}
+            </p>
             <h1 className="text-4xl md:text-6xl font-light text-black mb-6">
               {servicesData.title}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 font-light whitespace-pre-line">
+            <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
               {servicesData.subtitle}
             </p>
           </div>
         </section>
 
-        {/* Services Grid - photos always on the left */}
-        <section className="px-4 md:px-8">
-          <div className="max-w-6xl mx-auto">
-            {servicesData.services.map((service) => (
-              <div
-                key={service.id}
-                className="flex flex-col md:flex-row gap-8 md:gap-16 items-center mb-20 md:mb-32"
-              >
-                {/* Image - always on the left on desktop */}
-                <div className="w-full md:w-1/2">
-                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+        {/* Recent work strip — visual without committing to a service-list framing */}
+        {gallery.length > 0 && (
+          <section className="px-4 md:px-8 pb-16 md:pb-24">
+            <div className="max-w-6xl mx-auto">
+              {(galleryHeading || gallerySubtitle) && (
+                <div className="mb-8 md:mb-10 flex items-end justify-between gap-6">
+                  <div>
+                    {galleryHeading && (
+                      <h2 className="text-xl md:text-2xl font-light text-black">
+                        {galleryHeading}
+                      </h2>
+                    )}
+                    {gallerySubtitle && (
+                      <p className="text-sm md:text-base text-gray-600 mt-1 max-w-2xl">
+                        {gallerySubtitle}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                {gallery.map((item, i) => (
+                  <div key={i} className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                     <Image
-                      src={service.image}
-                      alt={service.title}
+                      src={item.image}
+                      alt={item.caption || "United Studio Collective"}
                       fill
                       className="object-cover"
                       unoptimized
                     />
+                    {item.caption && (
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-4">
+                        <span className="text-white text-xs uppercase tracking-[0.2em]">
+                          {item.caption}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className="w-full md:w-1/2">
-                  <h2 className="text-2xl md:text-4xl font-light text-black mb-4">
-                    {service.title}
-                  </h2>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-3">
-                    {service.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 text-gray-700">
-                        <Check className="w-5 h-5 text-black flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
-        {/* Service Breakdown - structured pricing-shape outline */}
+        {/* Service Breakdown */}
         {breakdown && (
-          <section className="px-4 md:px-8 pb-20 md:pb-28">
+          <section className="px-4 md:px-8 pb-16 md:pb-24 bg-gray-50 py-16 md:py-20 border-y border-gray-200">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12 md:mb-16">
                 <h2 className="text-3xl md:text-5xl font-light text-black mb-4">
@@ -133,9 +146,9 @@ export default function ServicesPage() {
           </section>
         )}
 
-        {/* Reel CTA - sells on quality before contact */}
+        {/* Reel CTA — sells on quality before pushing to contact */}
         {reelCta && (
-          <section className="bg-gray-50 py-12 md:py-16 px-4 md:px-8 border-y border-gray-200">
+          <section className="bg-white py-12 md:py-16 px-4 md:px-8">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-2xl md:text-3xl font-light text-black mb-3">
                 {reelCta.title}
@@ -152,7 +165,7 @@ export default function ServicesPage() {
           </section>
         )}
 
-        {/* CTA Section */}
+        {/* Contact CTA */}
         <section className="bg-black text-white py-12 md:py-16 px-4 md:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-light mb-4">

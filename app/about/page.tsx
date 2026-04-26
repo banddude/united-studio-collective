@@ -30,7 +30,7 @@ export default function About() {
         <section className="mb-14 flex justify-center">
           <div className="relative w-80 h-80">
             <Image
-              src="/images/about/963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg"
+              src="/images/about/medium_963954_7c1e5fa77e944f5ba66f2a5032bf3801~mv2.jpg"
               alt="United Studio Collective Team"
               fill
               className="object-cover"

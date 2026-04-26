@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
+import ServicesBanner from "../../../components/ServicesBanner";
 import { ArrowLeft } from "lucide-react";
 import photographyData from "../../../../content/photography.json";
 import { notFound } from "next/navigation";
@@ -33,6 +34,21 @@ export function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+// Photography images follow the convention <dir>/<file> with medium_<file>
+// and thumb_<file> siblings. This swaps to the medium variant when present
+// in the path; if the path already uses thumb_/medium_ it returns as-is.
+function getMediumPhotoPath(src: string): string {
+  if (!src) return src;
+  const slash = src.lastIndexOf('/');
+  if (slash < 0) return src;
+  const dir = src.slice(0, slash);
+  const file = src.slice(slash + 1);
+  if (file.startsWith('medium_') || file.startsWith('thumb_') || file.startsWith('full_')) {
+    return src;
+  }
+  return `${dir}/medium_${file}`;
 }
 
 export default async function ProjectGalleryPage({ params }: PageProps) {
@@ -78,10 +94,10 @@ export default async function ProjectGalleryPage({ params }: PageProps) {
           )}
         </div>
 
-        {/* Hero Image */}
+        {/* Hero Image (use medium-resolution version when available) */}
         <div className="relative w-full h-[50vh] md:h-[70vh] mb-2">
           <Image
-            src={project.hero}
+            src={getMediumPhotoPath(project.hero)}
             alt={project.name}
             fill
             className="object-cover"
@@ -93,6 +109,11 @@ export default async function ProjectGalleryPage({ params }: PageProps) {
         {/* Gallery with Lightbox (client component) */}
         <ProjectGallery images={projectImages} />
       </main>
+
+      <ServicesBanner
+        title="Like what you see?"
+        description="United Studio Collective brings full production to fashion films, music videos, and experimental work. See the services."
+      />
 
       <Footer />
     </div>

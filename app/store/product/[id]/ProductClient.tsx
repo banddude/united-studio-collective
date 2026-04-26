@@ -9,6 +9,7 @@ import Footer from "../../../components/Footer";
 import { useCart } from "../../../context/CartContext";
 import { X, ChevronLeft, ChevronRight, Minus, Plus, Check } from "lucide-react";
 import type { Product } from "../../../lib/store-data";
+import { getMediumPath } from "../../../lib/store-data";
 
 const baseUrl = "https://unitedstudiocollective.com";
 const frameOptions = ["Frameless Photograph", "Framed Photograph"];
@@ -235,7 +236,7 @@ export default function ProductClient({
             <div className="space-y-4">
               <div className="relative aspect-square bg-gray-100">
                 <Image
-                  src={product.image}
+                  src={getMediumPath(product.image)}
                   alt={product.name}
                   fill
                   className="object-contain"
