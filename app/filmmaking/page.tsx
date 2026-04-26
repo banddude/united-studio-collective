@@ -28,10 +28,35 @@ interface Video {
 const videos: Video[] = videosData as Video[];
 
 export default function FilmmakingPage() {
-  const [selectedVideo, setSelectedVideo] = useState<Video>(videos[0]);
+  // Deep-link support: /filmmaking?v=<videoId> selects that video on load.
+  // Read the param synchronously off window.location so the initial render
+  // already shows the right video instead of flashing the default first.
+  const initialSelected = (() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const v = params.get("v");
+      if (v) {
+        const match = videos.find((video) => video.videoId === v);
+        if (match) return match;
+      }
+    }
+    return videos[0];
+  })();
+
+  const [selectedVideo, setSelectedVideo] = useState<Video>(initialSelected);
   const [isPlaying, setIsPlaying] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Auto-play the deep-linked video so a user clicking a Services tile
+  // sees the film immediately rather than a still and a play button.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("v")) {
+      setIsPlaying(true);
+    }
+  }, []);
 
   const filteredVideos = videos.filter((video) =>
     video.title.toLowerCase().includes(searchQuery.toLowerCase()) && !video.hidden

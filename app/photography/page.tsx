@@ -30,9 +30,21 @@ interface PhotoImage {
 const projects = (photographyData.projects as Project[]) || [];
 
 // Get standalone images (not linked to a project) for the gallery
+// Pull a stable photo id from the filename so /photography#photo-<id> can
+// scroll the user to a specific image. Wix-derived filenames look like
+// "thumb_963954_<hash>~mv2.jpg" — the hash is what's unique.
+function photoIdFromSrc(srcPath: string): string {
+  const file = srcPath.split("/").pop() || srcPath;
+  const stripped = file
+    .replace(/^thumb_|^medium_|^full_/, "")
+    .replace(/\.(jpg|jpeg|png|webp)$/i, "");
+  return stripped.replace(/~mv2$/, "");
+}
+
 const galleryPhotos = (photographyData.images as PhotoImage[])
   .filter(img => !img.project)
   .map(img => ({
+    id: photoIdFromSrc(img.src),
     // Use thumb for grid, fallback to src if no thumb exists
     thumb: img.thumb || img.src,
     // Use full for lightbox, fallback to src if no full exists
@@ -42,6 +54,20 @@ const galleryPhotos = (photographyData.images as PhotoImage[])
 
 export default function PhotographyPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+
+  // If the URL targets a specific photo via #photo-<id>, open the lightbox
+  // to that image once on mount. Honors deep links from the Services page.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash || "";
+    const m = hash.match(/^#photo-(.+)$/);
+    if (!m) return;
+    const targetId = m[1];
+    const idx = galleryPhotos.findIndex((p) => p.id === targetId);
+    if (idx >= 0) {
+      setSelectedImageIndex(idx);
+    }
+  }, []);
 
   const openLightbox = (index: number) => {
     setSelectedImageIndex(index);
@@ -135,7 +161,8 @@ export default function PhotographyPage() {
           {galleryPhotos.map((photo, index) => (
             <div
               key={index}
-              className="relative aspect-square overflow-hidden cursor-pointer group"
+              id={`photo-${photo.id}`}
+              className="relative aspect-square overflow-hidden cursor-pointer group scroll-mt-[150px]"
               onClick={() => openLightbox(index)}
             >
               <Image

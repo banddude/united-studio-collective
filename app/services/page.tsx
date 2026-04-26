@@ -20,6 +20,8 @@ interface BreakdownSection {
 interface GalleryItem {
   image: string;
   caption?: string;
+  href?: string;
+  description?: string;
 }
 
 export default function ServicesPage() {
@@ -74,25 +76,45 @@ export default function ServicesPage() {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                {gallery.map((item, i) => (
-                  <div key={i} className="relative aspect-[3/4] overflow-hidden bg-gray-100">
-                    <Image
-                      src={item.image}
-                      alt={item.caption || "United Studio Collective"}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                    {item.caption && (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-4">
-                        <span className="text-white text-xs uppercase tracking-[0.2em]">
-                          {item.caption}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                {gallery.map((item, i) => {
+                  const tile = (
+                    <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 group">
+                      <Image
+                        src={item.image}
+                        alt={item.description || item.caption || "United Studio Collective"}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        unoptimized
+                      />
+                      {(item.caption || item.description) && (
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 md:p-5">
+                          {item.caption && (
+                            <span className="text-white text-xs uppercase tracking-[0.25em] block">
+                              {item.caption}
+                            </span>
+                          )}
+                          {item.description && (
+                            <span className="text-white/80 text-sm font-light mt-1 block">
+                              {item.description}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                  return item.href ? (
+                    <Link
+                      key={i}
+                      href={item.href}
+                      className="block focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                      {tile}
+                    </Link>
+                  ) : (
+                    <div key={i}>{tile}</div>
+                  );
+                })}
               </div>
             </div>
           </section>

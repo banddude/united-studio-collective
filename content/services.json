@@ -1,7 +1,7 @@
 {
   "page": "services",
   "title": "Full Production",
-  "subtitle": "United Studio Collective specializes in fashion films, with the same full production rigor brought to music videos, experimental shorts, and brand work. Concept to delivery, every piece is treated as a complete project: photography, stills, editing, color, and sound all live inside the production, not alongside it.",
+  "subtitle": "United Studio Collective specializes in fashion films. We bring the same full production rigor \u2014 concept to delivery \u2014 to experimental shorts, brand work, and beyond. Photography, editing, color, and sound all live inside the production rather than alongside it.",
   "breakdown": {
     "title": "Service Breakdown",
     "subtitle": "An itemized look at everything United Studio Collective brings to a project. This breakdown does not include actual pricing.",
@@ -120,23 +120,25 @@
     "buttonLink": "/contact"
   },
   "galleryHeading": "Recent Work",
-  "gallerySubtitle": "Fashion films are our specialty; we also create music videos, brand films, and experimental content.",
+  "gallerySubtitle": "Examples of projects USC has produced.",
   "gallery": [
     {
       "image": "/images/services/1769985480991_USC_JessieLayingDown1.jpg",
-      "caption": "Fashion Film"
+      "caption": "Fashion",
+      "href": "/filmmaking?v=eGznsWwAf28",
+      "description": "Remain On Hold"
     },
     {
       "image": "/images/services/desert_dunes.jpg",
-      "caption": "Editorial"
-    },
-    {
-      "image": "/images/services/1769985645699_img023.jpg",
-      "caption": "Post"
+      "caption": "Photography",
+      "href": "/photography#photo-963954_68c785f9dcc04d579553545aeba44046",
+      "description": "View the gallery"
     },
     {
       "image": "/images/services/1772859812679_img20210707_03244689.jpg",
-      "caption": "Experimental"
+      "caption": "Experimental",
+      "href": "/filmmaking?v=Mwe9xCaLLBM",
+      "description": "The Seasons of Fall"
     }
   ]
 }
