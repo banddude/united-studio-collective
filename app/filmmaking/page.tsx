@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ServicesBanner from "../components/ServicesBanner";
@@ -44,19 +43,15 @@ export default function FilmmakingPage() {
   })();
 
   const [selectedVideo, setSelectedVideo] = useState<Video>(initialSelected);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.has("v");
+    }
+    return false;
+  });
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Auto-play the deep-linked video so a user clicking a Services tile
-  // sees the film immediately rather than a still and a play button.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("v")) {
-      setIsPlaying(true);
-    }
-  }, []);
 
   const filteredVideos = videos.filter((video) =>
     video.title.toLowerCase().includes(searchQuery.toLowerCase()) && !video.hidden

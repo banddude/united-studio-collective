@@ -5,10 +5,11 @@
  * Downloads images and prepares them for local hosting
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const http = require('http');
+const crypto = require('crypto');
 
 // Collect all unique Wix URLs from content files
 function collectWixUrls() {

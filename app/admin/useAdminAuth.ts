@@ -10,26 +10,37 @@ const DEFAULT_CONFIG = {
 };
 
 export function useAdminAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [githubToken, setGithubToken] = useState("");
-  const [config, setConfig] = useState(DEFAULT_CONFIG);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedAuth = localStorage.getItem("usc_admin_auth");
+      const savedToken = localStorage.getItem("usc_github_token") || DEFAULT_CONFIG.githubToken;
+      return savedAuth === "true" && !!savedToken;
+    }
+    return false;
+  });
+  const [githubToken, setGithubToken] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedToken = localStorage.getItem("usc_github_token");
+      return savedToken || DEFAULT_CONFIG.githubToken;
+    }
+    return DEFAULT_CONFIG.githubToken;
+  });
+  const [config, setConfig] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedConfig = localStorage.getItem("usc_admin_config");
+      if (savedConfig) {
+        try {
+          return JSON.parse(savedConfig);
+        } catch (e) {
+          console.error("Failed to parse saved config", e);
+        }
+      }
+    }
+    return DEFAULT_CONFIG;
+  });
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const savedAuth = localStorage.getItem("usc_admin_auth");
-    const savedConfig = localStorage.getItem("usc_admin_config");
-    const savedToken = localStorage.getItem("usc_github_token");
-
-    if (savedConfig) {
-      setConfig(JSON.parse(savedConfig));
-    }
-
-    const tokenToUse = savedToken || DEFAULT_CONFIG.githubToken;
-
-    if (savedAuth === "true" && tokenToUse) {
-      setIsAuthenticated(true);
-      setGithubToken(tokenToUse);
-    }
     setIsLoaded(true);
   }, []);
 

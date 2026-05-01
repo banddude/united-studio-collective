@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Save,
@@ -37,13 +37,7 @@ export default function AdminContactPage() {
     message: string;
   }>({ type: null, message: "" });
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      fetchContactData();
-    }
-  }, [isLoaded, isAuthenticated]);
-
-  const fetchContactData = async () => {
+  const fetchContactData = useCallback(async () => {
     setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
@@ -69,6 +63,7 @@ export default function AdminContactPage() {
         throw new Error("Failed to fetch contact data");
       }
     } catch (error) {
+      console.error(error);
       setSaveStatus({
         type: "error",
         message: "Failed to load contact data. Check your GitHub token.",
@@ -76,7 +71,13 @@ export default function AdminContactPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [config, githubToken]);
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated) {
+      fetchContactData();
+    }
+  }, [isLoaded, isAuthenticated, fetchContactData]);
 
   const handleSave = async () => {
     if (!data) return;
@@ -125,8 +126,9 @@ export default function AdminContactPage() {
         type: "success",
         message: "Published successfully! Site is rebuilding.",
       });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Failed to save: ${message}` });
     } finally {
       setSaving(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);

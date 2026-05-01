@@ -4,6 +4,7 @@
  * Update all content files to use local image paths instead of Wix URLs
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 
 // Load the URL mapping

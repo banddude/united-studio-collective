@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -72,13 +72,7 @@ export default function AdminAboutPage() {
     logo: "",
   });
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      fetchData();
-    }
-  }, [isLoaded, isAuthenticated]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
@@ -104,11 +98,18 @@ export default function AdminAboutPage() {
         throw new Error("Failed to fetch about data");
       }
     } catch (error) {
+      console.error(error);
       setSaveStatus({ type: "error", message: "Failed to load data. Check your GitHub token." });
     } finally {
       setLoading(false);
     }
-  };
+  }, [config, githubToken]);
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated) {
+      fetchData();
+    }
+  }, [isLoaded, isAuthenticated, fetchData]);
 
   const handleSave = async () => {
     if (!data) return;
@@ -155,8 +156,9 @@ export default function AdminAboutPage() {
         type: "success",
         message: "Published successfully! Site is rebuilding."
       });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Failed to save: ${message}` });
     } finally {
       setSaving(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
@@ -296,8 +298,9 @@ export default function AdminAboutPage() {
       }
 
       setSaveStatus({ type: "success", message: "Image uploaded! Will appear after rebuild." });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Upload failed: ${message}` });
     } finally {
       setUploading(false);
       setUploadingFor(null);

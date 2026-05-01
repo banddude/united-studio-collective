@@ -53,21 +53,18 @@ const galleryPhotos = (photographyData.images as PhotoImage[])
   }));
 
 export default function PhotographyPage() {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-
-  // If the URL targets a specific photo via #photo-<id>, open the lightbox
-  // to that image once on mount. Honors deep links from the Services page.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const hash = window.location.hash || "";
-    const m = hash.match(/^#photo-(.+)$/);
-    if (!m) return;
-    const targetId = m[1];
-    const idx = galleryPhotos.findIndex((p) => p.id === targetId);
-    if (idx >= 0) {
-      setSelectedImageIndex(idx);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash || "";
+      const m = hash.match(/^#photo-(.+)$/);
+      if (m) {
+        const targetId = m[1];
+        const idx = galleryPhotos.findIndex((p) => p.id === targetId);
+        if (idx >= 0) return idx;
+      }
     }
-  }, []);
+    return null;
+  });
 
   const openLightbox = (index: number) => {
     setSelectedImageIndex(index);
