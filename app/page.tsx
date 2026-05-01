@@ -41,7 +41,7 @@ export default function Home() {
             {image.label && (
               <span
                 aria-hidden="true"
-                className="md:hidden pointer-events-none absolute inset-x-0 bottom-10 text-center text-white/85 text-[11px] tracking-[0.4em] uppercase font-light drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]"
+                className="md:hidden pointer-events-none absolute inset-0 flex items-center justify-center text-center text-white/90 text-[12px] tracking-[0.4em] uppercase font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] px-4"
               >
                 {image.label}
               </span>
