@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Save,
   Trash2,
-  GripVertical,
   Plus,
   Loader2,
   CheckCircle,
@@ -68,13 +67,9 @@ export default function AdminServicesPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadingServiceIndex, setUploadingServiceIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      fetchData();
-    }
-  }, [isLoaded, isAuthenticated]);
-
   const fetchData = async () => {
+    if (!config.owner || !config.repo || !githubToken) return;
+    
     setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
@@ -99,12 +94,20 @@ export default function AdminServicesPage() {
       } else {
         throw new Error("Failed to fetch services data");
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Error fetching services:", error);
       setSaveStatus({ type: "error", message: "Failed to load services. Check your GitHub token." });
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, isAuthenticated]);
 
   const handleSave = async () => {
     if (!data) return;
@@ -151,8 +154,9 @@ export default function AdminServicesPage() {
         type: "success",
         message: "Published successfully! Site is rebuilding.",
       });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Failed to save: ${message}` });
     } finally {
       setSaving(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
@@ -316,8 +320,9 @@ export default function AdminServicesPage() {
       setData({ ...data, services: newServices });
 
       setSaveStatus({ type: "success", message: "Image uploaded! Click Publish to save changes." });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Upload failed: ${message}` });
     } finally {
       setUploading(false);
       setUploadingServiceIndex(null);
@@ -365,8 +370,9 @@ export default function AdminServicesPage() {
       const imageUrl = `/images/services/${timestamp}_${baseName}.jpg`;
       setNewService({ ...newService, image: imageUrl });
       setSaveStatus({ type: "success", message: "Image uploaded!" });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Upload failed: ${message}` });
     } finally {
       setUploading(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);

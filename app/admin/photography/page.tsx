@@ -8,15 +8,11 @@ import {
   Trash2,
   GripVertical,
   Plus,
-  Eye,
-  EyeOff,
   Loader2,
   CheckCircle,
   AlertCircle,
   Crown,
   ChevronLeft,
-  Pencil,
-  Image as LucideImage,
   Upload,
 } from "lucide-react";
 import { useAdminAuth } from "../useAdminAuth";
@@ -71,13 +67,9 @@ export default function AdminPhotographyPage() {
   const [editingProjectIndex, setEditingProjectIndex] = useState<number | null>(null);
   const [projectForm, setProjectForm] = useState<Partial<Project>>({});
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      fetchPhotos();
-    }
-  }, [isLoaded, isAuthenticated]);
-
   const fetchPhotos = async () => {
+    if (!config.owner || !config.repo || !githubToken) return;
+    
     setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
@@ -102,12 +94,20 @@ export default function AdminPhotographyPage() {
       } else {
         throw new Error("Failed to fetch photography data");
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Error fetching photos:", error);
       setSaveStatus({ type: "error", message: "Failed to load photos. Check your GitHub token." });
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated) {
+      fetchPhotos();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, isAuthenticated]);
 
   const handleSave = async () => {
     if (!data) return;
@@ -154,8 +154,9 @@ export default function AdminPhotographyPage() {
         type: "success",
         message: "Published successfully! Site is rebuilding."
       });
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Failed to save: ${message}` });
     } finally {
       setSaving(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
@@ -362,7 +363,7 @@ export default function AdminPhotographyPage() {
             description: "New photograph",
             ...(targetProject ? { project: targetProject } : {})
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           failedFiles.push(files[i].name);
           console.error(`Failed to upload ${files[i].name}:`, error);
         }
@@ -422,8 +423,9 @@ export default function AdminPhotographyPage() {
           message: `${uploadedPhotos.length} image${uploadedPhotos.length > 1 ? 's' : ''} uploaded with optimized sizes! Will appear in ~1-2 min.`
         });
       }
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Upload failed: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Upload failed: ${message}` });
     } finally {
       setUploading(false);
       setUploadProgress(null);
@@ -459,7 +461,7 @@ export default function AdminPhotographyPage() {
             const jpegName = file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg');
             const convertedFile = new File([convertedBlob], jpegName, { type: "image/jpeg" });
             filesToUpload.push(convertedFile);
-          } catch (error: any) {
+          } catch (error: unknown) {
             console.error(`Failed to convert ${file.name}:`, error);
             // Skip this file but continue with others
           }
@@ -474,8 +476,9 @@ export default function AdminPhotographyPage() {
 
       // Now upload all processed files
       await uploadMultipleImages(filesToUpload, targetProject);
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Processing failed: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Processing failed: ${message}` });
       setUploading(false);
     }
   };
@@ -638,7 +641,7 @@ export default function AdminPhotographyPage() {
 
                       {projectPhotos.length > 0 ? (
                         <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-                          {projectPhotos.map((photo, photoIndex) => {
+                          {projectPhotos.map((photo) => {
                             const globalIndex = data.images.findIndex(img => img.src === photo.src);
                             return (
                               <div key={photo.src} className="relative aspect-square bg-gray-100 rounded overflow-hidden group">

@@ -32,13 +32,7 @@ export default function AdminStorePage() {
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated && githubToken) {
-      fetchStoreConfig();
-    }
-  }, [isLoaded, isAuthenticated, githubToken]);
-
-  const fetchStoreConfig = async () => {
+  const fetchStoreConfig = useCallback(async () => {
     try {
       // Fetch from GitHub API to always get latest data (not cached static file)
       const res = await fetch(
@@ -78,7 +72,13 @@ export default function AdminStorePage() {
       console.error("Failed to fetch store config:", error);
       setLoading(false);
     }
-  };
+  }, [config, githubToken]);
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated && githubToken) {
+      fetchStoreConfig();
+    }
+  }, [isLoaded, isAuthenticated, githubToken, fetchStoreConfig]);
 
   const handleArtistChange = (artistName: string) => {
     setSelectedArtist(artistName);
@@ -140,7 +140,7 @@ export default function AdminStorePage() {
       } else {
         throw new Error("Failed to update");
       }
-    } catch (error) {
+    } catch {
       setSaveStatus({ type: "error", message: "Failed to save changes. Please try again." });
     } finally {
       setSaving(false);

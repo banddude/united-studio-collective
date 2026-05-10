@@ -25,7 +25,7 @@ export function useAdminAuth() {
     }
     return DEFAULT_CONFIG.githubToken;
   });
-  const [config, setConfig] = useState(() => {
+  const [config] = useState(() => {
     if (typeof window !== "undefined") {
       const savedConfig = localStorage.getItem("usc_admin_config");
       if (savedConfig) {
@@ -41,7 +41,8 @@ export function useAdminAuth() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setIsLoaded(true);
+    const handle = requestAnimationFrame(() => setIsLoaded(true));
+    return () => cancelAnimationFrame(handle);
   }, []);
 
   const login = useCallback((token: string) => {

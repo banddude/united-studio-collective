@@ -23,7 +23,6 @@ interface ProductClientProps {
   artist: string;
   size: string;
   description: string;
-  stripeEnabled: boolean;
   archivedNotice: string;
 }
 
@@ -34,7 +33,6 @@ export default function ProductClient({
   artist,
   size,
   description,
-  stripeEnabled,
   archivedNotice,
 }: ProductClientProps) {
 

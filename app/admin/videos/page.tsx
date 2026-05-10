@@ -48,13 +48,7 @@ export default function AdminVideosPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newVideoUrl, setNewVideoUrl] = useState("");
 
-  useEffect(() => {
-    if (isLoaded && isAuthenticated) {
-      fetchVideos();
-    }
-  }, [isLoaded, isAuthenticated]);
-
-  const fetchVideos = async () => {
+  const fetchVideos = useCallback(async () => {
     setSaveStatus({ type: null, message: "" });
     setLoading(true);
     try {
@@ -81,12 +75,18 @@ export default function AdminVideosPage() {
       } else {
         throw new Error("Failed to fetch videos");
       }
-    } catch (error) {
+    } catch {
       setSaveStatus({ type: "error", message: "Failed to load videos. Check your GitHub token." });
     } finally {
       setLoading(false);
     }
-  };
+  }, [config, githubToken]);
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated) {
+      fetchVideos();
+    }
+  }, [isLoaded, isAuthenticated, fetchVideos]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -140,8 +140,9 @@ export default function AdminVideosPage() {
         message: "Published successfully! Site is rebuilding."
       });
 
-    } catch (error: any) {
-      setSaveStatus({ type: "error", message: `Failed to save: ${error.message}` });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setSaveStatus({ type: "error", message: `Failed to save: ${message}` });
     } finally {
       setSaving(false);
       setTimeout(() => setSaveStatus({ type: null, message: "" }), 10000);
@@ -229,7 +230,7 @@ export default function AdminVideosPage() {
         const oembedData = await oembedResponse.json();
         newVideo.title = oembedData.title || newVideo.title;
       }
-    } catch (error) {
+    } catch {
       console.log("Could not fetch YouTube info, using defaults");
     }
 

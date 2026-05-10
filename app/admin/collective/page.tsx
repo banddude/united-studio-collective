@@ -33,13 +33,16 @@ interface CollectiveData {
   page: string;
   title: string;
   description: string;
-  members: Member[];
+  headliner?: Member;
+  pastArtists?: Member[];
+  members?: Member[]; // Support legacy/transitional structure
 }
 
 export default function AdminCollectivePage() {
   const { isAuthenticated, githubToken, config, isLoaded } = useAdminAuth();
 
-  const [data, setData] = useState<CollectiveData | null>(null);
+  const [rawData, setRawData] = useState<CollectiveData | null>(null);
+  const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{
@@ -85,7 +88,17 @@ export default function AdminCollectivePage() {
             c.charCodeAt(0)
           )
         );
-        setData(JSON.parse(content));
+        const parsed: CollectiveData = JSON.parse(content);
+        setRawData(parsed);
+
+        // Convert headliner + pastArtists to members array
+        const combined: Member[] = [];
+        if (parsed.headliner) combined.push(parsed.headliner);
+        if (parsed.pastArtists) combined.push(...parsed.pastArtists);
+        // Fallback for if it was already migrated to 'members'
+        if (combined.length === 0 && parsed.members) combined.push(...parsed.members);
+
+        setMembers(combined);
       } else {
         throw new Error("Failed to fetch collective data");
       }
@@ -104,10 +117,19 @@ export default function AdminCollectivePage() {
   }, [isLoaded, isAuthenticated, fetchData]);
 
   const handleSave = async () => {
-    if (!data) return;
+    if (!rawData) return;
 
     setSaving(true);
     setSaveStatus({ type: null, message: "" });
+
+    // Split members back into headliner and pastArtists
+    const updatedData = {
+      ...rawData,
+      headliner: members.length > 0 ? members[0] : undefined,
+      pastArtists: members.slice(1),
+    };
+    // Remove the flat 'members' key if it exists to keep json clean
+    delete (updatedData as any).members;
 
     try {
       const getFileResponse = await fetch(
@@ -123,7 +145,7 @@ export default function AdminCollectivePage() {
       if (!getFileResponse.ok) throw new Error("Failed to get current file");
 
       const fileData = await getFileResponse.json();
-      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(updatedData, null, 2))));
 
       const updateResponse = await fetch(
         `https://api.github.com/repos/${config.owner}/${config.repo}/contents/content/collective.json`,
@@ -163,27 +185,25 @@ export default function AdminCollectivePage() {
 
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    if (!data) return;
     const dragIndex = parseInt(e.dataTransfer.getData("memberIndex"));
     if (dragIndex === dropIndex) return;
 
-    const newMembers = [...data.members];
+    const newMembers = [...members];
     const [draggedMember] = newMembers.splice(dragIndex, 1);
     newMembers.splice(dropIndex, 0, draggedMember);
-    setData({ ...data, members: newMembers });
+    setMembers(newMembers);
   };
 
   const deleteMember = (index: number) => {
-    if (!data) return;
     if (confirm("Delete this team member?")) {
-      const newMembers = data.members.filter((_, i) => i !== index);
-      setData({ ...data, members: newMembers });
+      const newMembers = members.filter((_, i) => i !== index);
+      setMembers(newMembers);
     }
   };
 
   const addMember = () => {
-    if (!data || !newMember.name) return;
-    setData({ ...data, members: [...data.members, newMember] });
+    if (!newMember.name) return;
+    setMembers([...members, newMember]);
     setNewMember({ name: "", role: "", bio: "", image: "", website: "", instagram: "", youtube: "", audioUrl: "", storeSlug: "" });
     setShowAddForm(false);
   };
@@ -294,7 +314,7 @@ export default function AdminCollectivePage() {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Page Settings */}
-        {data && (
+        {rawData && (
           <div className="bg-white rounded-lg shadow p-6 mb-8">
             <h2 className="text-lg font-bold mb-4">Page Settings</h2>
             <div className="space-y-4">
@@ -302,16 +322,16 @@ export default function AdminCollectivePage() {
                 <label className="block text-sm font-medium mb-1">Page Title</label>
                 <input
                   type="text"
-                  value={data.title}
-                  onChange={(e) => setData({ ...data, title: e.target.value })}
+                  value={rawData.title}
+                  onChange={(e) => setRawData({ ...rawData, title: e.target.value })}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Description</label>
                 <textarea
-                  value={data.description}
-                  onChange={(e) => setData({ ...data, description: e.target.value })}
+                  value={rawData.description}
+                  onChange={(e) => setRawData({ ...rawData, description: e.target.value })}
                   rows={3}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
                 />
@@ -475,14 +495,14 @@ export default function AdminCollectivePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data?.members.map((member, index) => (
+            {members.map((member, index) => (
               <div
                 key={index}
                 draggable
                 onDragStart={(e) => handleDragStart(e, index)}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, index)}
-                className="bg-white rounded-xl shadow-sm overflow-hidden group border border-gray-100"
+                className={`bg-white rounded-xl shadow-sm overflow-hidden group border ${index === 0 ? "border-black ring-1 ring-black" : "border-gray-100"}`}
               >
                 <div className="relative aspect-[3/4] bg-gray-100 cursor-grab active:cursor-grabbing">
                   {member.image ? (
@@ -490,6 +510,11 @@ export default function AdminCollectivePage() {
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <User className="w-16 h-16 text-gray-300" />
+                    </div>
+                  )}
+                  {index === 0 && (
+                    <div className="absolute top-2 right-2 px-2 py-1 bg-black text-white text-[10px] font-bold uppercase tracking-wider rounded shadow-sm z-10">
+                      Featured / Headliner
                     </div>
                   )}
                   <div className="absolute top-2 left-2 p-1 bg-white/80 backdrop-blur rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
@@ -575,9 +600,9 @@ export default function AdminCollectivePage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
-                            const newMembers = [...data!.members];
+                            const newMembers = [...members];
                             newMembers[index] = { ...member, ...editForm };
-                            setData({ ...data!, members: newMembers });
+                            setMembers(newMembers);
                             setEditingIndex(null);
                           }}
                           className="bg-black text-white px-3 py-1 rounded text-sm"

@@ -6,7 +6,7 @@ import { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
-import { Minus, Plus, X, Loader2, MapPin, Package, Check } from "lucide-react";
+import { Minus, Plus, X, Loader2, MapPin, Check } from "lucide-react";
 import { store, getProduct } from "../lib/store-data";
 
 // Replace this with your actual Cloudflare Worker URL after deployment
@@ -99,9 +99,10 @@ export default function CartPage() {
         throw new Error("No checkout URL returned");
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error(error);
-      alert(error.message || "Checkout failed. Please try again.");
+      alert(message || "Checkout failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -152,8 +153,9 @@ export default function CartPage() {
 
       const data = await response.json();
       setShippingRates(data.rates);
-    } catch (error: any) {
-      setRatesError(error.message || "Failed to load shipping rates");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setRatesError(message || "Failed to load shipping rates");
     } finally {
       setLoadingRates(false);
     }

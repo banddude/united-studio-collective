@@ -80,7 +80,7 @@ export default async function ArtistStorePage({ params }: PageProps) {
             <div className="px-4 pb-4 border-t border-gray-700">
               <nav className="pt-3 space-y-2">
                 <Link href="/store" className="block text-sm text-gray-300 py-1">All Products</Link>
-                <Link href="/store/winter-spring-26" className="block text-sm text-gray-300 py-1">Winter Spring '26</Link>
+                <Link href="/store/winter-spring-26" className="block text-sm text-gray-300 py-1">Winter Spring &apos;26</Link>
               </nav>
               <h3 className="text-xs uppercase tracking-wider text-gray-400 mt-4 mb-2">Artists</h3>
               <nav className="space-y-2">

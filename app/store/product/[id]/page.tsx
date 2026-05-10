@@ -8,7 +8,6 @@ import {
   getDefaultArtist,
   getDefaultSize,
   getDefaultDescription,
-  isStripeEnabled,
   getArchivedNotice,
 } from "../../../lib/store-data";
 
@@ -97,7 +96,6 @@ export default async function ProductPage({ params }: PageProps) {
       artist={artist}
       size={size}
       description={description}
-      stripeEnabled={isStripeEnabled()}
       archivedNotice={getArchivedNotice()}
     />
   );
