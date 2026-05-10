@@ -1,10 +1,11 @@
+import fs from "fs";
+import path from "path";
 import Image from "next/image";
 import Link from "next/link";
 import { Instagram, ExternalLink, ArrowLeft, Headphones } from "lucide-react";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import collectiveData from "../../../../content/collective.json";
-import transcriptText from "../../../../content/jessica-maxwell-interview-transcript.txt";
 import { notFound } from "next/navigation";
 
 interface Member {
@@ -19,19 +20,29 @@ interface Member {
   storeSlug?: string;
 }
 
-// Parse transcript into speaker segments
+// Transcripts live at content/transcripts/<slug>.txt. Returns null when the
+// artist has no transcript yet so the page can hide that section instead of
+// showing someone elses words.
+function loadTranscript(slug: string): string | null {
+  const filePath = path.join(process.cwd(), "content", "transcripts", `${slug}.txt`);
+  try {
+    return fs.readFileSync(filePath, "utf8");
+  } catch {
+    return null;
+  }
+}
+
 function parseTranscript(text: string): { speaker: string; text: string }[] {
-  const lines = text.split('\n').filter(line => line.trim());
+  const lines = text.split("\n").filter((line) => line.trim());
   const segments: { speaker: string; text: string }[] = [];
-  let currentSpeaker = '';
+  let currentSpeaker = "";
 
   for (const line of lines) {
-    // Skip the title line
-    if (line.includes('11:41 AM')) continue;
+    // Skip iMessage/Voice Memo style timestamp header rows like "Jessica, Mike - 11:41 AM"
+    if (/-\s*\d{1,2}:\d{2}\s*(AM|PM)/i.test(line)) continue;
 
-    // Check if this is a speaker line (ends with colon)
-    if (line.match(/^[A-Za-z\s]+:$/)) {
-      currentSpeaker = line.replace(':', '').trim();
+    if (line.match(/^[A-Za-z][A-Za-z\s.]*:$/)) {
+      currentSpeaker = line.replace(":", "").trim();
     } else if (currentSpeaker) {
       segments.push({ speaker: currentSpeaker, text: line });
     }
@@ -41,19 +52,16 @@ function parseTranscript(text: string): { speaker: string; text: string }[] {
 }
 
 function artistToSlug(artist: string): string {
-  return artist.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return artist.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 function extractYouTubeId(url: string): string {
-  // Handle youtu.be/VIDEO_ID format
   const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
   if (shortMatch) return shortMatch[1];
 
-  // Handle youtube.com/watch?v=VIDEO_ID format
   const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
   if (longMatch) return longMatch[1];
 
-  // Already just an ID
   return url;
 }
 
@@ -61,7 +69,7 @@ function getAllMembers(): Member[] {
   const data = collectiveData as unknown as {
     headliner?: Member;
     pastArtists?: Member[];
-    members?: Member[]; // legacy fallback
+    members?: Member[];
   };
   const members: Member[] = [];
   if (data.headliner) members.push(data.headliner);
@@ -72,8 +80,8 @@ function getAllMembers(): Member[] {
 
 export function generateStaticParams() {
   return getAllMembers()
-    .filter(m => m.youtube)
-    .map(m => ({
+    .filter((m) => m.youtube)
+    .map((m) => ({
       slug: artistToSlug(m.name),
     }));
 }
@@ -85,15 +93,14 @@ interface PageProps {
 export default async function InterviewPage({ params }: PageProps) {
   const { slug } = await params;
 
-  const member = getAllMembers().find(
-    m => artistToSlug(m.name) === slug
-  );
-
-  const transcriptSegments = parseTranscript(transcriptText);
+  const member = getAllMembers().find((m) => artistToSlug(m.name) === slug);
 
   if (!member || !member.youtube) {
     notFound();
   }
+
+  const transcriptText = loadTranscript(slug);
+  const transcriptSegments = transcriptText ? parseTranscript(transcriptText) : [];
 
   return (
     <div className="min-h-screen bg-white">
@@ -120,9 +127,7 @@ export default async function InterviewPage({ params }: PageProps) {
                 </h1>
 
                 {/* Bio */}
-                <p className="text-gray-600 leading-relaxed mb-6 max-w-lg">
-                  {member.bio}
-                </p>
+                <p className="text-gray-600 leading-relaxed mb-6 max-w-lg">{member.bio}</p>
 
                 {/* Links */}
                 <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
@@ -198,22 +203,24 @@ export default async function InterviewPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Transcript Section */}
-          <div>
-            <h2 className="text-xl font-light text-black mb-6 pb-2 border-b border-gray-200">Transcript</h2>
-            <div className="space-y-6">
-              {transcriptSegments.map((segment, i) => (
-                <div key={i}>
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                    {segment.speaker}
-                  </p>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    {segment.text}
-                  </p>
-                </div>
-              ))}
+          {/* Transcript Section - hidden when no per-artist transcript file exists */}
+          {transcriptSegments.length > 0 && (
+            <div>
+              <h2 className="text-xl font-light text-black mb-6 pb-2 border-b border-gray-200">
+                Transcript
+              </h2>
+              <div className="space-y-6">
+                {transcriptSegments.map((segment, i) => (
+                  <div key={i}>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                      {segment.speaker}
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed">{segment.text}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
 
