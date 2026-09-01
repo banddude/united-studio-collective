@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import ServicesBanner from "./components/ServicesBanner";
 import homepageData from "../content/homepage-images.json";
 import videosData from "./filmmaking/videos.json";
 
@@ -47,31 +46,63 @@ export default function Home() {
 
       <main className="flex flex-col">
         {/* 1. First Hero Image - Keeping this full screen for impact */}
-        <Link
-          href={firstImage.link}
-          className="relative w-full block group h-screen"
-        >
-          <Image
-            src={firstImage.src}
-            alt={firstImage.alt}
-            fill
-            priority
-            className="object-cover"
-            sizes="100vw"
-            quality={80}
-          />
-          {firstImage.label && (
-            <span
-              aria-hidden="true"
-              className="md:hidden pointer-events-none absolute inset-0 flex items-center justify-center text-center text-white/90 text-[12px] tracking-[0.4em] uppercase font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] px-4"
-            >
-              {firstImage.label}
-            </span>
-          )}
-        </Link>
+        <div className="relative w-full h-screen">
+          <Link
+            href={firstImage.link}
+            className="relative w-full h-full block group"
+          >
+            <Image
+              src={firstImage.src}
+              alt={firstImage.alt}
+              fill
+              priority
+              className="object-cover"
+              sizes="100vw"
+              quality={80}
+            />
+            {firstImage.label && (
+              <span
+                aria-hidden="true"
+                className="md:hidden pointer-events-none absolute inset-0 flex items-center justify-center text-center text-white/90 text-[12px] tracking-[0.4em] uppercase font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] px-4"
+              >
+                {firstImage.label}
+              </span>
+            )}
+          </Link>
+
+          {/* Balanced Pill Scroll Indicator - Matches Website Aesthetic */}
+          <div
+            aria-hidden="true"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+          >
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-lg text-white">
+              <span
+                className="text-[11px] tracking-[0.25em] uppercase font-light text-white/90"
+                style={{ fontFamily: "Avenir, 'Avenir Next', Montserrat, 'Century Gothic', 'Helvetica Neue', Arial, sans-serif" }}
+              >
+                Scroll
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-white/90"
+              >
+                <path d="M12 5v14" />
+                <path d="m19 12-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
 
         {/* 2. Hero Video Section - Slightly larger for impact */}
-        <section className="relative w-full h-[60vh] md:h-[70vh] bg-black overflow-hidden group">
+        <section id="video-section" className="relative w-full h-[60vh] md:h-[70vh] bg-black overflow-hidden group">
           <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center">
             {latestVideo.platform === 'youtube' ? (
               <div className="relative w-full h-full max-w-[180vh] aspect-video">
