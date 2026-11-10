@@ -1,9 +1,8 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import InlineCopy from "../components/InlineCopy";
 import servicesData from "../../content/services.json";
 import { ArrowRight, Play } from "lucide-react";
 
@@ -52,10 +51,24 @@ export default function ServicesPage() {
             <p className="text-lg md:text-xl text-gray-600 font-light leading-relaxed">
               {servicesData.subtitle}
             </p>
+            <nav aria-label="Production resources" className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/fashion-film-production/"
+                className="inline-flex items-center justify-center bg-black text-white px-6 py-3 font-medium hover:bg-gray-800 transition-colors"
+              >
+                Fashion Film Production
+              </Link>
+              <Link
+                href="/fashion-film-production-cost/"
+                className="inline-flex items-center justify-center bg-black text-white px-6 py-3 font-medium hover:bg-gray-800 transition-colors"
+              >
+                Production Cost Guide
+              </Link>
+            </nav>
           </div>
         </section>
 
-        {/* Recent work strip — visual without committing to a service-list framing */}
+        {/* Recent work strip, visual without committing to a service-list framing */}
         {gallery.length > 0 && (
           <section className="px-4 md:px-8 pb-16 md:pb-24">
             <div className="max-w-6xl mx-auto">
@@ -120,6 +133,21 @@ export default function ServicesPage() {
           </section>
         )}
 
+        {/* Production services */}
+        <section className="px-4 md:px-8 pb-16 md:pb-24">
+          <div className="max-w-3xl mx-auto space-y-12 md:space-y-16">
+            {servicesData.editorialSections.map((section) => (
+              <section key={section.title}>
+                <h2 className="text-2xl md:text-3xl font-light text-black mb-5">{section.title}</h2>
+                <div className="space-y-5 text-base md:text-lg text-gray-600 font-light leading-relaxed">
+                  {section.paragraphs.map((paragraph, index) => <p key={index}><InlineCopy text={paragraph} /></p>)}
+                  {section.title === "Fashion Films" && <p><Link href="/fashion-film-production/" className="text-black underline underline-offset-4 hover:opacity-60">Explore our fashion film production in Los Angeles.</Link></p>}
+                </div>
+              </section>
+            ))}
+          </div>
+        </section>
+
         {/* Service Breakdown */}
         {breakdown && (
           <section className="px-4 md:px-8 pb-16 md:pb-24 bg-gray-50 py-16 md:py-20 border-y border-gray-200">
@@ -153,7 +181,7 @@ export default function ServicesPage() {
                             <ul className="mt-2 ml-5 space-y-1.5 text-sm text-gray-500">
                               {item.subitems.map((sub, j) => (
                                 <li key={j} className="leading-snug">
-                                  — {sub}
+                                  - {sub}
                                 </li>
                               ))}
                             </ul>
@@ -168,7 +196,7 @@ export default function ServicesPage() {
           </section>
         )}
 
-        {/* Reel CTA — sells on quality before pushing to contact */}
+        {/* Reel CTA, sells on quality before pushing to contact */}
         {reelCta && (
           <section className="bg-white py-12 md:py-16 px-4 md:px-8">
             <div className="max-w-3xl mx-auto text-center">
@@ -186,6 +214,18 @@ export default function ServicesPage() {
             </div>
           </section>
         )}
+
+        <section className="px-4 md:px-8 py-16 md:py-20 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-black mb-8">Frequently Asked Questions</h2>
+            {servicesData.faqs.map((faq) => (
+              <details key={faq.question} className="group border-b border-gray-200 py-5">
+                <summary className="cursor-pointer text-lg md:text-xl font-light text-black marker:text-gray-400">{faq.question}</summary>
+                <p className="mt-4 text-gray-600 leading-relaxed"><InlineCopy text={faq.answer} /></p>
+              </details>
+            ))}
+          </div>
+        </section>
 
         {/* Contact CTA */}
         <section className="bg-black text-white py-12 md:py-16 px-4 md:px-8">

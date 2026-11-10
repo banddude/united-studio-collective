@@ -1,7 +1,7 @@
 {
   "page": "services",
-  "title": "Full Production",
-  "subtitle": "United Studio Collective specializes in fashion films. We bring the same full production rigor \u2014 concept to delivery \u2014 to experimental shorts, brand work, and beyond. Photography, editing, color, and sound all live inside the production rather than alongside it.",
+  "title": "Video Production Services in Los Angeles",
+  "subtitle": "United Studio Collective is a Los Angeles video production company specializing in fashion films. We take projects from first concept to final delivery with our own crews, camera packages, and post-production, so photography, editing, color, and sound all live inside the production rather than alongside it.",
   "breakdown": {
     "title": "Service Breakdown",
     "subtitle": "An itemized look at everything United Studio Collective brings to a project. This breakdown does not include actual pricing.",
@@ -116,8 +116,8 @@
   "cta": {
     "title": "Ready to Create Something Amazing?",
     "description": "Let's discuss your next project and bring your vision to life.",
-    "buttonText": "Get in Touch",
-    "buttonLink": "/contact"
+    "buttonText": "Start a Project",
+    "buttonLink": "/contact/"
   },
   "galleryHeading": "Recent Work",
   "gallerySubtitle": "Examples of projects USC has produced.",
@@ -139,6 +139,64 @@
       "caption": "Experimental",
       "href": "/filmmaking?v=Mwe9xCaLLBM",
       "description": "The Seasons of Fall"
+    }
+  ],
+  "editorialSections": [
+    {
+      "title": "Fashion Films",
+      "paragraphs": [
+        "Fashion films are the core of what we do. A fashion film is not an ad with clothes in it. It is cinematic storytelling built around a collection, a brand identity, or a single idea, and it gives fashion labels something audiences actually want to watch and share.",
+        "Our recent fashion work includes Remain On Hold and the Delikate Rayne Desert Fashion Shoot, both viewable on our Filmmaking page. If you are a label, a creative director, or a marketing team planning a campaign, we can take you from mood board to final cut."
+      ]
+    },
+    {
+      "title": "Full-Service Production",
+      "paragraphs": [
+        "Every project runs through three stages, and we can handle all of them or plug into the stages you already have covered.",
+        "**Pre-production.** Story vision creation, storyboarding with shot lists and mood boards, location scouting, shoot scheduling, talent scouting, and gear sheet creation and management. This is where the film gets planned, budgeted in practice, and de-risked before anyone calls action.",
+        "**Production.** On set we staff the director of photography, first assistant camera, gaffer, production assistant, wardrobe and stylist, and hair and makeup. We bring digital, Super 8, and 16mm camera packages, plus lens, lighting, and 1-ton grip truck packages. Location rental, lodging for destination shoots, catering and craft services, actors and models, and stills and behind-the-scenes coverage are all handled inside the production.",
+        "**Post-production.** Editing, color grading, and finishing for the film, plus still editing for campaign photography and behind-the-scenes imagery. Deliverables come back ready for web, campaign, and social use."
+      ]
+    },
+    {
+      "title": "Fashion and Editorial Photography",
+      "paragraphs": [
+        "Photography runs through everything we make. Every production includes stills and behind-the-scenes coverage, and we also shoot standalone fashion and editorial photography. Our photography gallery shows the range, from editorial portraits to cinematic, film-inspired compositions."
+      ]
+    },
+    {
+      "title": "Super 8 and 16mm",
+      "paragraphs": [
+        "We shoot on film, not just digitally. Super 8 and 16mm give brands a texture that is hard to fake: real grain, real color, and the feeling of something made by hand. If your campaign wants a tactile, editorial look, ask us what shooting analog would add to the budget and the schedule. We own the camera packages, so film is a format choice, not a subcontract."
+      ]
+    },
+    {
+      "title": "How We Work",
+      "paragraphs": [
+        "Our filmmakers, photographers, and artists bring their own specialties and creative perspectives to each project. One production team coordinates the work. Meet the artists on our Collective page."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Do you shoot on film?",
+      "answer": "Yes. We offer Super 8 and 16mm camera packages alongside digital, and we handle the workflow that film requires, from stock selection through scanning and grading."
+    },
+    {
+      "question": "Do you handle casting and talent?",
+      "answer": "Yes. Talent scouting and booking actors and models is part of our production services."
+    },
+    {
+      "question": "Can we book photography without video?",
+      "answer": "Yes. We shoot standalone fashion and editorial photography as well as stills within a video production."
+    },
+    {
+      "question": "Do you travel for shoots?",
+      "answer": "Yes. Location rental and lodging are part of our production planning, so destination shoots are something we build into the schedule and budget."
+    },
+    {
+      "question": "How much does a fashion film cost?",
+      "answer": "It depends on the format, crew size, locations, and whether you shoot film or digital. Tell us what you are planning through our contact form and we will put a real budget together. For the factors that drive cost, see our fashion film production cost guide.\n"
     }
   ]
 }
